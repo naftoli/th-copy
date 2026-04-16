@@ -80,16 +80,8 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
             .child-sheet {
                 page-break-after: always;
             }
-            .child-sheet table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            .child-sheet table th,
-            .child-sheet table td {
-                padding: 10px;
-            }
-            .child-sheet table td {
-                border-bottom: 1px solid #e0e0e0;
+            .child-sheet img {
+                width: 150px;
             }
         </style>
     </head>
@@ -100,7 +92,6 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
             foreach ($grade_sheets as $school_id => $grades) {
                 foreach ($grades as $grade => $sheet) {
                     foreach ($sheet as $child) {
-                        $prizes = [];
                         $user_id = $child[0];
                         $name = $child[1];
                         $grade = $child[2];
@@ -109,10 +100,6 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                         $trip = $child[5];
                         $sweater = $child[6];
                         $yarmulka = $child[7];
-                        for ($i = 8; $i < count($child); $i++) {
-                            // Store prize IDs; look up URLs later after validating key is scalar
-                            $prizes[] = $child[$i];
-                        }
                         echo "<div class='child-sheet'>";
                         echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
                         echo "<p>Sweater: " . $sweater . " Sweater</p>";
@@ -122,12 +109,21 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                             echo "<p>Gift: Jewelry Gift</p>";
                         }
                         echo "<p>Prizes: <br />";
-                        foreach ($prizes as $prize_id) {
-                            if (!is_scalar($prize_id)) continue;
-                            $key = (string)$prize_id;
-                            if (!isset($chidon_prizes[$key])) continue;
-                            $prize = $chidon_prizes[$key];
-                            echo "<img src='" . $prize . "' alt='" . $prize . "' />";
+                        foreach ($prizes[$user_id] as $prize) {
+                            $prize_id = $prize['id'];
+                            $he_name = $prize['name'];
+                            $prize_name = $chidon_prizes[$prize_id]['name'];
+                            if ($chidon_prizes[$prize_id]['size']) {
+                                $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                            }
+                            if ($chidon_prizes[$prize_id]['color']) {
+                                $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
+                            }
+                            if ($he_name) {
+                                $prize_name .= " - " . $he_name;
+                            }
+                            $prize_img = $chidon_prizes[$prize_id]['img'];
+                            echo "Prize: " . $prize_name . " <br /><img src='" . $prize_img . "' alt='" . $prize_name . "' />";
                         }
                         echo "</p>";
                         echo "</div>";
@@ -137,7 +133,6 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
         } else {
             foreach ($school_sheets as $school_id => $sheet) {
                 foreach ($sheet as $child) {
-                    $prizes = [];
                     $user_id = $child[0];
                     $name = $child[1];
                     $grade = $child[2];
@@ -146,10 +141,6 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                     $trip = $child[5];
                     $sweater = $child[6];
                     $yarmulka = $child[7];
-                    for ($i = 8; $i < count($child); $i++) {
-                        // Store prize IDs; look up URLs later after validating key is scalar
-                        $prizes[] = $child[$i];
-                    }
                     echo "<div class='child-sheet'>";
                     echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";
                     echo "<p>Sweater: " . $sweater . " Sweater</p>";
@@ -159,12 +150,21 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                         echo "<p>Gift: Jewelry Gift</p>";
                     }
                     echo "<p>Prizes: <br />";
-                    foreach ($prizes as $prize_id) {
-                        if (!is_scalar($prize_id)) continue;
-                        $key = (string)$prize_id;
-                        if (!isset($chidon_prizes[$key])) continue;
-                        $prize = $chidon_prizes[$key];
-                        echo "<img src='" . $prize . "' alt='" . $prize . "' />";
+                    foreach ($prizes[$user_id] as $prize) {
+                        $prize_id = $prize['id'];
+                        $he_name = $prize['name'];
+                        $prize_name = $chidon_prizes[$prize_id]['name'];
+                        if ($chidon_prizes[$prize_id]['size']) {
+                            $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                        }
+                        if ($chidon_prizes[$prize_id]['color']) {
+                            $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
+                        }
+                        if ($he_name) {
+                            $prize_name .= " - " . $he_name;
+                        }
+                        $prize_img = $chidon_prizes[$prize_id]['img'];
+                        echo "Prize: " . $prize_name . " <br /><img src='" . $prize_img . "' alt='" . $prize_name . "' />";
                     }
                     echo "</p>";
                     echo "</div>";
