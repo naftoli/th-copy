@@ -40,31 +40,47 @@ $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
 
+$grade_sheets = [];
+$school_sheets = [];
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     // echo "<pre>"; print_r($children); echo "</pre>"; 
     // continue;
     if (! empty($children)) {
        if (in_array($school_id, [7,54,106,255])) {
-            // continue; // for now
-           // for OT do both, by school and by grade
-            if ($school_id == 255) {
-               $ot_school_sheet = createSpreadSheet($children);
-            }
             // sort children by grade and create sheet for each grade
             $sorted = [];
             foreach ($children as $child) {
                $sorted[$child['class_grade']][] = $child;
             }
             foreach ($sorted as $grade => $details) {
-               $grade_sheet = createSpreadSheet($details);
+               $grade_sheets[$school_id][$grade] = createSpreadSheet($details);
             }
        } else {
-            $school_sheet = createSpreadSheet($children);
+            $school_sheets[$school_id] = createSpreadSheet($children);
        }
     }
 }
 
-echo "<pre>"; print_r($ot_school_sheet); echo "</pre>";
-echo "<pre>"; print_r($grade_sheet); echo "</pre>";
-echo "<pre>"; print_r($school_sheet); echo "</pre>";
+echo "<pre>"; print_r($grade_sheets); echo "</pre>";
+echo "<pre>"; print_r($school_sheets); echo "</pre>";
+?>
+<DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chidon Ceremony Report</title>
+        <style>
+            tr, th, td {
+                padding: 10px;
+                font-size: 14px;
+                border-bottom: 1px solid grey;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Chidon Ceremony Report</h1>
+        
+    </body>
+</html>
