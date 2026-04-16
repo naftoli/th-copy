@@ -151,7 +151,7 @@ foreach ($schools as $school_id => $school) {
                             foreach ($prizes[$user_id] as $prize) {
                                 $prize_id = $prize['id'];
                                 $he_name = $prize['name'];
-                                // if (isset($chidon_prizes[$prize_id])) {
+                                if (isset($chidon_prizes[$prize_id])) {
                                     $prize_name = $chidon_prizes[$prize_id]['name'];
                                     if ($chidon_prizes[$prize_id]['size']) {
                                         $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
@@ -163,7 +163,7 @@ foreach ($schools as $school_id => $school) {
                                         $prize_name .= " - " . $he_name;
                                     }
                                     echo "<li>" . $prize_name . "</li>";
-                                // }
+                                }
                             }
                             echo "</ul></p>";
                             if (isset($awards[$user_id])) {
@@ -211,7 +211,7 @@ foreach ($schools as $school_id => $school) {
                         foreach ($prizes[$user_id] as $prize) {
                             $prize_id = $prize['id'];
                             $he_name = $prize['name'];
-                            // if (isset($chidon_prizes[$prize_id])) {
+                            if (isset($chidon_prizes[$prize_id])) {
                                 $prize_name = $chidon_prizes[$prize_id]['name'];
                                 if ($chidon_prizes[$prize_id]['size']) {
                                     $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
@@ -223,7 +223,7 @@ foreach ($schools as $school_id => $school) {
                                     $prize_name .= " - " . $he_name;
                                 }
                                 echo "<li>" . $prize_name . "</li>";
-                            // }
+                            }
                         }
                         echo "</ul></p>";
                         if (isset($awards[$user_id])) {
