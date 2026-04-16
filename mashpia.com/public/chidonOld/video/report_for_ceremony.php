@@ -142,12 +142,14 @@ foreach ($schools as $school_id => $school) {
                             echo "<li>" . $prize_name . "</li>";
                         }
                         echo "</ul></p>";
-                        echo "<p>Awards:<ul>";
-                        foreach ($awards[$user_id] as $award) {
-                            $award_name = ucwords($award['item']);
-                            echo "<li>" . $award_name . "</li>";
+                        if (isset($awards[$user_id])) {
+                            echo "<p>Awards:<ul>";
+                            foreach ($awards[$user_id] as $award) {
+                                $award_name = ucwords($award['item']);
+                                echo "<li>" . $award_name . "</li>";
+                            }
+                            echo "</ul></p>";
                         }
-                        echo "</ul></p>";
                         echo "</div>";
                     }
                 }
@@ -195,12 +197,14 @@ foreach ($schools as $school_id => $school) {
                         echo "<li>" . $prize_name . "</li>";
                     }
                     echo "</ul></p>";
-                    echo "<p>Awards:<ul>";
-                    foreach ($awards[$user_id] as $award) {
-                        $award_name = ucwords($award['item']);
-                        echo "<li>" . $award_name . "</li>";
+                    if (isset($awards[$user_id])) {
+                        echo "<p>Awards:<ul>";
+                        foreach ($awards[$user_id] as $award) {
+                            $award_name = ucwords($award['item']);
+                            echo "<li>" . $award_name . "</li>";
+                        }
+                        echo "</ul></p>";
                     }
-                    echo "</ul></p>";
                     echo "</div>";
                 }
             }
