@@ -86,6 +86,9 @@ foreach ($schools as $school_id => $school) {
             .child-sheet img {
                 width: 150px;
             }
+            select, input {
+                padding: 10px;
+            }
             @media print {
                 .no-print {
                     display: none;
@@ -104,11 +107,11 @@ foreach ($schools as $school_id => $school) {
         <?php
         if (!isset($_POST['school_id']) && count($schools) > 1) {
             echo "<form method='post' action=''>";
-            echo "<select name='school_id'>";
+            echo "Select School: <select name='school_id'>";
             foreach ($schools as $school_id => $school) {
                 echo "<option value='" . $school_id . "'>" . $school . "</option>";
             }
-            echo "</select>";
+            echo "</select><br /><br />";
             echo "<input type='submit' value='Submit'>";
             echo "</form>";
         } else {
