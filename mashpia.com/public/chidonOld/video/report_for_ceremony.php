@@ -66,9 +66,9 @@ foreach ($schools as $school_id => $school) {
        }
     }
 }
-echo "<pre>"; print_r($grade_sheets); echo "</pre>";
-echo "<pre>"; print_r($school_sheets); echo "</pre>";
-exit;
+// echo "<pre>"; print_r($grade_sheets); echo "</pre>";
+// echo "<pre>"; print_r($school_sheets); echo "</pre>";
+// exit;
 ?>
 <DOCTYPE html>
 <html>
@@ -179,6 +179,7 @@ exit;
                     }
                 }
             } else {
+                echo "<pre>"; print_r($school_sheets); echo "</pre>"; exit;
                 foreach ($school_sheets as $school_id => $sheet) {
                     $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
                     $awards = $cs->getAwards($gender, $school_id);
