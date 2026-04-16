@@ -66,8 +66,9 @@ foreach ($schools as $school_id => $school) {
        }
     }
 }
-// echo "<pre>"; print_r($grade_sheets); echo "</pre>";
-// echo "<pre>"; print_r($school_sheets); echo "</pre>";
+echo "<pre>"; print_r($grade_sheets); echo "</pre>";
+echo "<pre>"; print_r($school_sheets); echo "</pre>";
+exit;
 ?>
 <DOCTYPE html>
 <html>
@@ -86,7 +87,7 @@ foreach ($schools as $school_id => $school) {
             .child-sheet img {
                 width: 150px;
             }
-            select, input {
+            select, input, button {
                 padding: 10px;
             }
             @media print {
