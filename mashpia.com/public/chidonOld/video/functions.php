@@ -439,7 +439,7 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         if ($for_ceremony) {
             $user_id = $child['user_id'];
             $award_track = $child['award_track'];
-            return [$user_id, $name, $grade, $reward_track, $award_track, $trip, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+            return [$user_id, $name, $grade, $show_track, $award_track, $trip, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
         } else {
             return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
                 $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
