@@ -52,7 +52,7 @@ echo "Getting raffles...\n";
 /***************************** GET THE RAFFLES ********************************/
 $raffles = [];
 
-if($web && $_GET['raffle_id']) {
+if($web && isset($_GET['raffle_id']) && $_GET['raffle_id']) {
     $raffle = Raffle::load($_GET['raffle_id']);
     if($raffle) $raffles[] = $raffle; // if there is a raffle id in the get request. then add that to the array
 } else {
@@ -90,7 +90,7 @@ foreach($raffles as $raffle){
 //    }
     
     /***************************** SKIP THE SAVING IF THE WEB DID NOT SEND THE "SAVE" COMMAND ********************************/
-    if($web && !$_GET['save']) {
+    if($web && !isset($_GET['save']) && $_GET['save']) {
         echo "<pre>"; print_r($winners); echo "</pre>";
         continue;
     } // if it is on the website and save is not set to on then do not save the results
