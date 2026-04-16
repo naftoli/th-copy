@@ -119,7 +119,7 @@ foreach ($schools as $school_id => $school) {
         ?>
             <button class="no-print" onclick="window.print()">Print</button>
             <?php
-            if (isset($grade_sheets)) {
+            if (isset($grade_sheets) && count($grade_sheets) > 0) {
                 foreach ($grade_sheets as $school_id => $grades) {
                     $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
                     $awards = $cs->getAwards($gender, $school_id);
@@ -178,8 +178,7 @@ foreach ($schools as $school_id => $school) {
                         }
                     }
                 }
-            } else {
-                echo "<pre>"; print_r($school_sheets); echo "</pre>"; exit;
+            } else if (isset($school_sheets) && count($school_sheets) > 0) {
                 foreach ($school_sheets as $school_id => $sheet) {
                     $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
                     $awards = $cs->getAwards($gender, $school_id);
