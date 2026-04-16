@@ -62,8 +62,8 @@ foreach ($schools as $school_id => $school) {
     }
 }
 
-echo "<pre>"; print_r($grade_sheets); echo "</pre>";
-echo "<pre>"; print_r($school_sheets); echo "</pre>";
+// echo "<pre>"; print_r($grade_sheets); echo "</pre>";
+// echo "<pre>"; print_r($school_sheets); echo "</pre>";
 ?>
 <DOCTYPE html>
 <html>
@@ -72,15 +72,50 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Chidon Ceremony Report</title>
         <style>
-            tr, th, td {
+            .child-sheet {
+                page-break-after: always;
+            }
+            .child-sheet table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .child-sheet table th,
+            .child-sheet table td {
                 padding: 10px;
-                font-size: 14px;
-                border-bottom: 1px solid grey;
+            }
+            .child-sheet table td {
+                border-bottom: 1px solid #e0e0e0;
             }
         </style>
     </head>
     <body>
         <h1>Chidon Ceremony Report</h1>
-        
+        <?php
+        if (isset($grade_sheets)) {
+            foreach ($grade_sheets as $school_id => $grades) {
+                foreach ($grades as $grade => $sheet) {
+                    foreach ($sheet as $child) {
+                        $track = $child[0];
+                        $name = $child[1];
+                        $prizes = [$child[9], $child[10], $child[11], $child[12], $child[13], $child[14]];
+                        echo "<div class='child-sheet'>";
+                        echo "<h3>Name: " . $name . " Grade: " . $grade . "</h3>";                       
+                        echo "</div>";
+                    }
+                }
+            }
+        } else {
+            foreach ($school_sheets as $school_id => $sheet) {
+                foreach ($sheet as $child) {
+                    $track = $child[0];
+                    $name = $child[1];
+                    $prizes = [$child[9], $child[10], $child[11], $child[12], $child[13], $child[14]];
+                    echo "<div class='child-sheet'>";
+                    echo "<h3>Name: " . $name . " Grade: " . $grade . "</h3>";                       
+                    echo "</div>";
+                }
+            }
+        }
+        ?>
     </body>
 </html>
