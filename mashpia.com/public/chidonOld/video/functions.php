@@ -424,7 +424,7 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         $grade = 'Grade ' . $child['class_grade'];
     }
 
-    $sweater = $child['size'] . ' ' . ($child['gender'] == 'M' ? 'Blue' : 'Pink');
+    $sweater = $child['size'] . ' ' . ($child['gender'] == 'M' ? 'Boy' : 'Girl');
     $yarmulka = $child['gender'] == 'M' ? $child['yarmulka'] : 'Jewelry Gift';
 
 //    if ($trophy) {
