@@ -251,7 +251,7 @@ function getUserPrizes() {
 
     $prizes = [];
     $sql = "SELECT 
-                user_id, prize_id
+                user_id, prize_id, he_name
             FROM
                 chidon_user_prizes 
             WHERE
@@ -260,7 +260,7 @@ function getUserPrizes() {
     while ($row = mysql_fetch_assoc($result)) {
         $prizes[$row['user_id']][] = [
             'id' => $row['prize_id'], 
-            'name' => $row['he_name']
+            'name' => isset($row['he_name']) ? $row['he_name'] : ''
         ];
     }
     return $prizes;
