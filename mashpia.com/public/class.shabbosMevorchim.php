@@ -1806,7 +1806,7 @@ class ShabbosMevorchim
         }
     }
 
-    public function generateStudentReport()
+    public function generateStudentReport($hq = false)
     {
         //echo "<pre>"; print_r($this->studentResults); echo "</pre>";
         //echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>"; return;
@@ -1814,40 +1814,50 @@ class ShabbosMevorchim
             if ($date > unixtojd()) $future = true;
             else $future = false;
             foreach ($info as $class => $users) {
-                $totals = array();
-                echo "<h2>" . $this->school_name . ' ' . $this->classes[$class]['grade'] . "</h2>";
-                echo "<div align='center'>";
-                echo "<span class='hebrewDate'>" . $this->getHebrewMonth(array_search($date, $this->dates)) . "</span><br />";
-                echo "<table>";
-                echo "<tr><th>Chayol</th><th>Goal</th>";
-                if (!$future) echo "<th>Accomplishment</th>";
-                echo "<th>Minutes Goal</th>";
-                if (!$future) echo "<th>Minutes Accomplishment</th>";
-                echo "</tr>";
+                if (! $hq) {
+                    $totals = [];
+                    echo "<h2>" . $this->school_name . ' ' . $this->classes[$class]['grade'] . "</h2>";
+                    echo "<div align='center'>";
+                    echo "<span class='hebrewDate'>" . $this->getHebrewMonth(array_search($date, $this->dates)) . "</span><br />";
+                    echo "<table>";
+                    echo "<tr><th>Chayol</th><th>Goal</th>";
+                    if (!$future) echo "<th>Accomplishment</th>";
+                    echo "<th>Minutes Goal</th>";
+                    if (!$future) echo "<th>Minutes Accomplishment</th>";
+                    echo "</tr>";
+                }
                 foreach ($users as $user => $info) {
-                    echo "<tr><td>" . $this->users[$user] . "</td>";
+                    echo "<tr>";
+                    if (! $hq) echo "<td>" . $this->schools[$school_id] . "</td>";
+                    echo "<td>" . $this->users[$user] . "</td>";
                     foreach ($info as $task => $total) {
-                        if (isset($totals[$task]['goal'])) {
-                            $totals[$task]['goal'] += $total;
-                        } else {
-                            $totals[$task]['goal'] = $total;
+                        if (! $hq) {
+                            if (isset($totals[$task]['goal'])) {
+                                $totals[$task]['goal'] += $total;
+                            } else {
+                                $totals[$task]['goal'] = $total;
+                            }
                         }
                         echo "<td>" . $total . ' ' . $task . "</td>";
                         if (!$future) {
                             echo "<td>";
                             if (isset($this->studentDoneResults[$date][$class][$user][$task])) {
                                 echo $this->studentDoneResults[$date][$class][$user][$task] . ' ' . $task;
-                                if (isset($totals[$task]['done'])) {
-                                    $totals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
-                                } else {
-                                    $totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+                                if (! $hq) {
+                                    if (isset($totals[$task]['done'])) {
+                                        $totals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
+                                    } else {
+                                        $totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+                                    }
                                 }
                             } else {
                                 echo "0 " . $task;
-                                if (isset($totals[$task]['done'])) {
-                                    $totals[$task]['done'] += 0;
-                                } else {
-                                    $totals[$task]['done'] = 0;
+                                if (! $hq) {
+                                    if (isset($totals[$task]['done'])) {
+                                        $totals[$task]['done'] += 0;
+                                    } else {
+                                        $totals[$task]['done'] = 0;
+                                    }
                                 }
                                 echo "&nbsp;";
                             }
@@ -1856,14 +1866,16 @@ class ShabbosMevorchim
                     }
                     echo "</tr>";
                 }
-                echo "<tr><td align='right'>Totals:</td>";
-                foreach ($totals as $type => $task) {
-                    echo "<td>" . $task['goal'] . ' ' . $type . "</td>";
-                    if (!$future) echo "<td>" . $task['done'] . ' ' . $type . "</td>";
+                if (! $hq) {
+                    echo "<tr><td align='right'>Totals:</td>";
+                    foreach ($totals as $type => $task) {
+                        echo "<td>" . $task['goal'] . ' ' . $type . "</td>";
+                        if (!$future) echo "<td>" . $task['done'] . ' ' . $type . "</td>";
+                    }
+                    echo "</tr>";
+                    echo "</table></div>";
+                    echo "<div class='page-break'></div>";
                 }
-                echo "</tr>";
-                echo "</table></div>";
-                echo "<div class='page-break'></div>";
             }
         }
     }
