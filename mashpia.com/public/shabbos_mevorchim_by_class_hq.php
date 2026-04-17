@@ -91,7 +91,7 @@ $sm->setArmyResults();
 
                     // changes from shabbos_mevorchim.php
                     $sm->setStudentResults(0, $_GET['date']);
-                    $sm->generateStudentReport(true);
+                    $sm->generateStudentReport(true, $id, $name);
 
                     echo "</table>";
                     echo "</tbody>";

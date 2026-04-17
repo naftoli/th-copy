@@ -1806,7 +1806,7 @@ class ShabbosMevorchim
         }
     }
 
-    public function generateStudentReport($hq = false)
+    public function generateStudentReport($hq = false, $school_id = 0, $school_name = '')
     {
         //echo "<pre>"; print_r($this->studentResults); echo "</pre>";
         //echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>"; return;
@@ -1828,7 +1828,7 @@ class ShabbosMevorchim
                 }
                 foreach ($users as $user => $info) {
                     echo "<tr>";
-                    if ($hq) echo "<td>" . $this->schools[$school_id] . "</td>";
+                    if ($hq) echo "<td>" . $school_name . "</td>";
                     echo "<td>" . $this->users[$user] . "</td>";
                     foreach ($info as $task => $total) {
                         if (! $hq) {
