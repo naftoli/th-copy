@@ -1742,6 +1742,7 @@ class ShabbosMevorchim
                 print_r($this->totalUsers);
                 // print_r($ordered);
                 echo "</pre>";
+                exit;
             }
 
             echo "<h3>" . $key . "</h3>";
