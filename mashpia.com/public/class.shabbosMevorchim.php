@@ -46,6 +46,8 @@ class ShabbosMevorchim
     private $heMonths;
 
     private $totalUsers;
+    /** Headcount per school for Tehillim registration (school_id => int). Separate from {@see $totalUsers} which is keyed by class_id in WhatsApp flows. */
+    private $schoolRegisteredForTehillim;
     private $schools;
     private $doneQuotas;
     private $participated;
@@ -119,6 +121,7 @@ class ShabbosMevorchim
         $this->students = array();
         $this->studentResults = array();
         $this->studentDoneResults = array();
+        $this->schoolRegisteredForTehillim = array();
         // set the following variables to false by default..
         $this->accomplishedOnly = false;
         $this->debug = false;
@@ -382,14 +385,7 @@ class ShabbosMevorchim
                 'armyDoneResults' => $this->armyDoneResults,
             ];
         });
-        // When this method is called per-school in a loop (HQ report),
-        // merge cached state so prior schools are preserved.
-        $this->classes = array_replace_recursive((array)$this->classes, (array)$state['classes']);
-        $this->users = array_replace_recursive((array)$this->users, (array)$state['users']);
-        $this->studentResults = array_replace_recursive((array)$this->studentResults, (array)$state['studentResults']);
-        $this->studentDoneResults = array_replace_recursive((array)$this->studentDoneResults, (array)$state['studentDoneResults']);
-        $this->doneQuotas = array_replace_recursive((array)$this->doneQuotas, (array)$state['doneQuotas']);
-        $this->participated = array_replace_recursive((array)$this->participated, (array)$state['participated']);
+        $this->applyCachedState($state);
     }
 
     public function getArmyResults()
@@ -660,7 +656,7 @@ class ShabbosMevorchim
                 $this->armySchoolsResults[$key][$schoolId] = $value;
             }
         }
-        $this->totalUsers[$id] = $state['totalUsers'];
+        $this->schoolRegisteredForTehillim[$id] = $state['totalUsers'];
     }
 
     private function setArmyDoneSchoolsResults($id, $date)
@@ -1374,7 +1370,13 @@ class ShabbosMevorchim
                 'participated' => $this->participated,
             ];
         });
-        $this->applyCachedState($state);
+        // HQ calls this once per school; merge so prior schools are preserved (unlike applyCachedState).
+        $this->classes = array_replace_recursive((array)$this->classes, (array)$state['classes']);
+        $this->users = array_replace_recursive((array)$this->users, (array)$state['users']);
+        $this->studentResults = array_replace_recursive((array)$this->studentResults, (array)$state['studentResults']);
+        $this->studentDoneResults = array_replace_recursive((array)$this->studentDoneResults, (array)$state['studentDoneResults']);
+        $this->doneQuotas = array_replace_recursive((array)$this->doneQuotas, (array)$state['doneQuotas']);
+        $this->participated = array_replace_recursive((array)$this->participated, (array)$state['participated']);
     }
 
     public function getUsers() 
@@ -1738,7 +1740,10 @@ class ShabbosMevorchim
             // figure out order based on percent of done quotas
             $ordered = array();
             foreach ($results as $id => $total) {
-                $quota = round(($this->doneQuotas[$key][$id] / $this->totalUsers[$id]) * 100, 2);
+                $registered = (int)($this->schoolRegisteredForTehillim[$id] ?? 0);
+                $quota = $registered
+                    ? round(($this->doneQuotas[$key][$id] / $registered) * 100, 2)
+                    : 0;
                 $ordered[$id] = $quota;
             }
             arsort($ordered);
@@ -1746,7 +1751,7 @@ class ShabbosMevorchim
                 echo "<pre>";
                 print_r($this->participated);
                 print_r($this->doneQuotas);
-                print_r($this->totalUsers);
+                print_r($this->schoolRegisteredForTehillim);
                 print_r($ordered);
                 echo "</pre>";
             }
@@ -1771,13 +1776,17 @@ class ShabbosMevorchim
                   $goal = $this->armySchoolsResults[$key][$id];
                   $done = $this->armySchoolsDoneResults[$key][$id] ? $this->armySchoolsDoneResults[$key][$id] : 0;
                   $minutesDone = $this->armySchoolsDoneResults['Minutes'][$id] ? $this->armySchoolsDoneResults['Minutes'][$id] : 0;
-                  echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $this->totalUsers[$id] . "</td><td>" .
+                  $registered = (int)($this->schoolRegisteredForTehillim[$id] ?? 0);
+                  $participatedPct = $registered ? round(($this->participated[$key][$id] / $registered) * 100) : 0;
+                  $avgKapitelach = $registered ? round($done / $registered) : 0;
+                  $avgMinutes = $registered ? round($minutesDone / $registered) : 0;
+                  echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $registered . "</td><td>" .
                       $goal . "</td><td>" . $done . " <span class='percent'>(" .
                       $this->armyResultsOrdered[$key][$id] . "%)</span></td><td>" .
-                      round(($this->participated[$key][$id] / $this->totalUsers[$id]) * 100) . "%</td><td>" .
+                      $participatedPct . "%</td><td>" .
                       $quota . "%</td><td>" .
-                      round($done / $this->totalUsers[$id]) . "</td><td>" .
-                      round($minutesDone / $this->totalUsers[$id]) . "</td></tr>";;
+                      $avgKapitelach . "</td><td>" .
+                      $avgMinutes . "</td></tr>";
               }
               ?>
           </table>
