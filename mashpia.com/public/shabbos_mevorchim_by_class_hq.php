@@ -54,56 +54,81 @@ $sm->setArmyResults();
     </head>
     <body>
         <?php require_once($_SERVER['DOCUMENT_ROOT'].'/admin_header.php'); ?>
-        <div id="tehillim">
-            <div class='no-print'>
-                <h1>Shabbos Mevorchim Tehillim Report</h1>
 
-                <div class="infobox" style="line-height: 1.2">
-                    SMT Reports are pulled out right after the Shabbos Mevorchim Tehillim Deadline. If a parent or base commander entered an amount
-                    on their account after this deadline, it will not show on this report and it will not be used to determine the winning schools/classes,
-                    however they will still receive their miles and mission.
-                </div>
+        <?php
+        if (! isset($_GET['date'])) : ?>
+            <h1>Shabbos Mevorchim HQ Report</h1>
+            <form method="post" action="shabbos_mevorchim_by_class_hq.php">
+                For: <select name="date">
+                    <? 
+                    $sm = new ShabbosMevorchim();
+                    $sm->setReportDates();
+                    $reportDates = $sm->getReportDatesAll();
 
-                <div align='center'>
-                    <input type='button' value='Print' onclick='window.print();'>
+                    $i = 0;
+                    $num = count($reportDates);
+                    foreach ($reportDates as $month => $d) {
+                        if (++$i == $num) 
+                            echo "<option value=" . $d . " selected='selected'>Shabbos Mevorchim " . $month . "</option>";
+                        else 
+                            echo "<option value=" . $d . ">Shabbos Mevorchim " . $month . "</option>"; 
+                    }
+                    ?> 
+                </select><br /><br />
+                <input type="submit" name="submit" id="submit" value="generate report">
+            </form>
+        <?php else: ?>
+            <div id="tehillim">
+                <div class='no-print'>
+                    <h1>Shabbos Mevorchim Tehillim Report</h1>
+
+                    <div class="infobox" style="line-height: 1.2">
+                        SMT Reports are pulled out right after the Shabbos Mevorchim Tehillim Deadline. If a parent or base commander entered an amount
+                        on their account after this deadline, it will not show on this report and it will not be used to determine the winning schools/classes,
+                        however they will still receive their miles and mission.
+                    </div>
+
+                    <div align='center'>
+                        <input type='button' value='Print' onclick='window.print();'>
+                    </div>
                 </div>
+                <br />
+                <?php // render the results for each school.
+                    $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+                    $ids = $as->getSchools();
+
+                    echo "<table>";
+                    echo "<thead>";
+                    echo "<tr><th>School</th><th>Chayol</th><th>Goal</th>";
+                    echo "<th>Accomplishment</th>";
+                    echo "<th>Minutes Goal</th>";
+                    echo "<th>Minutes Accomplishment</th>";
+                    echo "</tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
+
+                    $grandTotals = [];
+                    foreach( $ids as $id => $name ) {
+                        // generate the report for just this school
+                        $sm->setSchool( $id );
+                        $sm->setSchoolResults( $id );
+                        $sm->setClassResults();
+
+                        // changes from shabbos_mevorchim.php
+                        $sm->setStudentResults(0, $_GET['date']);
+                        $sm->generateStudentReport(true, $id, $name);
+                    }
+
+                    echo "<tr><td align='right' colspan='2'>Grand Totals:</td>";
+                    foreach ($grandTotals as $type => $task) {
+                        echo "<td>" . number_format($task['goal']) . ' ' . $type . "</td>";
+                        echo "<td>" . number_format($task['done']) . ' ' . $type . "</td>";
+                    }
+                    echo "</tr>";
+                    echo "</tbody>";
+                    echo "</table>";
+                ?>
             </div>
-            <br />
-            <?php // render the results for each school.
-                $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-                $ids = $as->getSchools();
-
-                echo "<table>";
-                echo "<thead>";
-                echo "<tr><th>School</th><th>Chayol</th><th>Goal</th>";
-                echo "<th>Accomplishment</th>";
-                echo "<th>Minutes Goal</th>";
-                echo "<th>Minutes Accomplishment</th>";
-                echo "</tr>";
-                echo "</thead>";
-                echo "<tbody>";
-
-                $grandTotals = [];
-                foreach( $ids as $id => $name ) {
-                    // generate the report for just this school
-                    $sm->setSchool( $id );
-                    $sm->setSchoolResults( $id );
-                    $sm->setClassResults();
-
-                    // changes from shabbos_mevorchim.php
-                    $sm->setStudentResults(0, $_GET['date']);
-                    $sm->generateStudentReport(true, $id, $name);
-                }
-
-                echo "<tr><td align='right' colspan='2'>Grand Totals:</td>";
-                foreach ($grandTotals as $type => $task) {
-                    echo "<td>" . number_format($task['goal']) . ' ' . $type . "</td>";
-                    echo "<td>" . number_format($task['done']) . ' ' . $type . "</td>";
-                }
-                echo "</tr>";
-                echo "</tbody>";
-                echo "</table>";
-            ?>
-        </div>
+        <?php endif; ?>
     </body>
 </html>
