@@ -116,7 +116,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php' );
                         $sm->setClassResults();
 
                         // changes from shabbos_mevorchim.php
-                        $sm->setStudentResults(0, $_GET['date']);
+                        $sm->setStudentResults(0, $_REQUEST['date']);
                         $sm->generateStudentReport(true, $id, $name);
                     }
 
