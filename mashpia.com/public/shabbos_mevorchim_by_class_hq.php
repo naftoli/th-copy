@@ -94,8 +94,8 @@ $sm->setArmyResults();
 
                     $sm->generateStudentReport(true, $id, $name);
 
-                    echo "</table>";
                     echo "</tbody>";
+                    echo "</table>";
                 }
             ?>
         </div>
