@@ -97,8 +97,8 @@ $sm->setArmyResults();
 
                 echo "<tr><td align='right' colspan='2'>Grand Totals:</td>";
                 foreach ($grandTotals as $type => $task) {
-                    echo "<td>" . $task['goal'] . ' ' . $type . "</td>";
-                    echo "<td>" . $task['done'] . ' ' . $type . "</td>";
+                    echo "<td>" . number_format($task['goal']) . ' ' . $type . "</td>";
+                    echo "<td>" . number_format($task['done']) . ' ' . $type . "</td>";
                 }
                 echo "</tr>";
                 echo "</tbody>";
