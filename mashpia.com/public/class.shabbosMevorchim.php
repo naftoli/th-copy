@@ -1808,6 +1808,7 @@ class ShabbosMevorchim
 
     public function generateStudentReport($hq = false, $school_id = 0, $school_name = '')
     {
+        global $grandTotals;
         //echo "<pre>"; print_r($this->studentResults); echo "</pre>";
         //echo "<pre>"; print_r($this->studentDoneResults); echo "</pre>"; return;
         foreach ($this->studentResults as $date => $info) {
