@@ -73,6 +73,16 @@ $sm->setArmyResults();
                 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
                 $ids = $as->getSchools();
 
+                echo "<table>";
+                echo "<thead>";
+                echo "<tr><th>School</th><th>Chayol</th><th>Goal</th>";
+                echo "<th>Accomplishment</th>";
+                echo "<th>Minutes Goal</th>";
+                echo "<th>Minutes Accomplishment</th>";
+                echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+
                 foreach( $ids as $id => $name ) {
                     // generate the report for just this school
                     $sm->setSchool( $id );
@@ -81,22 +91,11 @@ $sm->setArmyResults();
 
                     // changes from shabbos_mevorchim.php
                     $sm->setStudentResults(0, $_GET['date']);
-
-                    echo "<table>";
-                    echo "<thead>";
-                    echo "<tr><th>School</th><th>Chayol</th><th>Goal</th>";
-                    echo "<th>Accomplishment</th>";
-                    echo "<th>Minutes Goal</th>";
-                    echo "<th>Minutes Accomplishment</th>";
-                    echo "</tr>";
-                    echo "</thead>";
-                    echo "<tbody>";
-
                     $sm->generateStudentReport(true, $id, $name);
-
-                    echo "</tbody>";
-                    echo "</table>";
                 }
+
+                echo "</tbody>";
+                echo "</table>";
             ?>
         </div>
     </body>
