@@ -79,6 +79,9 @@ $sm->setArmyResults();
                     $sm->setSchoolResults( $id );
                     $sm->setClassResults();
 
+                    // changes from shabbos_mevorchim.php
+                    $sm->setStudentResults(0, $_GET['date']);
+
                     echo "<table>";
                     echo "<thead>";
                     echo "<tr><th>School</th><th>Chayol</th><th>Goal</th>";
@@ -89,8 +92,6 @@ $sm->setArmyResults();
                     echo "</thead>";
                     echo "<tbody>";
 
-                    // changes from shabbos_mevorchim.php
-                    $sm->setStudentResults(0, $_GET['date']);
                     $sm->generateStudentReport(true, $id, $name);
 
                     echo "</table>";
