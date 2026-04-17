@@ -1828,7 +1828,7 @@ class ShabbosMevorchim
                 }
                 foreach ($users as $user => $info) {
                     echo "<tr>";
-                    if (! $hq) echo "<td>" . $this->schools[$school_id] . "</td>";
+                    if ($hq) echo "<td>" . $this->schools[$school_id] . "</td>";
                     echo "<td>" . $this->users[$user] . "</td>";
                     foreach ($info as $task => $total) {
                         if (! $hq) {
