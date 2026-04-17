@@ -83,6 +83,7 @@ $sm->setArmyResults();
                 echo "</thead>";
                 echo "<tbody>";
 
+                $grandTotals = [];
                 foreach( $ids as $id => $name ) {
                     // generate the report for just this school
                     $sm->setSchool( $id );
@@ -94,6 +95,12 @@ $sm->setArmyResults();
                     $sm->generateStudentReport(true, $id, $name);
                 }
 
+                echo "<tr><td align='right'>Grand Totals:</td>";
+                foreach ($grandTotals as $type => $task) {
+                    echo "<td>" . $task['goal'] . ' ' . $type . "</td>";
+                    echo "<td>" . $task['done'] . ' ' . $type . "</td>";
+                }
+                echo "</tr>";
                 echo "</tbody>";
                 echo "</table>";
             ?>
