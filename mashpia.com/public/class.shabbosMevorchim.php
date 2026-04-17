@@ -1737,10 +1737,10 @@ class ShabbosMevorchim
             arsort($ordered);
             if ($debug) {
                 echo "<pre>";
-                print_r($this->participated);
-                print_r($this->doneQuotas);
+                // print_r($this->participated);
+                // print_r($this->doneQuotas);
                 print_r($this->totalUsers);
-                print_r($ordered);
+                // print_r($ordered);
                 echo "</pre>";
             }
 
