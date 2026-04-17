@@ -9,11 +9,6 @@ require( 'header.php' );
 // imports
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php' );
-
-$sm = new ShabbosMevorchim();
-$sm->setReportDates($_GET['date']); // get the date from the GET request....
-// set the army results
-$sm->setArmyResults();
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +55,7 @@ $sm->setArmyResults();
             <h1>Shabbos Mevorchim HQ Report</h1>
             <form method="post" action="shabbos_mevorchim_by_class_hq.php">
                 For: <select name="date">
-                    <? 
+                    <?php
                     $sm = new ShabbosMevorchim();
                     $sm->setReportDates();
                     $reportDates = $sm->getReportDatesAll();
@@ -78,6 +73,12 @@ $sm->setArmyResults();
                 <input type="submit" name="submit" id="submit" value="generate report">
             </form>
         <?php else: ?>
+            <?php
+            $sm = new ShabbosMevorchim();
+            $sm->setReportDates($_GET['date']); // get the date from the GET request....
+            // set the army results
+            $sm->setArmyResults();
+            ?>
             <div id="tehillim">
                 <div class='no-print'>
                     <h1>Shabbos Mevorchim Tehillim Report</h1>
