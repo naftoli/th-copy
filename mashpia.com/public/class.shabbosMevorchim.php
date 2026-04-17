@@ -1837,6 +1837,12 @@ class ShabbosMevorchim
                             } else {
                                 $totals[$task]['goal'] = $total;
                             }
+                        } else {
+                            if (isset($grandTotals[$task]['goal'])) {
+                                $grandTotals[$task]['goal'] += $total;
+                            } else {
+                                $grandTotals[$task]['goal'] = $total;
+                            }
                         }
                         echo "<td>" . $total . ' ' . $task . "</td>";
                         if (!$future) {
@@ -1849,6 +1855,12 @@ class ShabbosMevorchim
                                     } else {
                                         $totals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
                                     }
+                                } else {
+                                    if (isset($grandTotals[$task]['done'])) {
+                                        $grandTotals[$task]['done'] += $this->studentDoneResults[$date][$class][$user][$task];
+                                    } else {
+                                        $grandTotals[$task]['done'] = $this->studentDoneResults[$date][$class][$user][$task];
+                                    }
                                 }
                             } else {
                                 echo "0 " . $task;
@@ -1857,6 +1869,12 @@ class ShabbosMevorchim
                                         $totals[$task]['done'] += 0;
                                     } else {
                                         $totals[$task]['done'] = 0;
+                                    }
+                                } else {
+                                    if (isset($grandTotals[$task]['done'])) {
+                                        $grandTotals[$task]['done'] += 0;
+                                    } else {
+                                        $grandTotals[$task]['done'] = 0;
                                     }
                                 }
                                 echo "&nbsp;";
