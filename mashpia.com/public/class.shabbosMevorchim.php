@@ -382,7 +382,14 @@ class ShabbosMevorchim
                 'armyDoneResults' => $this->armyDoneResults,
             ];
         });
-        $this->applyCachedState($state);
+        // When this method is called per-school in a loop (HQ report),
+        // merge cached state so prior schools are preserved.
+        $this->classes = array_replace_recursive((array)$this->classes, (array)$state['classes']);
+        $this->users = array_replace_recursive((array)$this->users, (array)$state['users']);
+        $this->studentResults = array_replace_recursive((array)$this->studentResults, (array)$state['studentResults']);
+        $this->studentDoneResults = array_replace_recursive((array)$this->studentDoneResults, (array)$state['studentDoneResults']);
+        $this->doneQuotas = array_replace_recursive((array)$this->doneQuotas, (array)$state['doneQuotas']);
+        $this->participated = array_replace_recursive((array)$this->participated, (array)$state['participated']);
     }
 
     public function getArmyResults()
