@@ -121,6 +121,7 @@ if (isset($_POST['submit']) || isset($_GET['date'])) {
         <?
         // $sm->setDebug();
         $sm->setASR( $date );
+        $totalUsers = $sm->getTotalUsers();
 		$schools = $sm->getSchools();
 		foreach ($schools as $sid => $school) {
             $sm->setStudentResults($sid, $date);

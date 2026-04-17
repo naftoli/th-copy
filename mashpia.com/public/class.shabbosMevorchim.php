@@ -1725,6 +1725,7 @@ class ShabbosMevorchim
 
     public function generateHQReport($debug = false)
     {
+        echo "<pre>"; print_r($this->totalUsers); echo "</pre>"; exit;
         foreach ($this->armyResultsOrdered as $key => $results) {
             if ($key == 'Minutes') continue;
 
