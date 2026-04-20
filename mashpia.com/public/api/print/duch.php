@@ -340,6 +340,8 @@
                 formData.append('file', pdfBlob, filename);
                 */
                const html = document.documentElement.outerHTML;
+               // remove all img tags
+               html = html.replace(/<img[^>]*>/g, '');
                const formData = new FormData();
                formData.append('html', html);
                 fetch('sendToOhel.php', {
