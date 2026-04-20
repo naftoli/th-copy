@@ -167,6 +167,7 @@
           { "label":  "Whatsapp Tehillim Reports", "path": "/tehillim_whatsapp.php", "legacy": true, "user_types": [ "HQ" ] },
           { "label": "Mark Shabbos Mevorchim Tehillim", "legacy": true, "path": "/mark_tehillim2.php" },
           { "label": "Shabbos Mevorchim Report", "legacy": true, "path": "/choose_sm_report.php" },
+          { "label": "Shabbos Mevorchim HQ Report", "legacy": true, "path": "/shabbos_mevorchim_by_class_hq.php", "user_types": [ "HQ" ] },
           { "label": "Check Your Tehillim Quotas", "legacy": true, "path": "/tehillim_quotas.php" },
           { "label": "Change Tehillim Ladder/Quota", "legacy": true, "path": "/admin_users_track.php" },
           { "label": "Shabbos Mevorchim Tutorial Video", "legacy": true, "path": "/sm_video.php" },

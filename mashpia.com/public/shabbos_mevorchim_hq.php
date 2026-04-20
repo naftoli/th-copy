@@ -4,6 +4,12 @@ ini_set('display_errors', 1);
 
 $admin_auth = array('school','user'); 
 require('header.php'); 
+
+if (isset($_GET['debug'])) {
+    $debug = true;
+} else {
+    $debug = false;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -124,7 +130,7 @@ if (isset($_POST['submit']) || isset($_GET['date'])) {
 		foreach ($schools as $sid => $school) {
             $sm->setStudentResults($sid, $date);
         }
-        $sm->generateHQReport();
+        $sm->generateHQReport($debug);
         ?>
         </div>
     </div>
