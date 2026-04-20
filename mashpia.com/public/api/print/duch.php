@@ -320,30 +320,21 @@
             console.log('emailing to ohel');
             setTimeout(async function() {
                 document.getElementById('buttons').remove();
-                /*
-                var mainEl = document.getElementById('main');
-                // Root-relative only (/path), not // protocol-relative or bare relative URLs
-                var htmlForPdf = mainEl.innerHTML;
-                htmlForPdf = htmlForPdf.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
-                htmlForPdf = htmlForPdf.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
+
+                let html = document.documentElement.outerHTML;
+
+                // Remove all img tags (as before)
+                html = html.replace(/<img[^>]*>/g, '');
+
+                // Fix root-relative URLs so DocRaptor can load them
+                html = html.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
+                html = html.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
+                html = html.replace(/src='(\/(?!\/)[^']*)'/g, "src='https://mashpia.com$1'");
+                html = html.replace(/href='(\/(?!\/)[^']*)'/g, "href='https://mashpia.com$1'");
 
                 const formData = new FormData();
-                const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
-                const opt = {
-                    margin:       0.5,
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                const pdfBlob = await html2pdf().set(opt).from(htmlForPdf).toPdf().output('blob');
-                formData.append('file', pdfBlob, filename);
-                */
-               let html = document.documentElement.outerHTML;
-               // remove all img tags
-               html = html.replace(/<img[^>]*>/g, '');
-               const formData = new FormData();
-               formData.append('html', html);
+                formData.append('html', html);
+
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,
@@ -363,7 +354,7 @@
                 });
             }, 1500);
         }
-
+        
         async function waitForRenderReady(rootEl) {
             // Wait for webfonts (if supported)
             try {

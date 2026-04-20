@@ -8,34 +8,52 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+function fixRelativeUrls($html) {
+    $base = 'https://mashpia.com';
+
+    // Fix root-relative src and href (e.g. src="/scripts/..." => src="https://mashpia.com/scripts/...")
+    // Handles both double and single quotes
+    $html = preg_replace('/\bsrc="(\/(?!\/)[^"]*)"/', 'src="' . $base . '$1"', $html);
+    $html = preg_replace('/\bhref="(\/(?!\/)[^"]*)"/', 'href="' . $base . '$1"', $html);
+    $html = preg_replace("/\\bsrc='(\\/(?!\\/)[^']*)'/", "src='" . $base . "$1'", $html);
+    $html = preg_replace("/\\bhref='(\\/(?!\\/)[^']*)'/", "href='" . $base . "$1'", $html);
+
+    return $html;
+}
+
 function createDocraptorDocument($html) {
+    // Fix all root-relative URLs before sending to DocRaptor
+    $html = fixRelativeUrls($html);
+
     $docraptor = new DocRaptor\DocApi();
     $docraptor->getConfig()->setUsername("CIrbbDsV2QqOc-ULQnQv");
     $docraptor->getConfig()->setDebug(true);
 
     $doc = new DocRaptor\Doc();
-    $doc->setTest(true);                                                   // test documents are free but watermarked
-    $doc->setDocumentContent($html);     // supply content directly
-    // $doc->setDocumentUrl("http://docraptor.com/examples/invoice.html"); // or use a url
-    $doc->setName(time() . ".pdf");                                    // help you find a document later
-    $doc->setDocumentType("pdf");                                          // pdf or xls or xlsx
-    $doc->setJavascript(true);                                            // enable JavaScript processing
-    $doc->document_url = 
-    $prince_options = new DocRaptor\PrinceOptions();                    // pdf-specific options
-    // $doc->setPrinceOptions($prince_options);
-    // $prince_options->setMedia("screen");                                // use screen styles instead of print styles
-    $prince_options->setBaseurl("https://mashpia.com");                    // pretend URL when using document_content
+    $doc->setTest(true);                        // test documents are free but watermarked
+    $doc->setDocumentContent($html);            // supply content directly
+    $doc->setName(time() . ".pdf");             // help you find a document later
+    $doc->setDocumentType("pdf");               // pdf or xls or xlsx
+    $doc->setJavascript(true);                  // enable JavaScript processing
+
+    $prince_options = new DocRaptor\PrinceOptions();
+    $prince_options->setBaseurl("https://mashpia.com");  // pretend URL when using document_content
+    $doc->setPrinceOptions($prince_options);
 
     $create_response = $docraptor->createDoc($doc);
-    
-    // save the response to a file
-    $fileName = "https://mashpia.com/api/print/duch_pdf/" . $doc->getName();
+
+    // Save the PDF to a local file
+    $uploadDir = __DIR__ . '/duch_pdf/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    $fileName = $uploadDir . $doc->getName();
     file_put_contents($fileName, $create_response->getData());
+
     return $fileName;
 }
 
 function emailToOhel($fileName = null, $html = null) {
-    // send the pdf to ohel
     $mail = new PHPMailer(true);
     $msg = "<html>
     <body>
@@ -63,38 +81,9 @@ function emailToOhel($fileName = null, $html = null) {
     return false;
 }
 
-// Check if a html was uploaded successfully
-/*
-if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-    // Check if a file was uploaded successfully
-    $fileTmpPath = $_FILES['file']['tmp_name'];
-    $fileName = basename($_FILES['file']['name']); // Sanitize filename if needed
-    $uploadDir = './duch_pdf/'; // Specify your target directory on the server
-
-    // Ensure the upload directory exists
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
-    $destPath = $uploadDir . $fileName;
-
-    // Move the file from the temporary location to the desired folder
-    if (move_uploaded_file($fileTmpPath, $destPath)) {
-        // email the file to the Ohel
-        $error = emailToOhel($destPath);
-        if ($error) {
-            echo json_encode(['success' => false, 'error' => $error, 'message' => null]);
-        } else {
-            echo json_encode(['success' => true, 'error' => null, 'message' => 'File has been emailed to the Ohel.']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'error' => 'Failed to move file. Check directory permissions.', 'message' => null]);
-    }
-} else 
-*/
 if (isset($_POST['html'])) {
     $html = $_POST['html'];
-    $file = createDocraptorDocument($html);   
+    $file = createDocraptorDocument($html);
     $error = emailToOhel($file);
     echo json_encode(['success' => !$error, 'error' => $error, 'message' => 'File has been emailed to the Ohel.']);
 } else {
