@@ -339,7 +339,7 @@
                 const pdfBlob = await html2pdf().set(opt).from(htmlForPdf).toPdf().output('blob');
                 formData.append('file', pdfBlob, filename);
                 */
-               const html = document.documentElement.outerHTML;
+               let html = document.documentElement.outerHTML;
                // remove all img tags
                html = html.replace(/<img[^>]*>/g, '');
                const formData = new FormData();
