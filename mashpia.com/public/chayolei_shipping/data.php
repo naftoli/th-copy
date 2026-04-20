@@ -61,8 +61,13 @@ function build_items() {
         $html .= "<div><input type='checkbox' name='items[" . $cat . "]' class='check_items' /> All " . ucwords($cat) . "<br />";
         foreach ($items[$cat] as $item_id => $item) {
             $name = strtolower($item);
-            if (in_array($cat, ['mivtzoim', 'hei teves'])) $id = $item_id;
-            else $id = htmlspecialchars($name, ENT_QUOTES);
+            if (in_array($cat, ['mivtzoim', 'hei teves'])) {
+                $id = $item_id;
+            } elseif ($cat === 'hachayols') {
+                $id = $item_id;
+            } else {
+                $id = htmlspecialchars($name, ENT_QUOTES);
+            }
             $html .= "<input type='checkbox' name='items[" . $cat . "][" . $id . "]' class='item' /> " . ucwords($item) . "<br />";
         }
         if (in_array($cat, ['medals', 'ranks'])) {
@@ -157,9 +162,12 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "><select name='shipment_number' class='shipment_number'";
                         if (!$super || isset($status['status']) && $status['status'] == 1) echo " disabled";
                         echo ">";
-                        for ($s = 1; $s <= 9; $s++) {
+                        $maxShip = isset($GLOBALS['chayolei_max_shipment_num']) ? (int) $GLOBALS['chayolei_max_shipment_num'] : 10;
+                        for ($s = 1; $s <= $maxShip; $s++) {
                             echo "<option value='$s'";
-                            if (isset($status['shipment_number']) && $status['shipment_number'] == $s) echo " selected";
+                            if (isset($status['shipment_number']) && (int) $status['shipment_number'] === $s) {
+                                echo " selected";
+                            }
                             echo ">$s</option>";
                         }
                         echo "</select></td>";
