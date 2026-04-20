@@ -29,17 +29,18 @@ $enrollmentBySchool = [];
 if (!empty($schools)) {
     $sql = "
         SELECT
-            u.admin_id,
-            u.first,
+            u.first 
             u.last,
             u.user_serial,
             u.school_id,
             c.class_grade,
             c.class_sub,
-            tc.reg_date
+            tc.reg_date, 
+            aa.admin_id 
         FROM th_chidon tc
             JOIN users u ON u.user_id = tc.user_id
             JOIN classes c ON c.class_id = u.class_id
+            JOIN admin_auths aa ON aa.id = u.user_id 
         WHERE
             tc.year = " . intval($year) . "
             AND c.class_grade in (" . implode(',', $gradeList) . ")
@@ -47,6 +48,7 @@ if (!empty($schools)) {
         ORDER BY u.school_id, c.class_grade, c.class_sub, u.last, u.first
     ";
 
+    // echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $enrollmentBySchool[$row['school_id']][] = $row;
