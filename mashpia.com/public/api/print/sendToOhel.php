@@ -64,7 +64,7 @@ function createDocraptorPdf($html) {
     $docraptor->getConfig()->setUsername("CIrbbDsV2QqOc-ULQnQv");
 
     $doc = new DocRaptor\Doc();
-    $doc->setTest(false);                   // change to true for free watermarked test PDFs
+    $doc->setTest(true);                   // change to true for free watermarked test PDFs
     $doc->setDocumentContent($html);
     $doc->setName(time() . rand(1000, 9999) . ".pdf");
     $doc->setDocumentType("pdf");
