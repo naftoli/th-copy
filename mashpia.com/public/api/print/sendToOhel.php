@@ -79,7 +79,22 @@ function createDocraptorPdf($html) {
     $doc->setPrinceOptions($prince_options);
 
     $response = $docraptor->createDoc($doc);
-    return $response->getData();
+    
+    // The DocRaptor SDK returns either an object with getData() or a raw string
+    // depending on the SDK version and response type
+    if (is_string($response)) {
+        // Raw binary string returned directly — check it looks like a PDF
+        if (substr($response, 0, 4) !== '%PDF') {
+            throw new \Exception('DocRaptor returned unexpected content: ' . substr($response, 0, 200));
+        }
+        return $response;
+    }
+ 
+    if (is_object($response) && method_exists($response, 'getData')) {
+        return $response->getData();
+    }
+ 
+    throw new \Exception('DocRaptor returned unrecognised response type: ' . gettype($response));
 }
 
 /**
