@@ -29,7 +29,7 @@ $enrollmentBySchool = [];
 if (!empty($schools)) {
     $sql = "
         SELECT
-            u.first 
+            u.first, 
             u.last,
             u.user_serial,
             u.school_id,
