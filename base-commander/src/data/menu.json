@@ -97,7 +97,9 @@
         ]
       },
 
-      { "label": "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
+      { "label": "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/enrollment_report.php" },
+
+      { "label": "Comprehensive Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
 
       { "label":  "Enrollment / Prize Confirmation", "legacy": true, "path": "/chidonTests/confirmations.php" },
 
