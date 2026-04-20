@@ -2,13 +2,16 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Increase PHP timeout since we may make multiple DocRaptor calls
+// Increase PHP timeout since we make multiple DocRaptor calls
 set_time_limit(300);
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use setasign\Fpdi\Fpdi;
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
 function fixRelativeUrls($html) {
     $base = 'https://mashpia.com';
@@ -19,9 +22,6 @@ function fixRelativeUrls($html) {
     return $html;
 }
 
-/**
- * Extract the <head> block from the full HTML so each chunk has proper styles/fonts.
- */
 function extractHead($html) {
     if (preg_match('/<head[^>]*>(.*?)<\/head>/si', $html, $m)) {
         return '<head>' . $m[1] . '</head>';
@@ -30,76 +30,72 @@ function extractHead($html) {
 }
 
 /**
- * Split the full HTML into per-student chunks.
- * The print script separates each student with a pipe | character.
- * Each chunk becomes its own complete HTML document.
+ * Split the full page HTML into one chunk per student.
+ * The print script separates students with a pipe | character.
  */
 function splitIntoChunks($html, $head) {
     $chunks = [];
 
-    // Extract just the body content
     if (preg_match('/<body[^>]*>(.*?)<\/body>/si', $html, $m)) {
         $body = $m[1];
     } else {
         $body = $html;
     }
 
-    // Split on the pipe separator between student records
     $parts = explode('|', $body);
 
     foreach ($parts as $part) {
         $part = trim($part);
         if (empty($part)) continue;
-        // Skip non-student parts (spinner div, grade-list div, main div wrapper, scripts)
         if (strpos($part, 'userDuch') === false) continue;
-
-        // Wrap each student in a full HTML document with shared head
         $chunks[] = '<!DOCTYPE html><html>' . $head . '<body>' . $part . '</body></html>';
     }
 
     return $chunks;
 }
 
+// ── PDF generation ───────────────────────────────────────────────────────────
+
 /**
- * Send one HTML chunk to DocRaptor and return the raw PDF binary.
+ * Send one student HTML chunk to DocRaptor and return raw PDF binary.
  */
 function createDocraptorPdf($html) {
     $docraptor = new DocRaptor\DocApi();
     $docraptor->getConfig()->setUsername("CIrbbDsV2QqOc-ULQnQv");
 
     $doc = new DocRaptor\Doc();
-    $doc->setTest(true);                   // set to true to get free watermarked test PDFs
+    $doc->setTest(false);                   // change to true for free watermarked test PDFs
     $doc->setDocumentContent($html);
     $doc->setName(time() . rand(1000, 9999) . ".pdf");
     $doc->setDocumentType("pdf");
-    $doc->setJavascript(false);             // no JS needed for static student reports
+    $doc->setJavascript(false);
 
     $prince_options = new DocRaptor\PrinceOptions();
     $prince_options->setBaseurl("https://mashpia.com");
     $doc->setPrinceOptions($prince_options);
 
     $response = $docraptor->createDoc($doc);
-    
-    // The DocRaptor SDK returns either an object with getData() or a raw string
-    // depending on the SDK version and response type
+
     if (is_string($response)) {
-        // Raw binary string returned directly — check it looks like a PDF
         if (substr($response, 0, 4) !== '%PDF') {
             throw new \Exception('DocRaptor returned unexpected content: ' . substr($response, 0, 200));
         }
         return $response;
     }
- 
+
     if (is_object($response) && method_exists($response, 'getData')) {
         return $response->getData();
     }
- 
+
     throw new \Exception('DocRaptor returned unrecognised response type: ' . gettype($response));
 }
 
+// ── PDF merging ───────────────────────────────────────────────────────────────
+
 /**
- * Merge multiple PDF binaries into one using pdftk (available on most Linux servers).
- * Returns the path to the merged file, or null if pdftk is unavailable.
+ * Merge multiple PDF binaries into one file.
+ * Uses FPDI + FPDF (pure PHP). Falls back to pdftk if FPDI unavailable.
+ * Returns path to merged file, or null if neither method works.
  */
 function mergePdfs($pdfBinaries) {
     $uploadDir = __DIR__ . '/duch_pdf/';
@@ -115,24 +111,60 @@ function mergePdfs($pdfBinaries) {
         $tempFiles[] = $path;
     }
 
-    // Try merging with pdftk
     $mergedPath = $uploadDir . 'merged_' . time() . '.pdf';
-    $fileList   = implode(' ', array_map('escapeshellarg', $tempFiles));
-    $cmd        = "pdftk $fileList cat output " . escapeshellarg($mergedPath) . " 2>&1";
-    exec($cmd, $output, $returnCode);
 
-    // Clean up temp chunk files
-    foreach ($tempFiles as $f) {
-        @unlink($f);
+    // ── Method 1: FPDI + FPDF (pure PHP) ─────────────────────────────────────
+    if (class_exists('\setasign\Fpdi\Fpdi')) {
+        try {
+            $fpdi = new Fpdi();
+
+            foreach ($tempFiles as $tempFile) {
+                $pageCount = $fpdi->setSourceFile($tempFile);
+                for ($p = 1; $p <= $pageCount; $p++) {
+                    $tplId = $fpdi->importPage($p);
+                    $size  = $fpdi->getTemplateSize($tplId);
+                    $orientation = ($size['width'] > $size['height']) ? 'L' : 'P';
+                    $fpdi->AddPage($orientation, [$size['width'], $size['height']]);
+                    $fpdi->useTemplate($tplId);
+                }
+            }
+
+            $fpdi->Output($mergedPath, 'F');
+            foreach ($tempFiles as $f) { @unlink($f); }
+
+            if (file_exists($mergedPath)) {
+                return $mergedPath;
+            }
+        } catch (\Exception $e) {
+            error_log('FPDI merge failed: ' . $e->getMessage());
+            // fall through to pdftk
+        }
     }
 
-    if ($returnCode === 0 && file_exists($mergedPath)) {
-        return $mergedPath;
+    // ── Method 2: pdftk shell command ─────────────────────────────────────────
+    $disabledFunctions = array_map('trim', explode(',', ini_get('disable_functions')));
+    if (function_exists('exec') && !in_array('exec', $disabledFunctions)) {
+        $fileList   = implode(' ', array_map('escapeshellarg', $tempFiles));
+        $cmd        = "pdftk $fileList cat output " . escapeshellarg($mergedPath) . " 2>&1";
+        $output     = [];
+        $returnCode = 0;
+        exec($cmd, $output, $returnCode);
+        foreach ($tempFiles as $f) { @unlink($f); }
+
+        if ($returnCode === 0 && file_exists($mergedPath)) {
+            return $mergedPath;
+        }
+        error_log('pdftk merge failed (exit ' . $returnCode . '): ' . implode("\n", $output));
+        return null;
     }
 
-    error_log('pdftk merge failed (exit ' . $returnCode . '): ' . implode("\n", $output));
+    // ── No merge method available ──────────────────────────────────────────────
+    error_log('mergePdfs: Neither FPDI nor pdftk available. Sending as separate attachments.');
+    foreach ($tempFiles as $f) { @unlink($f); }
     return null;
 }
+
+// ── Email ────────────────────────────────────────────────────────────────────
 
 function emailToOhel($filePath = null, $allFiles = []) {
     $mail = new PHPMailer(true);
@@ -151,7 +183,6 @@ function emailToOhel($filePath = null, $allFiles = []) {
         $mail->Subject = 'Duch';
         $mail->Body    = $msg;
 
-        // Attach merged PDF if available, otherwise attach all individual chunks
         if ($filePath && file_exists($filePath)) {
             $mail->addAttachment($filePath);
         } elseif (!empty($allFiles)) {
@@ -165,14 +196,14 @@ function emailToOhel($filePath = null, $allFiles = []) {
         return $mail->ErrorInfo;
     }
 
-    // Clean up files after sending
+    // Clean up after sending
     if ($filePath && file_exists($filePath)) @unlink($filePath);
     foreach ($allFiles as $f) { if (file_exists($f)) @unlink($f); }
 
     return false;
 }
 
-// ── Main ────────────────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 
 if (!isset($_POST['html'])) {
     echo json_encode(['success' => false, 'error' => 'No HTML received.', 'message' => null]);
@@ -190,14 +221,14 @@ if (empty($chunks)) {
     exit;
 }
 
-// Generate one PDF per student chunk
+// Generate one PDF per student
 $pdfBinaries = [];
 $errors      = [];
 
 foreach ($chunks as $i => $chunk) {
     try {
         $pdfBinaries[] = createDocraptorPdf($chunk);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         $errors[] = 'Student ' . ($i + 1) . ': ' . $e->getMessage();
     }
 }
@@ -207,14 +238,14 @@ if (empty($pdfBinaries)) {
     exit;
 }
 
-// Merge all PDFs into one file
+// Merge all PDFs into one
 $mergedPath = mergePdfs($pdfBinaries);
 
 $uploadDir = __DIR__ . '/duch_pdf/';
 $allFiles  = [];
 
 if (!$mergedPath) {
-    // pdftk unavailable — save chunks individually and attach them all
+    // Merge unavailable — save and attach chunks individually
     foreach ($pdfBinaries as $i => $binary) {
         $path = $uploadDir . 'duch_' . time() . '_' . $i . '.pdf';
         file_put_contents($path, $binary);
@@ -227,11 +258,11 @@ $emailError = emailToOhel($mergedPath, $allFiles);
 if ($emailError) {
     echo json_encode(['success' => false, 'error' => $emailError, 'message' => null]);
 } else {
-    $chunkCount = count($pdfBinaries);
-    $warnMsg    = !empty($errors) ? ' (warnings: ' . implode('; ', $errors) . ')' : '';
+    $count   = count($pdfBinaries);
+    $warnMsg = !empty($errors) ? ' (warnings: ' . implode('; ', $errors) . ')' : '';
     echo json_encode([
         'success' => true,
         'error'   => null,
-        'message' => "Generated $chunkCount PDF(s) and emailed successfully.$warnMsg"
+        'message' => "Generated $count PDF(s) and emailed successfully.$warnMsg"
     ]);
 }
