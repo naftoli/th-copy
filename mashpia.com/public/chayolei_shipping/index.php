@@ -18,6 +18,8 @@ require_once 'class.chayoleiShipping.php';
 require_once 'data.php';
 
 $cs = new ChayoleiShipping();
+$cs->setYear($cur_year);
+$max_hachayol_shipment_option = $cs->getMaxHachayolShipmentNum((int) $cur_year);
 $categories = $cs->getCategories();
 $items = $cs->getItems();
 ?>
@@ -139,6 +141,9 @@ $items = $cs->getItems();
 </head>
 <body>
   <h1>Create Your Own Shipping Report</h1>
+  <?php if ($super) { ?>
+    <p style="margin-bottom:1rem;"><a href="shipments.php">Manage Hachayol shipments (issue ranges)</a></p>
+  <?php } ?>
   <form id="shippingForm" action="report.php" method="post">
     <fieldset>
       <legend>Choose Items</legend>
@@ -226,16 +231,11 @@ $items = $cs->getItems();
       <legend>Shipment Number</legend>
       <select name="shipment_number" id="shipment_number">
         <option value="0">Any/All</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
+        <?php
+        for ($sn = 1; $sn <= $max_hachayol_shipment_option; $sn++) {
+            echo '<option value="' . $sn . '">' . $sn . "</option>\n";
+        }
+        ?>
       </select>
     </fieldset>
 

@@ -21,6 +21,12 @@ class ChayoleiShipping
 {
     private $db, $year, $schools, $grades, $users;
 
+    /** @var array|null shipment_num => ['issue_start'=>int,'issue_end'=>int] */
+    private $hachayolShipmentDefCache;
+
+    /** @var int|null */
+    private $hachayolShipmentDefCacheYear;
+
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
@@ -30,10 +36,14 @@ class ChayoleiShipping
         $this->users = [];
         $this->toExclude = [];
         $this->only = [];
+        $this->hachayolShipmentDefCache = null;
+        $this->hachayolShipmentDefCacheYear = null;
     }
 
     public function setYear($yr) {
         $this->year = $yr;
+        $this->hachayolShipmentDefCache = null;
+        $this->hachayolShipmentDefCacheYear = null;
     }
 
     public function setSchools($schools) {
@@ -54,6 +64,90 @@ class ChayoleiShipping
 
     public function setOnly($ids) {
         $this->only = $ids;
+    }
+
+    /**
+     * Ensure DB table for configurable Hachayol shipment ↔ issue ranges exists.
+     */
+    public function ensureChayoleiHachayolShipmentsTable() {
+        static $done = false;
+        if ($done) {
+            return;
+        }
+        $this->db->exec("
+            CREATE TABLE IF NOT EXISTS chayolei_hachayol_shipments (
+                id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                year INT NOT NULL,
+                shipment_num SMALLINT UNSIGNED NOT NULL,
+                issue_start SMALLINT UNSIGNED NOT NULL,
+                issue_end SMALLINT UNSIGNED NOT NULL,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (id),
+                UNIQUE KEY uq_year_shipment (year, shipment_num),
+                KEY idx_year (year)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ");
+        $done = true;
+    }
+
+    /**
+     * Rows for a year: shipment_num, issue_start, issue_end
+     */
+    public function getHachayolShipmentDefinitions($year = null) {
+        $yr = $year !== null ? (int) $year : (int) $this->year;
+        $this->ensureChayoleiHachayolShipmentsTable();
+        $stmt = $this->db->prepare('
+            SELECT shipment_num, issue_start, issue_end
+            FROM chayolei_hachayol_shipments
+            WHERE year = ?
+            ORDER BY shipment_num
+        ');
+        $stmt->execute([$yr]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Highest shipment # to show in filters (at least 10 for legacy reports).
+     */
+    public function getMaxHachayolShipmentNum($year = null) {
+        $yr = $year !== null ? (int) $year : (int) $this->year;
+        $this->ensureChayoleiHachayolShipmentsTable();
+        $stmt = $this->db->prepare('SELECT MAX(shipment_num) FROM chayolei_hachayol_shipments WHERE year = ?');
+        $stmt->execute([$yr]);
+        $m = (int) $stmt->fetchColumn();
+        return max($m, 10);
+    }
+
+    private function getHachayolShipmentDefinitionsMap($year = null) {
+        $yr = $year !== null ? (int) $year : (int) $this->year;
+        if ($this->hachayolShipmentDefCache !== null && $this->hachayolShipmentDefCacheYear === $yr) {
+            return $this->hachayolShipmentDefCache;
+        }
+        $map = [];
+        foreach ($this->getHachayolShipmentDefinitions($yr) as $row) {
+            $map[(int) $row['shipment_num']] = [
+                'issue_start' => (int) $row['issue_start'],
+                'issue_end' => (int) $row['issue_end'],
+            ];
+        }
+        $this->hachayolShipmentDefCache = $map;
+        $this->hachayolShipmentDefCacheYear = $yr;
+        return $map;
+    }
+
+    /**
+     * Item id for th_chidon_shipping / labels: encodes the **physical shipment batch number**
+     * (shipment #1, #2, #3 from the report UI — which wave/box), not magazine issue numbers.
+     * Issue ranges (e.g. issues 4–60) belong in labels only via getHachayolShipmentDefinitionsMap().
+     *
+     * Legacy shape: shipments 1–9 → HACH01…HACH09; 10+ → HACH10, HACH11, …
+     */
+    public static function hachayolShipmentItemId($shipmentBatchNum) {
+        $n = (int) $shipmentBatchNum;
+        if ($n >= 1 && $n <= 9) {
+            return 'HACH0' . $n;
+        }
+        return 'HACH' . $n;
     }
 
     public function getCategories() {
@@ -93,8 +187,24 @@ class ChayoleiShipping
         foreach ($rows as $row) {
             $items[] = $row['item'];
         }
-        // return $items;
-        return ['Hachayol Shipment #1', 'Hachayol Shipment #2', 'Hachayol Shipment #3', 'Hachayol Shipment #4', 'Hachayol Shipment #5', 'Hachayol Shipment #6', 'Hachayol Shipment #7', 'Hachayol Shipment #8', 'Hachayol Shipment #9', 'Hachayol Shipment #10'];
+        $defRows = $this->getHachayolShipmentDefinitions($this->year);
+        $byNum = [];
+        foreach ($defRows as $row) {
+            $byNum[(int) $row['shipment_num']] = $row;
+        }
+        $maxN = $this->getMaxHachayolShipmentNum($this->year);
+        $out = [];
+        for ($n = 1; $n <= $maxN; $n++) {
+            $key = 'hachayol shipment #' . $n;
+            if (isset($byNum[$n])) {
+                $row = $byNum[$n];
+                $out[$key] = 'Hachayol Shipment #' . $n
+                    . ' (Hachayol #' . (int) $row['issue_start'] . '–' . (int) $row['issue_end'] . ')';
+            } else {
+                $out[$key] = 'Hachayol Shipment #' . $n;
+            }
+        }
+        return $out;
     }
 
     public function checkShippingStatus($school_id) {    
@@ -131,6 +241,7 @@ class ChayoleiShipping
 
     public function getHachayols($gender, $school, $items) {
         $hachayols = [];
+        $defMap = $this->getHachayolShipmentDefinitionsMap($this->year);
         $h = new Hachayol();
         $h->setSchools($school);
         $rows = $h->runSql($gender, $school, $this->year);
@@ -143,20 +254,26 @@ class ChayoleiShipping
                 if (!isset($shipping_status[$row['admin_id']])) continue;
             }
             foreach ($items as $item) {
-                // get last digit of item
-                $last_digit = intval(substr($item, -1));
+                if (!preg_match('/hachayol shipment #(\d+)/i', (string) $item, $m)) {
+                    continue;
+                }
+                $shipNum = (int) $m[1];
+                $itemLabel = 'Hachayol';
+                if (isset($defMap[$shipNum])) {
+                    $itemLabel = 'Hachayol (#' . $defMap[$shipNum]['issue_start'] . '–' . $defMap[$shipNum]['issue_end'] . ')';
+                }
                 $hachayols[$row['user_id']][] = [
-                    'item'  => 'Hachayol',
+                    'item'  => $itemLabel,
                     'size'  => '',
                     'name'  => '',
-                    'id'    => 'HACH0' . $last_digit,
+                    'id'    => self::hachayolShipmentItemId($shipNum),
                     'cat'   => 'hachayols',
                     'size'  => '',
                     'qty'   => 1
                 ];
             }
         }
-        
+
         return $hachayols;
     }
 
