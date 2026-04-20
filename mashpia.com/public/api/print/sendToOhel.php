@@ -23,7 +23,7 @@ function createDocraptorDocument($html) {
     // $prince_options = new DocRaptor\PrinceOptions();                    // pdf-specific options
     // $doc->setPrinceOptions($prince_options);
     // $prince_options->setMedia("screen");                                // use screen styles instead of print styles
-    $prince_options->setBaseurl("https://mashpia.com");                    // pretend URL when using document_content
+    // $prince_options->setBaseurl("https://mashpia.com");                    // pretend URL when using document_content
 
     $create_response = $docraptor->createDoc($doc);
     
