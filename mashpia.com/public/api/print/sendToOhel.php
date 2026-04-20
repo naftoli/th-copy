@@ -19,11 +19,12 @@ function createDocraptorDocument($html) {
     // $doc->setDocumentUrl("http://docraptor.com/examples/invoice.html"); // or use a url
     $doc->setName(time() . ".pdf");                                    // help you find a document later
     $doc->setDocumentType("pdf");                                          // pdf or xls or xlsx
-    $doc->setJavascript(true);                                          // enable JavaScript processing
-    // $prince_options = new DocRaptor\PrinceOptions();                    // pdf-specific options
+    $doc->setJavascript(true);                                            // enable JavaScript processing
+    $doc->document_url = 
+    $prince_options = new DocRaptor\PrinceOptions();                    // pdf-specific options
     // $doc->setPrinceOptions($prince_options);
     // $prince_options->setMedia("screen");                                // use screen styles instead of print styles
-    // $prince_options->setBaseurl("https://mashpia.com");                    // pretend URL when using document_content
+    $prince_options->setBaseurl("https://mashpia.com");                    // pretend URL when using document_content
 
     $create_response = $docraptor->createDoc($doc);
     
