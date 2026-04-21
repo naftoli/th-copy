@@ -20,8 +20,6 @@
             column-count: 3;
             column-gap: 20px;
             height: auto !important;
-            /* min-height: auto !important; */
-            /* page-break-after: avoid !important; */
         }
         .track {
             margin-bottom: 15px;
@@ -131,8 +129,6 @@
             padding: 5px 10px;
         }
     </style>
-
-    <script src="https://docraptor.com/docraptor-1.0.0.js"></script>
 </head>
 
 <body>
@@ -141,33 +137,31 @@
     <div id="main"></div>
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
-    <script src="/scripts/js.cookie.js"></script>
     <script src="/mobile/js/spin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script>
-        // options for the loading spinner....
         var opts = {
-            lines: 8, // The number of lines to draw
-            length: 26, // The length of each line
-            width: 12, // The line thickness
-            radius: 26, // The radius of the inner circle
-            scale: 0.75, // Scales overall size of the spinner
-            corners: 1, // Corner roundness (0..1)
-            color: '#888', // #rgb or #rrggbb or array of colors
-            opacity: 0.25, // Opacity of the lines
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise-1: counterclockwise
-            speed: 1.1, // Rounds per second
-            trail: 60, // Afterglow percentage
-            fps: 20, // Frames per second when using setTimeout() as a fallback for CSS
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            className: 'spinner', // The CSS class to assign to the spinner
-            top: '50%', // Top position relative to parent
-            left: '50%', // Left position relative to parent
-            shadow: false, // Whether to render a shadow
-            hwaccel: true, // Whether to use hardware acceleration
-            position: 'absolute' // Element positioning
+            lines: 8,
+            length: 26,
+            width: 12,
+            radius: 26,
+            scale: 0.75,
+            corners: 1,
+            color: '#888',
+            opacity: 0.25,
+            rotate: 0,
+            direction: 1,
+            speed: 1.1,
+            trail: 60,
+            fps: 20,
+            zIndex: 2e9,
+            className: 'spinner',
+            top: '50%',
+            left: '50%',
+            shadow: false,
+            hwaccel: true,
+            position: 'absolute'
         };
         var target = document.getElementById('spinner');
         new Spinner(opts).spin(target);
@@ -193,33 +187,6 @@
                     if (fromBC) {
                         $("#email-button").show();
                     }
-                    // Wait for fonts, images, and layout before auto-printing
-                    // waitForRenderReady(document.getElementById('main')).then(function() {
-                        // const children = document.querySelectorAll('.userDuch');
-                        // children.forEach(function(child) {
-                        //     const totalPages = checkPageCount(child);
-                        //     if (totalPages % 2 !== 0) {
-                        //         // add a blank page
-                        //         child.insertAdjacentHTML('beforeend',
-                        //             '<div style="page-break-after: always;"></div>'
-                        //         );
-                        //     }
-                        // });
-                        // window.print();
-                        // this key works in test mode!
-                        // DocRaptor.createAndDownloadDoc("CIrbbDsV2QqOc-ULQnQv", {
-                        //     name: "html-and-javascript",
-                        //     test: true, // test documents are free but watermarked
-                        //     document_type: "pdf",
-                        //     document_content: document.getElementById('main').innerHTML,
-                        //     // document_url: "https://mashpia.com/pdf/duch.php",
-                        //     javascript: true
-                        //     // prince_options: {
-                        //     //   media: "print", // @media 'screen' or 'print' CSS
-                        //     //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
-                        //     // }
-                        // });
-                    // });
                 }
             }
 
@@ -271,54 +238,45 @@
                 return;
             }
 
-            // Print Duch All: check if we need to auto-open tab pages (more than 10 classes)
-                var checkData = Object.assign({}, postData, { check_tabs: 1 });
-                fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
-                    .then(function(r) { return r.text(); })
-                    .then(function(text) {
-                        var json = null;
-                        try { json = JSON.parse(text); } catch (e) {}
-                        if (json && json.useTabs && json.tabs && json.tabs.length > 0) {
-                            $("#spinner").empty();
-                            var listEl = document.getElementById('grade-list');
-                            listEl.style.display = 'block';
-                            listEl.innerHTML = '<p>Opening ' + json.tabs.length + ' tab pages…</p>';
-                            json.tabs.forEach(function(t, i) {
-                                openTabInNewPage(t, i * 1000);
-                            });
-                            var lastOpenMs = (json.tabs.length - 1) * 1000;
-                            setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.tabs.length + ' tab pages. Closing…</p>';
-                                window.close();
-                            }, lastOpenMs + 1000);
-                            return;
-                        }
-                        var fullData = Object.assign({}, postData);
-                        delete fullData.check_tabs;
-                        fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
-                            .then(function(r) { return r.text(); })
-                            .then(showContent)
-                            .catch(function(err) {
-                                $("#spinner").empty();
-                                alert('Error: ' + err);
-                            });
-                    })
-                    .catch(function(err) {
+            // Print Duch All: optionally split into multiple tab pages (see printDuchAll check_tabs)
+            var checkData = Object.assign({}, postData, { check_tabs: 1 });
+            fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
+                .then(function(r) { return r.text(); })
+                .then(function(text) {
+                    var json = null;
+                    try { json = JSON.parse(text); } catch (e) {}
+                    if (json && json.useTabs && json.tabs && json.tabs.length > 0) {
                         $("#spinner").empty();
-                        alert('Error: ' + err);
-                    });
-
-            // fetch(url, { method: 'POST', body: JSON.stringify(postData) })
-            //     .then(function(r) { return r.text(); })
-            //     .then(showContent)
-            //     .catch(function(err) {
-            //         $("#spinner").empty();
-            //         alert('Error: ' + err);
-            //     });
+                        var listEl = document.getElementById('grade-list');
+                        listEl.style.display = 'block';
+                        listEl.innerHTML = '<p>Opening ' + json.tabs.length + ' tab pages…</p>';
+                        json.tabs.forEach(function(t, i) {
+                            openTabInNewPage(t, i * 1000);
+                        });
+                        var lastOpenMs = (json.tabs.length - 1) * 1000;
+                        setTimeout(function() {
+                            listEl.innerHTML = '<p>Opened ' + json.tabs.length + ' tab pages. Closing…</p>';
+                            window.close();
+                        }, lastOpenMs + 1000);
+                        return;
+                    }
+                    var fullData = Object.assign({}, postData);
+                    delete fullData.check_tabs;
+                    fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
+                        .then(function(r) { return r.text(); })
+                        .then(showContent)
+                        .catch(function(err) {
+                            $("#spinner").empty();
+                            alert('Error: ' + err);
+                        });
+                })
+                .catch(function(err) {
+                    $("#spinner").empty();
+                    alert('Error: ' + err);
+                });
         };
 
         function emailToOhel() {
-            console.log('emailing to ohel');
             setTimeout(async function() {
                 try {
                     const btns = document.getElementById('buttons');
@@ -374,87 +332,23 @@
                     const mergedBytes = await mergedPdf.save();
                     const filename = 'duch_' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                     const blob = new Blob([mergedBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
+                    const formData = new FormData();
+                    formData.append('pdf', blob, filename);
+
+                    const res = await fetch('sendToOhel.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json().catch(function() { return {}; });
+                    if (data.success) {
+                        alert(data.message || 'Email sent successfully.');
+                    } else {
+                        alert('Error: ' + (data.error || res.statusText || 'Unknown error'));
+                    }
                 } catch (err) {
-                    console.error(err);
                     alert('Error creating duch PDF: ' + (err && err.message ? err.message : err));
                 }
-
-                /*
-                const formData = new FormData();
-                formData.append('html', html);
-
-                fetch('sendToOhel.php', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(result => {
-                    $("#spinner").empty();
-                    if (result.success) {
-                        alert('Email sent successfully');
-                    } else {
-                        alert('Error: ' + (result.error || JSON.stringify(result)));
-                    }
-                })
-                .catch(result => {
-                    $("#spinner").empty();
-                    alert('Error: ' + (result.error || JSON.stringify(result)));
-                });
-                */
             }, 1500);
-        }
-        
-        async function waitForRenderReady(rootEl) {
-            // Wait for webfonts (if supported)
-            try {
-                if (document.fonts && document.fonts.ready) {
-                    await document.fonts.ready;
-                }
-            } catch (e) {}
-
-            // Wait for images inside root to load/decode so heights don't change after measuring
-            try {
-                const imgs = (rootEl || document).querySelectorAll ? (rootEl || document).querySelectorAll('img') : [];
-                const waits = [];
-                imgs.forEach(function(img) {
-                    if (!img) return;
-                    if (img.complete && img.naturalWidth) return;
-                    if (img.decode) {
-                        waits.push(img.decode().catch(function(){}));
-                    } else {
-                        waits.push(new Promise(function(resolve){ img.onload = resolve; img.onerror = resolve; }));
-                    }
-                });
-                await Promise.all(waits);
-            } catch (e) {}
-
-            // Let the browser flush layout at least once
-            await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
-        }
-
-        async function checkPageCount(element) {
-            // Configure PDF settings to match standard paper
-            const opt = {
-                    margin:       0.5,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-
-            // Generate the PDF internally but don't save it yet
-            const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf');
-            // The pdf object is an instance of jsPDF
-            const totalPages = pdf.internal.getNumberOfPages();
-            console.log('Total pages: ' + totalPages);
-            return totalPages;
         }
     </script>
 </body>
