@@ -87,12 +87,13 @@ if (empty($selectedRanks)) {
         }
 
         table {
-            font-size: 11px;
+            font-size: 12px;
             border-collapse: collapse;
         }
 
         th, td {
-            padding: 3px 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
 
         .page-break {
