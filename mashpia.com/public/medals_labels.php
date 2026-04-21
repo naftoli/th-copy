@@ -209,6 +209,10 @@ function checkForBreak()
                             }
                             else $firstTime = false;
                             echo "<div class='label'>";
+                            echo "<span class='name'><b>Medal Packing Dates</b><br />" . $heDates['start_he'] . " - " . $heDates['end_he'] . "</span>";
+                            echo "</div>";
+                            checkForBreak();
+                            echo "<div class='label'>";
                             echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
                             $schoolChanged = false;
                         } else if ($gradeChanged) {
