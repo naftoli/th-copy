@@ -144,6 +144,7 @@
     <script src="/scripts/js.cookie.js"></script>
     <script src="/mobile/js/spin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.3/jspdf.umd.min.js"></script>
     <script>
         // options for the loading spinner....
         var opts = {
@@ -323,15 +324,31 @@
 
                 let html = document.documentElement.outerHTML;
 
-                // Remove all img tags (as before)
-                html = html.replace(/<img[^>]*>/g, '');
-
                 // Fix root-relative URLs so DocRaptor can load them
-                html = html.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
-                html = html.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
-                html = html.replace(/src='(\/(?!\/)[^']*)'/g, "src='https://mashpia.com$1'");
-                html = html.replace(/href='(\/(?!\/)[^']*)'/g, "href='https://mashpia.com$1'");
+                // html = html.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
+                // html = html.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
+                // html = html.replace(/src='(\/(?!\/)[^']*)'/g, "src='https://mashpia.com$1'");
+                // html = html.replace(/href='(\/(?!\/)[^']*)'/g, "href='https://mashpia.com$1'");
 
+                // Remove all img tags
+                html = html.replace(/<img\b[^>]*>/gi, '');
+
+                // split up html into student chunks
+                const studentChunks = html.split('|');
+                const pdfs = [];
+                studentChunks.forEach(chunk => {
+                    const pdf = new jsPDF();
+                    pdf.text(chunk, 10, 10);
+                    pdfs.push(pdf);
+                });
+
+                // merge all pdfs into one
+                const mergedPdf = pdfs.reduce((acc, pdf) => {
+                    return acc.concat(pdf);
+                }, new jsPDF());
+                mergedPdf.save('/duch_pdf/' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf');
+
+                /*
                 const formData = new FormData();
                 formData.append('html', html);
 
@@ -352,6 +369,7 @@
                     $("#spinner").empty();
                     alert('Error: ' + (result.error || JSON.stringify(result)));
                 });
+                */
             }, 1500);
         }
         
