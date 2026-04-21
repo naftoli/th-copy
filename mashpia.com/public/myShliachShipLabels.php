@@ -183,6 +183,12 @@ $for_shipping = []; // variable for info to set as shipped
     $rows = 1; // counter for rows
     $csv = []; // variable for csv data
 
+    // first label on the run: report packing dates
+    echo "<div class='label'>";
+    echo "<span class='name'><b>Packing Dates</b><br />" . $heDatesRanks['start_he'] . " - " . $heDatesRanks['end_he'] . "</span>";
+    echo "</div>";
+    checkForBreak();
+
     foreach ($parents as $admin => $children) {
         $parent = $admins[$admin];
         $name = $parent['first'] . ' ' . $parent['last'];
