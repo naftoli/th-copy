@@ -11,11 +11,12 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 
 $chidonYr = GlobalSettings::getChidonRegYear();
+$currentYear = GlobalSettings::getChidonYear();
 $year = intval($_REQUEST['year'] ?? $chidonYr);
 
 $startGrade = 3;
 $endGrade = 8;
-if ($chidonYr > $year) {
+if ($chidonYr > $currentYear) {
     $startGrade--;
     $endGrade--;
 }
