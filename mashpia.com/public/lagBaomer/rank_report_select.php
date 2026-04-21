@@ -20,6 +20,11 @@ $selectedRanks = isset($_GET['ranks']) && is_array($_GET['ranks'])
     ? array_map('intval', $_GET['ranks'])
     : [];
 $registeredOnly = isset($_GET['registered_only']) ? intval($_GET['registered_only']) : 1;
+$reportView = isset($_GET['report_view']) ? $_GET['report_view'] : 'both'; // details|summary|both
+$totalsByGender = isset($_GET['totals_by_gender']) ? intval($_GET['totals_by_gender']) : 1;
+if (!in_array($reportView, ['details', 'summary', 'both'])) {
+    $reportView = 'both';
+}
 
 // keep only schools this admin is allowed to see
 $selectedSchools = array_values(array_intersect($selectedSchools, $schoolIds));
@@ -329,6 +334,30 @@ if (empty($selectedRanks)) {
                 <input type="radio" name="registered_only" value="0" <?= !$registeredOnly ? 'checked' : '' ?>>
                 All children
             </label>
+            <br/><br/>
+            <strong>Report type</strong><br/>
+            <label>
+                <input type="radio" name="report_view" value="both" <?= $reportView == 'both' ? 'checked' : '' ?>>
+                Details + Summary
+            </label>
+            <label>
+                <input type="radio" name="report_view" value="details" <?= $reportView == 'details' ? 'checked' : '' ?>>
+                Details only
+            </label>
+            <label>
+                <input type="radio" name="report_view" value="summary" <?= $reportView == 'summary' ? 'checked' : '' ?>>
+                Summary only
+            </label>
+            <br/><br/>
+            <strong>Totals</strong><br/>
+            <label>
+                <input type="radio" name="totals_by_gender" value="1" <?= $totalsByGender ? 'checked' : '' ?>>
+                Split by gender
+            </label>
+            <label>
+                <input type="radio" name="totals_by_gender" value="0" <?= !$totalsByGender ? 'checked' : '' ?>>
+                Combine genders
+            </label>
         </div>
         <button type="submit">Run Report</button>
         <input type='button' value='Print' onclick='print_report()'/>
@@ -381,19 +410,21 @@ if (empty($users)) {
 foreach ($users as $school => $info) {
     $totals = ['F' => [], 'M' => []];
     $totalGenerals = ['F' => 0, 'M' => 0];
+    $combinedTotals = [];
+    $combinedGenerals = 0;
 
-    foreach ($info as $grade => $other) {
-        echo "<h2>" . $school . ' - ' . $grade . "</h2>";
-        echo "<table>";
-        echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
-        foreach ($other as $gender => $user) {
+    foreach ($info as $grade => &$other) {
+        foreach ($other as $gender => &$user) {
             foreach ($user as $name => $rank) {
-                echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td></tr>";
                 if (isset($totals[$gender][$rank])) $totals[$gender][$rank]++;
                 else $totals[$gender][$rank] = 1;
 
+                if (isset($combinedTotals[$rank])) $combinedTotals[$rank]++;
+                else $combinedTotals[$rank] = 1;
+
                 if ($rank >= 9) {
                     $totalGenerals[$gender]++;
+                    $combinedGenerals++;
                     $generalsTotals[$gender]++;
                 }
 
@@ -401,46 +432,93 @@ foreach ($users as $school => $info) {
                 else $grandTotals[$gender][$rank] = 1;
             }
         }
-        echo "</table>";
-        echo "<div class='page-break'></div>";
+    }
+
+    if ($reportView !== 'summary') {
+        foreach ($info as $grade => $other) {
+            echo "<h2>" . $school . ' - ' . $grade . "</h2>";
+            echo "<table>";
+            echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
+            foreach ($other as $gender => $user) {
+                foreach ($user as $name => $rank) {
+                    echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td></tr>";
+                }
+            }
+            echo "</table>";
+            echo "<div class='page-break'></div>";
+        }
     }
 
     foreach ($totals as $gender => &$more) {
         ksort($more);
     }
+    ksort($combinedTotals);
 
-    echo "<h2>" . $school . " Totals</h2>";
-    echo "<table>";
-    echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
-    foreach ($totals as $gender => $other) {
-        foreach ($other as $rank => $num) {
-            echo "<tr><td>" . $gender . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $num . "</td></tr>";
+    if ($reportView !== 'details') {
+        echo "<h2>" . $school . " Totals</h2>";
+        echo "<table>";
+        if ($totalsByGender) {
+            echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
+            foreach ($totals as $gender => $other) {
+                foreach ($other as $rank => $num) {
+                    echo "<tr><td>" . $gender . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $num . "</td></tr>";
+                }
+            }
+        } else {
+            echo "<tr><th>Rank</th><th>Total</th></tr>";
+            foreach ($combinedTotals as $rank => $num) {
+                echo "<tr><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $num . "</td></tr>";
+            }
         }
+        echo "</table><br />";
+        if ($totalsByGender) {
+            foreach ($totalGenerals as $gender => $total) {
+                if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
+            }
+        } else {
+            if ($combinedGenerals > 0) echo "<p>Total Generals: " . $combinedGenerals . "</p>";
+        }
+        echo "<div class='page-break'></div>";
     }
-    echo "</table><br />";
-    foreach ($totalGenerals as $gender => $total) {
-        if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
-    }
-    echo "<div class='page-break'></div>";
 }
 
-if ($admin_user['auth'] == 'super' && !empty($users)) {
+if ($admin_user['auth'] == 'super' && !empty($users) && $reportView !== 'details') {
     foreach ($grandTotals as $gender => &$info) {
         ksort($info);
     }
+    $grandTotalsCombined = [];
+    foreach ($grandTotals as $gender => $ranks) {
+        foreach ($ranks as $rank => $total) {
+            if (!isset($grandTotalsCombined[$rank])) $grandTotalsCombined[$rank] = 0;
+            $grandTotalsCombined[$rank] += $total;
+        }
+    }
+    ksort($grandTotalsCombined);
     echo "<h2>Grand Totals</h2>";
     echo "<table>";
-    echo "<tr><th>Gender</th><th>Rank</th><th>Total</th><tr>";
-    foreach ($grandTotals as $gender => $other) {
-        foreach ($other as $rank => $total) {
-            echo "<tr><td>" . $gender . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $total . "</td></tr>";
+    if ($totalsByGender) {
+        echo "<tr><th>Gender</th><th>Rank</th><th>Total</th><tr>";
+        foreach ($grandTotals as $gender => $other) {
+            foreach ($other as $rank => $total) {
+                echo "<tr><td>" . $gender . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $total . "</td></tr>";
+            }
+        }
+    } else {
+        echo "<tr><th>Rank</th><th>Total</th><tr>";
+        foreach ($grandTotalsCombined as $rank => $total) {
+            echo "<tr><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $total . "</td></tr>";
         }
     }
     echo "</table>";
     echo "<div class='page-break'></div>";
     echo "<h2>Grand Totals for Generals</h2>";
-    foreach ($generalsTotals as $gender => $total) {
-        if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
+    if ($totalsByGender) {
+        foreach ($generalsTotals as $gender => $total) {
+            if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
+        }
+    } else {
+        $allGenerals = array_sum($generalsTotals);
+        if ($allGenerals > 0) echo "<p>Total Generals: " . $allGenerals . "</p>";
     }
 }
 ?>
