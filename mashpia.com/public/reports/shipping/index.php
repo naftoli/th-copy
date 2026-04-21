@@ -102,7 +102,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/medals_labels.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">School Campaign Medals Shipping Lables</span>
+                    <span class="link-text">School Campaign Medals Shipping Labels</span>
                 </div>
             </a>
             <a href="/myShliachShipLabels.php">
