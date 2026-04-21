@@ -466,7 +466,7 @@ foreach ($users as $school => $info) {
             }
             ksort($classCombinedTotals);
 
-            echo "<h3>" . $school . ' - ' . $grade . " Totals</h3>";
+            echo "<h2>" . $school . ' - ' . $grade . " Totals</h2>";
             echo "<table>";
             if ($totalsByGender) {
                 echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
@@ -484,10 +484,10 @@ foreach ($users as $school => $info) {
             echo "</table><br />";
             if ($totalsByGender) {
                 foreach ($classGenerals as $gender => $total) {
-                    if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals (" . $grade . "): " . $total . "</p>";
+                    if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
                 }
             } else {
-                if ($classGeneralsCombined > 0) echo "<p>Total Generals (" . $grade . "): " . $classGeneralsCombined . "</p>";
+                if ($classGeneralsCombined > 0) echo "<p>Total Generals: " . $classGeneralsCombined . "</p>";
             }
 
             echo "<div class='page-break'></div>";
