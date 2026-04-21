@@ -436,15 +436,60 @@ foreach ($users as $school => $info) {
 
     if ($reportView !== 'summary') {
         foreach ($info as $grade => $other) {
+            $classTotals = ['F' => [], 'M' => []];
+            $classCombinedTotals = [];
+            $classGenerals = ['F' => 0, 'M' => 0];
+            $classGeneralsCombined = 0;
+
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
             echo "<table>";
             echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
             foreach ($other as $gender => $user) {
                 foreach ($user as $name => $rank) {
                     echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td></tr>";
+                    if (isset($classTotals[$gender][$rank])) $classTotals[$gender][$rank]++;
+                    else $classTotals[$gender][$rank] = 1;
+
+                    if (isset($classCombinedTotals[$rank])) $classCombinedTotals[$rank]++;
+                    else $classCombinedTotals[$rank] = 1;
+
+                    if ($rank >= 9) {
+                        $classGenerals[$gender]++;
+                        $classGeneralsCombined++;
+                    }
                 }
             }
             echo "</table>";
+
+            foreach ($classTotals as $gender => &$classMore) {
+                ksort($classMore);
+            }
+            ksort($classCombinedTotals);
+
+            echo "<h3>" . $school . ' - ' . $grade . " Totals</h3>";
+            echo "<table>";
+            if ($totalsByGender) {
+                echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
+                foreach ($classTotals as $gender => $classOther) {
+                    foreach ($classOther as $rank => $num) {
+                        echo "<tr><td>" . $gender . "</td><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $num . "</td></tr>";
+                    }
+                }
+            } else {
+                echo "<tr><th>Rank</th><th>Total</th></tr>";
+                foreach ($classCombinedTotals as $rank => $num) {
+                    echo "<tr><td>" . (isset($rankNames[$rank]) ? $rankNames[$rank] : $rank) . "</td><td>" . $num . "</td></tr>";
+                }
+            }
+            echo "</table><br />";
+            if ($totalsByGender) {
+                foreach ($classGenerals as $gender => $total) {
+                    if ($total > 0) echo "<p>Total " . $genderLookup[$gender] . " Generals (" . $grade . "): " . $total . "</p>";
+                }
+            } else {
+                if ($classGeneralsCombined > 0) echo "<p>Total Generals (" . $grade . "): " . $classGeneralsCombined . "</p>";
+            }
+
             echo "<div class='page-break'></div>";
         }
     }
