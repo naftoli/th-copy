@@ -335,21 +335,17 @@
 
                 // split up html into student chunks
                 const studentChunks = html.split('|');
-                const pdfs = [];
                 const JsPdfCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
                 if (!JsPdfCtor) {
                     throw new Error('jsPDF failed to load');
                 }
-                studentChunks.forEach(chunk => {
-                    const pdf = new JsPdfCtor();
-                    pdf.text(chunk, 10, 10);
-                    pdfs.push(pdf);
+                const mergedPdf = new JsPdfCtor();
+                studentChunks.forEach((chunk, idx) => {
+                    if (idx > 0) {
+                        mergedPdf.addPage();
+                    }
+                    mergedPdf.text(chunk, 10, 10);
                 });
-
-                // merge all pdfs into one
-                const mergedPdf = pdfs.reduce((acc, pdf) => {
-                    return acc.concat(pdf);
-                }, new JsPdfCtor());
                 mergedPdf.save('/duch_pdf/' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf');
 
                 /*
