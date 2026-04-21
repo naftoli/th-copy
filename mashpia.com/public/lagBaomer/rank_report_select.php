@@ -14,7 +14,7 @@ $selectedSchools = isset($_GET['schools']) && is_array($_GET['schools'])
     ? array_map('intval', $_GET['schools'])
     : [];
 $selectedGrades = isset($_GET['grades']) && is_array($_GET['grades'])
-    ? array_map('intval', $_GET['grades'])
+    ? array_map('strval', $_GET['grades'])
     : [];
 $selectedRanks = isset($_GET['ranks']) && is_array($_GET['ranks'])
     ? array_map('intval', $_GET['ranks'])
@@ -33,12 +33,23 @@ if (!empty($selectedSchools)) {
     $sqlGrades = "SELECT DISTINCT c.class_grade
                   FROM classes c
                   WHERE c.school_id IN (" . implode(', ', $selectedSchools) . ")
-                  AND c.class_grade REGEXP '^[0-9]+$'
-                  ORDER BY c.class_grade + 0";
+                  ORDER BY
+                    CASE
+                        WHEN c.class_grade = 'Pre1a' THEN 0
+                        WHEN c.class_grade REGEXP '^[0-9]+$' THEN 1
+                        ELSE 2
+                    END,
+                    c.class_grade + 0,
+                    c.class_grade";
     $resultGrades = mysql_query($sqlGrades);
     while ($row = mysql_fetch_assoc($resultGrades)) {
-        $availableGrades[] = intval($row['class_grade']);
+        $availableGrades[] = $row['class_grade'];
     }
+}
+if (!in_array('Pre1a', $availableGrades)) {
+    array_unshift($availableGrades, 'Pre1a');
+} else {
+    $availableGrades = array_values(array_unique(array_merge(['Pre1a'], $availableGrades)));
 }
 if (empty($selectedGrades)) {
     $selectedGrades = $availableGrades;
@@ -98,6 +109,8 @@ if (empty($selectedRanks)) {
 
         .filters h3 {
             margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
         }
 
         .row {
@@ -109,6 +122,7 @@ if (empty($selectedRanks)) {
 
         .group {
             min-width: 260px;
+            flex: 1 1 280px;
         }
 
         .options-box {
@@ -120,9 +134,55 @@ if (empty($selectedRanks)) {
             border-radius: 6px;
         }
 
+        .options-box label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 2px;
+            width: 100%;
+        }
+
+        .options-box label:hover {
+            background: #f8f9fc;
+            border-radius: 4px;
+        }
+
+        .grades-box {
+            display: block;
+        }
+
+        .grades-box label {
+            width: 100%;
+            padding: 3px 2px;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .scope-wrap {
+            margin-top: 4px;
+            padding-top: 8px;
+            border-top: 1px dashed #ddd;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .scope-wrap label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 16px;
+            gap: 6px;
+        }
+
         .muted {
             color: #666;
             font-size: 11px;
+        }
+
+        button, 
+        input[type="button"] {
+            padding: 10px;
         }
 
         @media print {
@@ -230,30 +290,18 @@ if (empty($selectedRanks)) {
             <div class="group">
                 <strong>Grades</strong><br/>
                 <label><input type="checkbox" id="selectAllGrades"> Select all grades</label>
-                <div class="options-box">
+                <div class="options-box grades-box">
                     <?php foreach ($availableGrades as $grade) { ?>
                         <label>
                             <input type="checkbox" class="gradeOption" name="grades[]"
-                                   value="<?= intval($grade) ?>" <?= in_array(intval($grade), $selectedGrades) ? 'checked' : '' ?>>
-                            Grade <?= intval($grade) ?>
+                                   value="<?= htmlspecialchars($grade) ?>" <?= in_array((string)$grade, $selectedGrades) ? 'checked' : '' ?>>
+                            Grade <?= htmlspecialchars($grade) ?>
                         </label><br/>
                     <?php } ?>
                     <?php if (empty($availableGrades)) { ?>
                         <span class="muted">No grades found for selected schools.</span>
                     <?php } ?>
                 </div>
-            </div>
-
-            <div class="group">
-                <strong>Children scope</strong><br/>
-                <label>
-                    <input type="radio" name="registered_only" value="1" <?= $registeredOnly ? 'checked' : '' ?>>
-                    Registered only
-                </label><br/>
-                <label>
-                    <input type="radio" name="registered_only" value="0" <?= !$registeredOnly ? 'checked' : '' ?>>
-                    All children
-                </label>
             </div>
 
             <div class="group">
@@ -270,6 +318,17 @@ if (empty($selectedRanks)) {
                 </div>
             </div>
         </div>
+        <div class="scope-wrap">
+            <strong>Children</strong><br/>
+            <label>
+                <input type="radio" name="registered_only" value="1" <?= $registeredOnly ? 'checked' : '' ?>>
+                Registered only
+            </label>
+            <label>
+                <input type="radio" name="registered_only" value="0" <?= !$registeredOnly ? 'checked' : '' ?>>
+                All children
+            </label>
+        </div>
         <button type="submit">Run Report</button>
         <input type='button' value='Print' onclick='print_report()'/>
     </form>
@@ -280,7 +339,7 @@ $users = [];
 
 if (!empty($selectedSchools) && !empty($selectedGrades) && !empty($selectedRanks)) {
     $selectedGradesSql = array_map(function ($grade) {
-        return "'" . intval($grade) . "'";
+        return "'" . mysql_real_escape_string($grade) . "'";
     }, $selectedGrades);
     $selectedRanksSql = array_map('intval', $selectedRanks);
 
