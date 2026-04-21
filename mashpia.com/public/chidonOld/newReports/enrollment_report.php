@@ -16,7 +16,7 @@ $year = intval($_REQUEST['year'] ?? $chidonYr);
 
 $startGrade = 3;
 $endGrade = 8;
-if ($chidonYr > $currentYear) {
+if ($chidonYr > $currentYear && $chidonYr == $year) {
     $startGrade--;
     $endGrade--;
 }
