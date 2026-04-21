@@ -144,7 +144,7 @@
     <script src="/scripts/js.cookie.js"></script>
     <script src="/mobile/js/spin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.3/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script>
         // options for the loading spinner....
         var opts = {
@@ -320,33 +320,69 @@
         function emailToOhel() {
             console.log('emailing to ohel');
             setTimeout(async function() {
-                document.getElementById('buttons').remove();
+                try {
+                    const btns = document.getElementById('buttons');
+                    if (btns) btns.remove();
 
-                let html = document.documentElement.outerHTML;
-
-                // Fix root-relative URLs so DocRaptor can load them
-                // html = html.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
-                // html = html.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
-                // html = html.replace(/src='(\/(?!\/)[^']*)'/g, "src='https://mashpia.com$1'");
-                // html = html.replace(/href='(\/(?!\/)[^']*)'/g, "href='https://mashpia.com$1'");
-
-                // Remove all img tags
-                html = html.replace(/<img\b[^>]*>/gi, '');
-
-                // split up html into student chunks
-                const studentChunks = html.split('|');
-                const JsPdfCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
-                if (!JsPdfCtor) {
-                    throw new Error('jsPDF failed to load');
-                }
-                const mergedPdf = new JsPdfCtor();
-                studentChunks.forEach((chunk, idx) => {
-                    if (idx > 0) {
-                        mergedPdf.addPage();
+                    const studentNodes = Array.from(document.querySelectorAll('.userDuch'));
+                    if (!studentNodes.length) {
+                        throw new Error('No student pages found to export.');
                     }
-                    mergedPdf.text(chunk, 10, 10);
-                });
-                mergedPdf.save('/duch_pdf/' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf');
+
+                    const opt = {
+                        margin: 0.5,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: {
+                            useCORS: true,
+                            allowTaint: false,
+                            imageTimeout: 0,
+                            ignoreElements: function(el) {
+                                return el && el.tagName === 'IMG';
+                            }
+                        },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    const mergedPdf = await PDFLib.PDFDocument.create();
+
+                    for (const studentNode of studentNodes) {
+                        // Build each child PDF independently first.
+                        const tempContainer = document.createElement('div');
+                        const clone = studentNode.cloneNode(true);
+                        clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
+                        tempContainer.appendChild(clone);
+                        document.body.appendChild(tempContainer);
+
+                        const childPdfBytes = await html2pdf()
+                            .set(opt)
+                            .from(tempContainer)
+                            .toPdf()
+                            .outputPdf('arraybuffer');
+
+                        document.body.removeChild(tempContainer);
+
+                        const childPdf = await PDFLib.PDFDocument.load(childPdfBytes);
+                        const childPages = await mergedPdf.copyPages(childPdf, childPdf.getPageIndices());
+                        childPages.forEach(function(page) {
+                            mergedPdf.addPage(page);
+                        });
+                    }
+
+                    const mergedBytes = await mergedPdf.save();
+                    const filename = 'duch_' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
+                    const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                } catch (err) {
+                    console.error(err);
+                    alert('Error creating duch PDF: ' + (err && err.message ? err.message : err));
+                }
 
                 /*
                 const formData = new FormData();
