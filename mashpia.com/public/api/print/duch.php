@@ -349,6 +349,9 @@
                         // Build each child PDF independently first.
                         const tempContainer = document.createElement('div');
                         const clone = studentNode.cloneNode(true);
+                        // Avoid forced page break after each child (would add blank pages when merging PDFs).
+                        clone.style.setProperty('page-break-after', 'auto', 'important');
+                        clone.style.setProperty('break-after', 'auto', 'important');
                         clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
                         tempContainer.appendChild(clone);
                         document.body.appendChild(tempContainer);
