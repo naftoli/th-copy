@@ -291,16 +291,16 @@ class date_tasks_mission {
 		}
 
 		foreach ( $rows as $row ) {
-			if ($user_id == 79101) {
-				echo "Allow personalization: " . $this->allowPersonalization . "<br />";
-				echo "Default on: " . $row['default_on'] . "<br />";
-				echo "Is on: " . $d->isOn($row['date_task_id'], 'task') . "<br />";
-				echo "Is exception: " . $this->e->isException($row['date_task_id'], $user_id) . "<br />";
-				echo "Tasks: " . implode(',', $this->tasks) . "<br />";
-				echo "In tasks: " . in_array($row['name'], $this->tasks) . "<br />";
-				echo "Continue: " . ($this->allowPersonalization ? ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task') ? true : false) : ($row['default_on'] == 0 ? true : false)) . "<br />";
-				echo "Continue: " . (!empty($this->tasks) ? (!in_array($row['name'], $this->tasks) ? true : false) : true) . "<br />";
-			}
+			// if ($user_id == 79101) {
+			// 	echo "Allow personalization: " . $this->allowPersonalization . "<br />";
+			// 	echo "Default on: " . $row['default_on'] . "<br />";
+			// 	echo "Is on: " . $d->isOn($row['date_task_id'], 'task') . "<br />";
+			// 	echo "Is exception: " . $this->e->isException($row['date_task_id'], $user_id) . "<br />";
+			// 	echo "Tasks: " . implode(',', $this->tasks) . "<br />";
+			// 	echo "In tasks: " . in_array($row['name'], $this->tasks) . "<br />";
+			// 	echo "Continue: " . ($this->allowPersonalization ? ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task') ? true : false) : ($row['default_on'] == 0 ? true : false)) . "<br />";
+			// 	echo "Continue: " . (!empty($this->tasks) ? (!in_array($row['name'], $this->tasks) ? true : false) : true) . "<br />";
+			// }
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
