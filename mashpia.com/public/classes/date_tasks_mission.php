@@ -1,5 +1,8 @@
 <?
+require_once dirname(__FILE__) . '/../api/header/cache.php';
+
 class date_tasks_mission {
+	const TASK_ROWS_CACHE_TTL = 300;
 	public $date_tasks_mission_id;
 	public $school_type_id;
 	public $subject_id;
@@ -60,26 +63,32 @@ class date_tasks_mission {
 		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'] ) ) {
 			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'];
 		} else {
-			$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-			$sql .= "FROM date_tasks AS dt ";
-			$sql .= "JOIN labels AS l USING (label_id) ";
-			$sql .= "JOIN frequencies AS f USING (frequency_id) ";
-			$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
-			} else {
-				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
-			}
-			$sql .= " AND f.frequency_name = \"Daily\" ";
-			$sql .= " AND dt.mission_marking = 1 ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " GROUP BY name ";
-			}
-			$sql .= "ORDER BY dt.label_ord, dt.grid_id";
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$rows[] = $row;
-			}
+			$idsHash = !empty($task_mission_ids) ? md5(implode(',', $task_mission_ids)) : 'single';
+			$cacheKey = "date_tasks:daily:mission:{$this->date_tasks_mission_id}:ids:{$idsHash}";
+			$rows = Cache::remember($cacheKey, self::TASK_ROWS_CACHE_TTL, function () use ($task_mission_ids) {
+				$list = [];
+				$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+				$sql .= "FROM date_tasks AS dt ";
+				$sql .= "JOIN labels AS l USING (label_id) ";
+				$sql .= "JOIN frequencies AS f USING (frequency_id) ";
+				$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+				} else {
+					$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+				}
+				$sql .= " AND f.frequency_name = \"Daily\" ";
+				$sql .= " AND dt.mission_marking = 1 ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " GROUP BY name ";
+				}
+				$sql .= "ORDER BY dt.label_ord, dt.grid_id";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
@@ -112,26 +121,32 @@ class date_tasks_mission {
 		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'] ) ) {
 			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'];
 		} else {
-			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-			$sql = $sql . "FROM date_tasks AS dt ";
-			$sql = $sql . "JOIN labels AS l USING (label_id) ";
-			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
-			} else {
-				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
-			}
-			$sql = $sql . " AND f.frequency_name = \"Weekly\" ";
-			$sql .= " AND dt.mission_marking = 1 ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " GROUP BY name ";
-			}
-			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$rows[] = $row;
-			}
+			$idsHash = !empty($task_mission_ids) ? md5(implode(',', $task_mission_ids)) : 'single';
+			$cacheKey = "date_tasks:weekly:mission:{$this->date_tasks_mission_id}:ids:{$idsHash}";
+			$rows = Cache::remember($cacheKey, self::TASK_ROWS_CACHE_TTL, function () use ($task_mission_ids) {
+				$list = [];
+				$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+				$sql = $sql . "FROM date_tasks AS dt ";
+				$sql = $sql . "JOIN labels AS l USING (label_id) ";
+				$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+				$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+				} else {
+					$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+				}
+				$sql = $sql . " AND f.frequency_name = \"Weekly\" ";
+				$sql .= " AND dt.mission_marking = 1 ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " GROUP BY name ";
+				}
+				$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
@@ -165,26 +180,32 @@ class date_tasks_mission {
 		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'] ) ) {
 			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'];
 		} else {
-			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-			$sql = $sql . "FROM date_tasks AS dt ";
-			$sql = $sql . "JOIN labels AS l USING (label_id) ";
-			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
-			} else {
-				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
-			}
-			$sql = $sql . " AND f.frequency_name = \"Shabbos\" ";
-			$sql .= " AND dt.mission_marking = 1 ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " GROUP BY name ";
-			}
-			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$rows[] = $row;
-			}
+			$idsHash = !empty($task_mission_ids) ? md5(implode(',', $task_mission_ids)) : 'single';
+			$cacheKey = "date_tasks:shabbos:mission:{$this->date_tasks_mission_id}:ids:{$idsHash}";
+			$rows = Cache::remember($cacheKey, self::TASK_ROWS_CACHE_TTL, function () use ($task_mission_ids) {
+				$list = [];
+				$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+				$sql = $sql . "FROM date_tasks AS dt ";
+				$sql = $sql . "JOIN labels AS l USING (label_id) ";
+				$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+				$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+				} else {
+					$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+				}
+				$sql = $sql . " AND f.frequency_name = \"Shabbos\" ";
+				$sql .= " AND dt.mission_marking = 1 ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " GROUP BY name ";
+				}
+				$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
@@ -218,23 +239,29 @@ class date_tasks_mission {
 		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'] ) ) {
 			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'];
 		} else {
-			$sql = "SELECT * ";
-			$sql = $sql . "FROM date_tasks AS dt ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
-			} else {
-				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
-			}
-			$sql = $sql . " AND (dt.label_id IS NULL or dt.label_id = 0) ";
-			$sql .= " AND dt.mission_marking = 1 ";
-			if (!empty($task_mission_ids)) {
-				$sql .= " GROUP BY name ";
-			}
-			$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$rows[] = $row;
-			}
+			$idsHash = !empty($task_mission_ids) ? md5(implode(',', $task_mission_ids)) : 'single';
+			$cacheKey = "date_tasks:no_label:mission:{$this->date_tasks_mission_id}:ids:{$idsHash}";
+			$rows = Cache::remember($cacheKey, self::TASK_ROWS_CACHE_TTL, function () use ($task_mission_ids) {
+				$list = [];
+				$sql = "SELECT * ";
+				$sql = $sql . "FROM date_tasks AS dt ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+				} else {
+					$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+				}
+				$sql = $sql . " AND (dt.label_id IS NULL or dt.label_id = 0) ";
+				$sql .= " AND dt.mission_marking = 1 ";
+				if (!empty($task_mission_ids)) {
+					$sql .= " GROUP BY name ";
+				}
+				$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
@@ -275,19 +302,24 @@ class date_tasks_mission {
 		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'] ) ) {
 			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'];
 		} else {
-			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-			$sql = $sql . "FROM date_tasks AS dt ";
-			$sql = $sql . "JOIN labels AS l USING (label_id) ";
-			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-			$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
-			$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
-			$sql .= " AND dt.mission_marking = 1 ";
-			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$rows[] = $row;
-			}
+			$cacheKey = "date_tasks:pesukim:mission:{$this->date_tasks_mission_id}";
+			$rows = Cache::remember($cacheKey, self::TASK_ROWS_CACHE_TTL, function () {
+				$list = [];
+				$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+				$sql = $sql . "FROM date_tasks AS dt ";
+				$sql = $sql . "JOIN labels AS l USING (label_id) ";
+				$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+				$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+				$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
+				$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
+				$sql .= " AND dt.mission_marking = 1 ";
+				$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
