@@ -2,7 +2,7 @@
 require_once dirname(__FILE__) . '/../api/header/cache.php';
 
 class date_tasks_mission {
-	const TASK_ROWS_CACHE_TTL = 300;
+	const TASK_ROWS_CACHE_TTL = 600;
 	public $date_tasks_mission_id;
 	public $school_type_id;
 	public $subject_id;

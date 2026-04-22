@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../api/header/cache.php';
 
 class user_track 
 {
-	const MISSIONS_CACHE_TTL = 300;
+	const MISSIONS_CACHE_TTL = 600;
 	public $user_id;
 	public $subject_id;
 	public $track_id;
