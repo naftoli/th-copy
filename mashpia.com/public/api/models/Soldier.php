@@ -872,6 +872,12 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if ($new_reg) {
                 $this->enrollInCampaigns();
                 $this->setupBirthdayMissions(false);
+                // check if user is registering for next yr
+                $cur_yr = GlobalSettings::getCurrentYear();
+                if ($year > $cur_yr) {
+                    // also register for current year
+                    $this->registrationCharge($type, $amount, $trans_id, $cur_yr);
+                }
             }
             // move all marks from old date_tasks_marks table to regular date_tasks_marks table
             $moved = $this->moveMarksFromArchive();
