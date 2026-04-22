@@ -823,6 +823,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             ])) {
                 $errors[] = "Could not insert into user_registration. (Not Registered).";
                 return $errors;
+            } else {
+                // check if user is registering for next yr
+                $cur_yr = GlobalSettings::getCurrentYear();
+                if ($year > $cur_yr) {
+                    // also register for current year
+                    if (!$reg_query->execute([
+                        'year' => $cur_yr, 'admin_id' => $admin_id,
+                        'user_id' => $this->user_id, 'school_id' => $this->school_id,
+                        'paid' => $amount
+                    ])) {
+                        $errors[] = "Could not insert into user_registration. (Not Registered).";
+                        return $errors;
+                    }
+                }
             }
 //            echo $reg_query->debugDumpParams();
             // save the charge
@@ -872,12 +886,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if ($new_reg) {
                 $this->enrollInCampaigns();
                 $this->setupBirthdayMissions(false);
-                // check if user is registering for next yr
-                $cur_yr = GlobalSettings::getCurrentYear();
-                if ($year > $cur_yr) {
-                    // also register for current year
-                    $this->registrationCharge($type, $amount, $trans_id, $cur_yr);
-                }
             }
             // move all marks from old date_tasks_marks table to regular date_tasks_marks table
             $moved = $this->moveMarksFromArchive();
