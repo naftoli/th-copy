@@ -284,6 +284,9 @@ class date_tasks_mission {
 			$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
 			$sql .= " AND dt.mission_marking = 1 ";
 			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+			if ($user_id == 79101) {
+				echo $sql; exit;
+			}
 			$query = mysql_query($sql);
 			while ($row = mysql_fetch_assoc($query)) {
 				$rows[] = $row;
