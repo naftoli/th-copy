@@ -111,6 +111,7 @@
         .pageFooter {
             padding-top: 5px;
             padding-bottom: 2px;
+            page-break-before: always;
         }
         h3 {
             font-weight: bold;
