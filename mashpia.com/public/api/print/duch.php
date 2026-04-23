@@ -435,7 +435,7 @@
             clone.style.setProperty('page-break-after', 'always', 'important');
             clone.style.setProperty('break-after', 'page', 'important');
             clone.querySelectorAll('img').forEach(function(img) {
-                if (!img.closest('.headerImg')) {
+                if (!(img.closest('.headerImg') || img.closest('.campaign-icon'))) {
                     img.remove();
                 }
             });
