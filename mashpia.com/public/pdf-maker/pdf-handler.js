@@ -21,7 +21,7 @@ var PdfHandler = (function () {
      * Queue a PDF generation job.
      *
      * @param {string[]} pages      - Array of HTML strings, one per PDF page
-     * @param {string}   email      - Recipient email address
+     * @param {string|string[]} email - Recipient email or list of emails
      * @param {string}   name       - Recipient display name
      * @param {object}   callbacks  - { onQueued, onProgress, onComplete, onError }
      * @param {object}   options    - Optional PDF options e.g. { format: 'A4' }

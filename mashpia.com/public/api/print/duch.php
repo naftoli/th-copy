@@ -239,6 +239,7 @@
         new Spinner(opts).spin(target);
 
         const pdfModal = document.getElementById('pdf-modal');
+        const pdfModalTitle = document.getElementById('pdf-modal-title');
         const pdfModalLog = document.getElementById('pdf-modal-log');
         const pdfModalClose = document.getElementById('pdf-modal-close');
         let lastProgressSignature = '';
@@ -247,9 +248,15 @@
             return new Date().toLocaleTimeString();
         }
 
-        function openPdfModal() {
+        function openPdfModal(recipients) {
             lastProgressSignature = '';
             pdfModalLog.textContent = '';
+            const list = Array.isArray(recipients) ? recipients.filter(Boolean) : [];
+            if (list.length) {
+                pdfModalTitle.textContent = 'Sending Duch to Ohel (' + list.join(', ') + ')';
+            } else {
+                pdfModalTitle.textContent = 'Sending Duch to Ohel';
+            }
             pdfModal.classList.add('is-open');
             pdfModal.setAttribute('aria-hidden', 'false');
             pdfModalClose.classList.remove('is-visible');
@@ -266,6 +273,7 @@
 
         function finishPdfModal(message, ok) {
             appendPdfLine(message, ok ? 'success' : 'error');
+            appendPdfLine(ok ? 'Process complete. You can close this window.' : 'Process stopped due to an error.', ok ? 'success' : 'error');
             pdfModalClose.classList.add('is-visible');
         }
 
@@ -398,9 +406,6 @@
         function emailToOhel() {
             setTimeout(async function() {
                 try {
-                    openPdfModal();
-                    appendPdfLine('Preparing duch pages for PDF generation...');
-
                     const btns = document.getElementById('buttons');
                     if (btns) btns.remove();
 
@@ -410,19 +415,23 @@
                     }
 
                     const pages = studentNodes.map(buildPdfPageHtml);
-                    const emailAddress = 'naftoli@tzivoshashem.org';
+                    const recipients = ['naftoli@tzivoshashem.org', 'shimmy@tzivoshashem.org'];
                     const displayName = 'Ohel';
+                    openPdfModal(recipients);
+                    appendPdfLine('Preparing duch pages for PDF generation...');
+                    appendPdfLine('Recipients: ' + recipients.join(', '));
                     appendPdfLine('Queued ' + pages.length + ' page(s) for rendering.');
 
-                    PdfHandler.generate(pages, emailAddress, displayName, {
+                    PdfHandler.generate(pages, recipients, displayName, {
                         onQueued: function(jobId) {
-                            appendPdfLine('Job queued: ' + jobId);
+                            appendPdfLine('Job queued: ' + jobId + '. Waiting for worker...');
                         },
                         onProgress: function(status) {
                             const signature = [status.status || '', status.progress || '', status.updatedAt || ''].join('|');
                             if (signature === lastProgressSignature) return;
                             lastProgressSignature = signature;
-                            appendPdfLine((status.status || 'processing') + ': ' + (status.progress || 'Working...'));
+                            const state = (status.status || 'processing').toUpperCase();
+                            appendPdfLine(state + ': ' + (status.progress || 'Working...'));
                         },
                         onComplete: function(status) {
                             finishPdfModal(status.message || 'PDF finished and emailed successfully.', true);
