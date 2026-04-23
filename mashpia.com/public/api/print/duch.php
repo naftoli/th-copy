@@ -460,7 +460,7 @@
 
                     appendPdfLine('Optimizing images for faster PDF generation...');
                     const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
-                    const recipients = ['naftoli@tzivoshashem.org'];
+                    const recipients = ['naftoli@tzivoshashem.org', 'tziviaweinbaum@gmail.com'];
                     const displayName = 'Ohel';
                     openPdfModal(recipients);
                     appendPdfLine('Preparing duch pages for PDF generation...');
