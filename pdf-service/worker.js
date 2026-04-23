@@ -82,17 +82,24 @@ async function processJob(job) {
 
     await setStatus(jobId, 'processing', { progress: 'Sending email...' });
 
-    const recipients = Array.isArray(email)
-      ? email.filter(Boolean).join(', ')
-      : String(email || '').trim();
+    const recipientList = (Array.isArray(email) ? email : [email])
+      .map(function(e) { return String(e || '').trim(); })
+      .filter(Boolean);
 
-    if (!recipients) {
+    if (!recipientList.length) {
       throw new Error('No valid recipient email(s) found in job payload');
     }
 
+    const toAddresses = recipientList.map(function(address) {
+      return {
+        name: name || 'Recipient',
+        address: address
+      };
+    });
+
     await mailer.sendMail({
       from:        '"Tzivos Hashem" <dev@tzivoshashem.org>',
-      to:          recipients,
+      to:          toAddresses,
       subject:     'Your PDF Duch is Ready',
       text:        'Please find your PDF Duch attached.',
       attachments: [{ filename: 'pdf.pdf', content: mergedPdf }]
@@ -100,7 +107,7 @@ async function processJob(job) {
 
     await setStatus(jobId, 'complete', {
       progress: 'Done',
-      message:  'Your PDF has been emailed to ' + recipients
+      message:  'Your PDF has been emailed to ' + recipientList.join(', ')
     });
 
     console.log('Job complete:', jobId);
