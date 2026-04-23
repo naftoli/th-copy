@@ -16,6 +16,10 @@
             margin: 20px auto;
             page-break-after: always;
         }
+        .userDuch:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
         .container {
             column-count: 3;
             column-gap: 20px;
@@ -439,8 +443,8 @@
 
         async function buildPdfPageHtml(studentNode) {
             const clone = studentNode.cloneNode(true);
-            clone.style.setProperty('page-break-after', 'always', 'important');
-            clone.style.setProperty('break-after', 'page', 'important');
+            clone.style.setProperty('page-break-after', 'auto', 'important');
+            clone.style.setProperty('break-after', 'auto', 'important');
             // clone.querySelectorAll('img').forEach(function(img) {
             //     if (img.closest('.userImg') || img.closest('.schoolLogo')) {
             //         img.remove();
@@ -450,7 +454,7 @@
 
             const headHtml = document.head ? document.head.innerHTML : '';
             const origin = window.location.origin || 'https://mashpia.com';
-            const pageStyle = '<style>@page{size:letter;margin:0.5in;} html,body{margin:0;padding:0;} .userDuch{width:7.5in !important;margin:0 auto !important;page-break-after:always !important;break-after:page !important;}</style>';
+            const pageStyle = '<style>@page{size:letter;margin:0.5in;} html,body{margin:0;padding:0;} .userDuch{width:7.5in !important;margin:0 auto !important;page-break-after:auto !important;break-after:auto !important;}</style>';
             return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
         }
 
