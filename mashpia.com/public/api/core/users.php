@@ -421,9 +421,9 @@ class UsersRouter {
             if ($current_user->isHQ() && $soldier->canDestroy()) {
                 $soldier->delete();
                 // remove from parent account
-                $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $user->user_id . ' AND auth = "user"');
+                $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $soldier->user_id . ' AND auth = "user"');
                 // remove from user_tracks
-                $MASHPIA_DB->query('DELETE FROM user_tracks WHERE user_id = ' . $user->user_id);
+                $MASHPIA_DB->query('DELETE FROM user_tracks WHERE user_id = ' . $soldier->user_id);
 //                return json_response('Soldier has been deleted.');
             }
 
