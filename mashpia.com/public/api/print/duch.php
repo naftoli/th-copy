@@ -394,13 +394,14 @@
 
         function buildPdfPageHtml(studentNode) {
             const clone = studentNode.cloneNode(true);
-            clone.style.setProperty('page-break-after', 'auto', 'important');
-            clone.style.setProperty('break-after', 'auto', 'important');
+            clone.style.setProperty('page-break-after', 'always', 'important');
+            clone.style.setProperty('break-after', 'page', 'important');
             clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
 
             const headHtml = document.head ? document.head.innerHTML : '';
             const origin = window.location.origin || 'https://mashpia.com';
-            return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + '</head><body>' + clone.outerHTML + '</body></html>';
+            const pageStyle = '<style>@page{size:Letter;margin:10mm;} .userDuch{page-break-after:always !important;break-after:page !important;}</style>';
+            return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
         }
 
         function emailToOhel() {
