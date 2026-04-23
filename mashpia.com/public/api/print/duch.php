@@ -420,7 +420,7 @@
                     if (!ctx) continue;
 
                     ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.65);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
                     if (!dataUrl) continue;
                     img.setAttribute('src', dataUrl);
                     img.removeAttribute('srcset');
