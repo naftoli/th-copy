@@ -1,7 +1,5 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-
-use Predis\Client as Redis;
+require_once __DIR__ . '/../../../includes/globals.php';
 
 header('Content-Type: application/json');
 
@@ -48,6 +46,15 @@ $job = array(
 
 try {
     $redis = new Redis();
+    $host = !empty($GLOBALS['global_redis_host']) ? $GLOBALS['global_redis_host'] : '127.0.0.1';
+    $port = !empty($GLOBALS['global_redis_port']) ? (int) $GLOBALS['global_redis_port'] : 6379;
+    $redis->connect($host, $port, 1.5);
+    if (!empty($GLOBALS['global_redis_password'])) {
+        $redis->auth($GLOBALS['global_redis_password']);
+    }
+    if (isset($GLOBALS['global_redis_db'])) {
+        $redis->select((int) $GLOBALS['global_redis_db']);
+    }
 
     // Push job onto queue
     $redis->rpush('pdf_jobs', json_encode($job));
@@ -66,7 +73,7 @@ try {
         'jobId'   => $jobId
     ));
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     http_response_code(500);
     echo json_encode(array('error' => 'Queue error: ' . $e->getMessage()));
 }
