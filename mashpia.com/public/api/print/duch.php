@@ -451,8 +451,13 @@
         function emailToOhel() {
             setTimeout(async function() {
                 try {
-                    const btns = document.getElementById('buttons');
-                    if (btns) btns.remove();
+                    const sendBtn = document.getElementById('email-button');
+                    if (sendBtn) {
+                        sendBtn.disabled = true;
+                        sendBtn.style.opacity = '0.6';
+                        sendBtn.style.cursor = 'not-allowed';
+                        sendBtn.textContent = 'Sending...';
+                    }
 
                     const studentNodes = Array.from(document.querySelectorAll('.userDuch'));
                     if (!studentNodes.length) {
