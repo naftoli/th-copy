@@ -401,12 +401,17 @@
 
                 try {
                     const absoluteUrl = new URL(src, window.location.origin).href;
-                    console.log(absoluteUrl);
                     img.setAttribute('src', absoluteUrl);
                     const response = await fetch(absoluteUrl, { mode: 'cors', credentials: 'include' });
                     if (!response.ok) continue;
 
                     const blob = await response.blob();
+                    const mime = (blob.type || '').toLowerCase();
+                    const isRaster = mime.indexOf('jpeg') !== -1 || mime.indexOf('jpg') !== -1 || mime.indexOf('png') !== -1 || mime.indexOf('webp') !== -1;
+                    if (!isRaster) {
+                        // Keep absolute src for svg/gif/other assets.
+                        continue;
+                    }
                     const bitmap = await createImageBitmap(blob);
 
                     const maxWidth = 220;
@@ -450,55 +455,60 @@
         }
 
         function emailToOhel() {
-            setTimeout(async function() {
-                try {
-                    const sendBtn = document.getElementById('email-button');
-                    if (sendBtn) {
-                        sendBtn.disabled = true;
-                        sendBtn.style.opacity = '0.6';
-                        sendBtn.style.cursor = 'not-allowed';
-                        sendBtn.textContent = 'Sending...';
-                    }
-
-                    const studentNodes = Array.from(document.querySelectorAll('.userDuch'));
-                    if (!studentNodes.length) {
-                        throw new Error('No student pages found to export.');
-                    }
-
-                    appendPdfLine('Optimizing images for faster PDF generation...');
-                    const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
-                    const recipients = ['naftoli@tzivoshashem.org'];
-                    const displayName = 'Ohel';
-                    openPdfModal(recipients);
-                    appendPdfLine('Preparing duch pages for PDF generation...');
-                    appendPdfLine('Recipients: ' + recipients.join(', '));
-                    appendPdfLine('Queued ' + pages.length + ' page(s) for rendering.');
-
-                    PdfHandler.generate(pages, recipients, displayName, {
-                        onQueued: function(jobId) {
-                            appendPdfLine('Job queued: ' + jobId + '. Waiting for worker...');
-                        },
-                        onProgress: function(status) {
-                            const signature = [status.status || '', status.progress || '', status.updatedAt || ''].join('|');
-                            if (signature === lastProgressSignature) return;
-                            lastProgressSignature = signature;
-                            const state = (status.status || 'processing').toUpperCase();
-                            appendPdfLine(state + ': ' + (status.progress || 'Working...'));
-                        },
-                        onComplete: function(status) {
-                            finishPdfModal(status.message || 'PDF finished and emailed successfully.', true);
-                        },
-                        onError: function(err) {
-                            finishPdfModal('Error creating duch PDF: ' + err, false);
-                        }
-                    }, {
-                        format: 'letter',
-                        margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
-                    });
-                } catch (err) {
-                    finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
+            try {
+                const sendBtn = document.getElementById('email-button');
+                if (sendBtn) {
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.6';
+                    sendBtn.style.cursor = 'not-allowed';
+                    sendBtn.textContent = 'Sending...';
                 }
-            }, 1500);
+
+                const recipients = ['naftoli@tzivoshashem.org'];
+                const displayName = 'Ohel';
+                openPdfModal(recipients);
+                appendPdfLine('Preparing duch pages for PDF generation...');
+                appendPdfLine('Recipients: ' + recipients.join(', '));
+
+                setTimeout(async function() {
+                    try {
+                        const studentNodes = Array.from(document.querySelectorAll('.userDuch'));
+                        if (!studentNodes.length) {
+                            throw new Error('No student pages found to export.');
+                        }
+
+                        appendPdfLine('Optimizing images for faster PDF generation...');
+                        const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
+                        appendPdfLine('Queued ' + pages.length + ' page(s) for rendering.');
+
+                        PdfHandler.generate(pages, recipients, displayName, {
+                            onQueued: function(jobId) {
+                                appendPdfLine('Job queued: ' + jobId + '. Waiting for worker...');
+                            },
+                            onProgress: function(status) {
+                                const signature = [status.status || '', status.progress || '', status.updatedAt || ''].join('|');
+                                if (signature === lastProgressSignature) return;
+                                lastProgressSignature = signature;
+                                const state = (status.status || 'processing').toUpperCase();
+                                appendPdfLine(state + ': ' + (status.progress || 'Working...'));
+                            },
+                            onComplete: function(status) {
+                                finishPdfModal(status.message || 'PDF finished and emailed successfully.', true);
+                            },
+                            onError: function(err) {
+                                finishPdfModal('Error creating duch PDF: ' + err, false);
+                            }
+                        }, {
+                            format: 'letter',
+                            margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
+                        });
+                    } catch (err) {
+                        finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
+                    }
+                }, 0);
+            } catch (err) {
+                finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
+            }
         }
     </script>
 </body>
