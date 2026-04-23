@@ -401,6 +401,7 @@
 
                 try {
                     const absoluteUrl = new URL(src, window.location.origin).href;
+                    img.setAttribute('src', absoluteUrl);
                     const response = await fetch(absoluteUrl, { mode: 'cors', credentials: 'include' });
                     if (!response.ok) continue;
 
@@ -443,7 +444,7 @@
 
             const headHtml = document.head ? document.head.innerHTML : '';
             const origin = window.location.origin || 'https://mashpia.com';
-            const pageStyle = '<style>@page{size:Letter;margin:10mm;} .userDuch{page-break-after:always !important;break-after:page !important;}</style>';
+            const pageStyle = '<style>@page{size:letter;margin:0.5in;} html,body{margin:0;padding:0;} .userDuch{width:7.5in !important;margin:0 auto !important;page-break-after:always !important;break-after:page !important;}</style>';
             return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
         }
 
@@ -460,7 +461,7 @@
 
                     appendPdfLine('Optimizing images for faster PDF generation...');
                     const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
-                    const recipients = ['naftoli@tzivoshashem.org', 'tziviaweinbaum@gmail.com'];
+                    const recipients = ['naftoli@tzivoshashem.org'];
                     const displayName = 'Ohel';
                     openPdfModal(recipients);
                     appendPdfLine('Preparing duch pages for PDF generation...');
@@ -485,7 +486,7 @@
                             finishPdfModal('Error creating duch PDF: ' + err, false);
                         }
                     }, {
-                        format: 'Letter',
+                        format: 'letter',
                         margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
                     });
                 } catch (err) {
