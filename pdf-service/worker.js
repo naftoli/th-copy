@@ -8,12 +8,11 @@ const QUEUE_KEY = 'pdf_jobs';
 
 // ── Configure your SMTP here ──────────────────────────────────────────────────
 const mailer = nodemailer.createTransport({
-  host:   'your-smtp-host',
-  port:   587,
+  host:   'localhost',
+  port:   25,
   secure: false,
-  auth: {
-    user: 'you@example.com',
-    pass: 'yourpassword'
+  tls: {
+    rejectUnauthorized: false  // needed on some cPanel setups
   }
 });
 // ─────────────────────────────────────────────────────────────────────────────
@@ -80,11 +79,11 @@ async function processJob(job) {
     await setStatus(jobId, 'processing', { progress: 'Sending email...' });
 
     await mailer.sendMail({
-      from:        '"Your App" <you@example.com>',
+      from:        '"Tzivos Hashem" <dev@tzivoshashem.org>',
       to:          '"' + name + '" <' + email + '>',
-      subject:     'Your PDF Report is Ready',
-      text:        'Please find your report attached.',
-      attachments: [{ filename: 'report.pdf', content: mergedPdf }]
+      subject:     'Your PDF Duch is Ready',
+      text:        'Please find your PDF Duch attached.',
+      attachments: [{ filename: 'pdf.pdf', content: mergedPdf }]
     });
 
     await setStatus(jobId, 'complete', {
