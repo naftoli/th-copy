@@ -12,17 +12,13 @@ const QUEUE_KEY = 'pdf_jobs';
 
 // ── Configure your SMTP here ──────────────────────────────────────────────────
 const mailer = nodemailer.createTransport({
-  host:   'mail.mashpia.com',
-  port:   587,
+  host:   '127.0.0.1',
+  port:   25,
   secure: false,
-  auth: {
-    user: 'cth@mashpia.com',
-    pass: 'Naftoli@5783!'
-  },
+  family: 4,
   tls: {
     rejectUnauthorized: false
-  },
-  family: 4  // force IPv4
+  }
 });
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -118,11 +114,15 @@ async function processJob(job) {
     });
 
     await mailer.sendMail({
-      from:        '"Chayolei Tzivos Hashem" <cth@mashpia.com>',
-      to:          toAddresses,
-      subject:     'Your PDF Duch is Ready',
-      text:        'Please find your PDF Duch attached.',
-      attachments: [{ filename: 'pdf.pdf', content: mergedPdf }]
+      envelope: {
+        from: 'cth@mashpia.com',
+        to:   email
+      },
+      from:        '"Tzivos Hashem" <cth@mashpia.com>',
+      to:          '"' + name + '" <' + email + '>',
+      subject:     'Your PDF Report is Ready',
+      text:        'Please find your report attached.',
+      attachments: [{ filename: 'report.pdf', content: mergedPdf }]
     });
 
     await setStatus(jobId, 'complete', {
