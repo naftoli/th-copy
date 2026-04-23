@@ -128,6 +128,10 @@
             .pdf-modal {
                 display: none !important;
             }
+            /* Match emailed PDF: slightly smaller type so print matches Puppeteer output */
+            #main .userDuch {
+                zoom: 0.87;
+            }
         }
         @media screen {
             .no-print {
@@ -455,8 +459,24 @@
 
             const headHtml = document.head ? document.head.innerHTML : '';
             const origin = window.location.origin || 'https://mashpia.com';
-            const pageStyle = '<style>@page{size:letter;margin:0.5in;} html,body{margin:0;padding:0;} .userDuch{width:7.5in !important;margin:0 auto !important;page-break-after:auto !important;break-after:auto !important;}</style>';
-            return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
+            const pageStyle = '<style id="duch-pdf-fonts">@page{size:letter;margin:0.5in;}'
+                + 'html.duch-pdf,html.duch-pdf body{margin:0;padding:0;}'
+                + 'html.duch-pdf body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;'
+                + "font-family:'Exo','Segoe UI',system-ui,-apple-system,sans-serif;}"
+                + 'html.duch-pdf .userDuch{'
+                + 'width:7.25in !important;max-width:7.25in;'
+                + 'margin:0 auto !important;'
+                + 'page-break-after:auto !important;break-after:auto !important;'
+                + 'zoom:0.87;'
+                + 'transform-origin:top center;'
+                + '}'
+                + 'html.duch-pdf .campaign-name{font-size:17px !important;}'
+                + 'html.duch-pdf .task-short-name{font-size:12px !important;}'
+                + 'html.duch-pdf .streak-text{font-size:12px !important;}'
+                + 'html.duch-pdf .medal-name,html.duch-pdf .promotion-name,html.duch-pdf .campaign-medals{font-size:11px !important;}'
+                + 'html.duch-pdf footer{font-size:16px !important;}'
+                + '</style>';
+            return '<!DOCTYPE html><html class="duch-pdf"><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
         }
 
         function emailToOhel() {

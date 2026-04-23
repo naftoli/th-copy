@@ -76,6 +76,14 @@ async function processJob(job) {
             });
           })
           .then(function() {
+            return page.evaluate(function() {
+              if (document.fonts && document.fonts.ready) {
+                return document.fonts.ready;
+              }
+              return Promise.resolve();
+            });
+          })
+          .then(function() {
             return page.pdf({
               format: options.format || 'A4',
               printBackground: true,
