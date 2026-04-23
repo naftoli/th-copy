@@ -119,6 +119,9 @@
             .no-print {
                 display: none !important;
             }
+            .pdf-modal {
+                display: none !important;
+            }
         }
         @media screen {
             .no-print {
@@ -194,7 +197,7 @@
     <div id="spinner"></div>
     <div id="grade-list" class="no-print" style="display: none;"></div>
     <div id="main"></div>
-    <div id="pdf-modal" class="pdf-modal no-print" aria-hidden="true">
+    <div id="pdf-modal" class="pdf-modal" aria-hidden="true">
         <div class="pdf-modal-card" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
             <div class="pdf-modal-header">
                 <span id="pdf-modal-title">Sending Duch to Ohel</span>
