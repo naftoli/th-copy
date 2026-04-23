@@ -113,7 +113,7 @@ async function processJob(job) {
     });
 
     await mailer.sendMail({
-      from:        '"Tzivos Hashem" <cth@mashpia.com>',
+      from:        '"Chayolei Tzivos Hashem" <cth@mashpia.com>',
       to:          toAddresses,
       subject:     'Your PDF Duch is Ready',
       text:        'Please find your PDF Duch attached.',
