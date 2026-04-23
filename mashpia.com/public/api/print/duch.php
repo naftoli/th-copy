@@ -401,6 +401,7 @@
 
                 try {
                     const absoluteUrl = new URL(src, window.location.origin).href;
+                    console.log(absoluteUrl);
                     img.setAttribute('src', absoluteUrl);
                     const response = await fetch(absoluteUrl, { mode: 'cors', credentials: 'include' });
                     if (!response.ok) continue;
@@ -436,7 +437,7 @@
             clone.style.setProperty('page-break-after', 'always', 'important');
             clone.style.setProperty('break-after', 'page', 'important');
             clone.querySelectorAll('img').forEach(function(img) {
-                if (!(img.closest('.headerImg') || img.closest('.campaign-icon'))) {
+                if (img.closest('.userImg') || img.closest('.schoolLogo')) {
                     img.remove();
                 }
             });
