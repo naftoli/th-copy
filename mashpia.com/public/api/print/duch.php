@@ -441,11 +441,11 @@
             const clone = studentNode.cloneNode(true);
             clone.style.setProperty('page-break-after', 'always', 'important');
             clone.style.setProperty('break-after', 'page', 'important');
-            clone.querySelectorAll('img').forEach(function(img) {
-                if (img.closest('.userImg') || img.closest('.schoolLogo')) {
-                    img.remove();
-                }
-            });
+            // clone.querySelectorAll('img').forEach(function(img) {
+            //     if (img.closest('.userImg') || img.closest('.schoolLogo')) {
+            //         img.remove();
+            //     }
+            // });
             await downscaleCloneImages(clone);
 
             const headHtml = document.head ? document.head.innerHTML : '';
