@@ -17,12 +17,46 @@ if (empty($input['pages']) || !is_array($input['pages'])) {
     exit;
 }
 
-$email = filter_var($input['email'], FILTER_VALIDATE_EMAIL);
+$rawEmail = isset($input['email']) ? $input['email'] : '';
+$emails = array();
+if (is_array($rawEmail)) {
+    foreach ($rawEmail as $candidate) {
+        $candidate = trim((string) $candidate);
+        if ($candidate === '') continue;
+        $valid = filter_var($candidate, FILTER_VALIDATE_EMAIL);
+        if (!$valid) {
+            http_response_code(400);
+            echo json_encode(array('error' => 'Invalid email address in list: ' . $candidate));
+            exit;
+        }
+        $emails[] = $valid;
+    }
+} else {
+    $rawEmail = trim((string) $rawEmail);
+    if (strpos($rawEmail, ',') !== false) {
+        $parts = explode(',', $rawEmail);
+        foreach ($parts as $candidate) {
+            $candidate = trim($candidate);
+            if ($candidate === '') continue;
+            $valid = filter_var($candidate, FILTER_VALIDATE_EMAIL);
+            if (!$valid) {
+                http_response_code(400);
+                echo json_encode(array('error' => 'Invalid email address in list: ' . $candidate));
+                exit;
+            }
+            $emails[] = $valid;
+        }
+    } else if ($rawEmail !== '') {
+        $valid = filter_var($rawEmail, FILTER_VALIDATE_EMAIL);
+        if ($valid) $emails[] = $valid;
+    }
+}
+
 $name  = isset($input['name']) ? strip_tags($input['name']) : 'Recipient';
 
-if (!$email) {
+if (empty($emails)) {
     http_response_code(400);
-    echo json_encode(array('error' => 'Invalid email address'));
+    echo json_encode(array('error' => 'At least one valid email address is required'));
     exit;
 }
 
@@ -38,7 +72,7 @@ $jobId = uniqid('pdf_', true);
 $job = array(
     'jobId'    => $jobId,
     'pages'    => $pages,
-    'email'    => $email,
+    'email'    => $emails,
     'name'     => $name,
     'options'  => isset($input['options']) ? $input['options'] : array(),
     'queuedAt' => time()
