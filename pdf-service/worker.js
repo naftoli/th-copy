@@ -3,7 +3,11 @@ const { PDFDocument } = require('pdf-lib');
 const Redis      = require('ioredis');
 const nodemailer = require('nodemailer');
 
-const redis    = new Redis(); // connects to localhost:6379
+const redis = new Redis({
+  host: '127.0.0.1',
+  port: 6379,
+  password: 'Naftoli@5783!'
+});
 const QUEUE_KEY = 'pdf_jobs';
 
 // ── Configure your SMTP here ──────────────────────────────────────────────────
