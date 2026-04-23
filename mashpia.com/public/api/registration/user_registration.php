@@ -806,7 +806,7 @@ class UserRegistrationRouter {
                     $mailer->AltBody = strip_tags($message);
                     $mailer->addAddress($to);
                     if ($cc) $mailer->addCC($cc);
-                    $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
+                    $mailer->setFrom('cth@mashpia.com', 'Chayolei Tzivos Hashem');
                     if (! $mailer->send()) {
                         $error = 'Your information has been saved but there was an error sending the confirmation email.\nError: ' . $mailer->ErrorInfo;
                         return $error;
@@ -818,7 +818,7 @@ class UserRegistrationRouter {
             } else {
                 $headers[] = 'MIME-Version: 1.0';
                 $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
+                $headers[] = 'From: Chayolei Tzivos Hashem <cth@mashpia.com>';
                 $headers[] = "Bcc: " . $bcc;
                 if ($cc) $headers[] = "Cc: " . $cc;
                 if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
