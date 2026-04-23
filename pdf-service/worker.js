@@ -12,11 +12,15 @@ const QUEUE_KEY = 'pdf_jobs';
 
 // ── Configure your SMTP here ──────────────────────────────────────────────────
 const mailer = nodemailer.createTransport({
-  host:   'localhost',
-  port:   25,
+  host:   'mail.tzivoshashem.org',
+  port:   587,
   secure: false,
+  auth: {
+    user: 'dev@tzivoshashem.org',
+    pass: 'Naftoli8770!'
+  },
   tls: {
-    rejectUnauthorized: false  // needed on some cPanel setups
+    rejectUnauthorized: false
   }
 });
 // ─────────────────────────────────────────────────────────────────────────────
@@ -113,7 +117,7 @@ async function processJob(job) {
     });
 
     await mailer.sendMail({
-      from:        '"Chayolei Tzivos Hashem" <cth@mashpia.com>',
+      from: '"Tzivos Hashem" <dev@tzivoshashem.org>',      
       to:          toAddresses,
       subject:     'Your PDF Duch is Ready',
       text:        'Please find your PDF Duch attached.',
