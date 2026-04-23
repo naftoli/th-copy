@@ -30,7 +30,7 @@ var PdfHandler = (function () {
         callbacks = callbacks || {};
         options   = options || {};
 
-        fetch('/queue-job.php', {
+        fetch('/pdf-maker/queue-job.php', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({
@@ -63,7 +63,7 @@ var PdfHandler = (function () {
         }
 
         setTimeout(function() {
-            fetch('/status.php?jobId=' + encodeURIComponent(jobId))
+            fetch('/pdf-maker/status.php?jobId=' + encodeURIComponent(jobId))
                 .then(function(res) { return res.json(); })
                 .then(function(status) {
 

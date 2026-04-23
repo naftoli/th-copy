@@ -277,6 +277,17 @@
                 });
         };
 
+        function buildPdfPageHtml(studentNode) {
+            const clone = studentNode.cloneNode(true);
+            clone.style.setProperty('page-break-after', 'auto', 'important');
+            clone.style.setProperty('break-after', 'auto', 'important');
+            clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
+
+            const headHtml = document.head ? document.head.innerHTML : '';
+            const origin = window.location.origin || 'https://mashpia.com';
+            return '<!DOCTYPE html><html><head><base href="' + origin + '/">' + headHtml + '</head><body>' + clone.outerHTML + '</body></html>';
+        }
+
         function emailToOhel() {
             setTimeout(async function() {
                 try {
@@ -288,64 +299,21 @@
                         throw new Error('No student pages found to export.');
                     }
 
-                    const opt = {
-                        margin: 0.5,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: {
-                            useCORS: true,
-                            allowTaint: false,
-                            imageTimeout: 0,
-                            ignoreElements: function(el) {
-                                return el && el.tagName === 'IMG';
-                            }
+                    const pages = studentNodes.map(buildPdfPageHtml);
+                    const emailAddress = 'naftoli@tzivoshashem.org';
+                    const displayName = 'Ohel';
+
+                    PdfHandler.generate(pages, emailAddress, displayName, {
+                        onQueued: function() {
+                            alert('Duch PDF queued. It will be emailed when ready.');
                         },
-                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                    };
-
-                    const mergedPdf = await PDFLib.PDFDocument.create();
-
-                    for (const studentNode of studentNodes) {
-                        // Build each child PDF independently first.
-                        const tempContainer = document.createElement('div');
-                        const clone = studentNode.cloneNode(true);
-                        // Avoid forced page break after each child (would add blank pages when merging PDFs).
-                        clone.style.setProperty('page-break-after', 'auto', 'important');
-                        clone.style.setProperty('break-after', 'auto', 'important');
-                        clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
-                        tempContainer.appendChild(clone);
-                        document.body.appendChild(tempContainer);
-
-                        const childPdfBytes = await html2pdf()
-                            .set(opt)
-                            .from(tempContainer)
-                            .toPdf()
-                            .outputPdf('arraybuffer');
-
-                        document.body.removeChild(tempContainer);
-
-                        const childPdf = await PDFLib.PDFDocument.load(childPdfBytes);
-                        const childPages = await mergedPdf.copyPages(childPdf, childPdf.getPageIndices());
-                        childPages.forEach(function(page) {
-                            mergedPdf.addPage(page);
-                        });
-                    }
-
-                    const mergedBytes = await mergedPdf.save();
-                    const filename = 'duch_' + new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
-                    const blob = new Blob([mergedBytes], { type: 'application/pdf' });
-                    const formData = new FormData();
-                    formData.append('pdf', blob, filename);
-
-                    const res = await fetch('sendToOhel.php', {
-                        method: 'POST',
-                        body: formData
+                        onError: function(err) {
+                            alert('Error creating duch PDF: ' + err);
+                        }
+                    }, {
+                        format: 'Letter',
+                        margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
                     });
-                    const data = await res.json().catch(function() { return {}; });
-                    if (data.success) {
-                        alert(data.message || 'Email sent successfully.');
-                    } else {
-                        alert('Error: ' + (data.error || res.statusText || 'Unknown error'));
-                    }
                 } catch (err) {
                     alert('Error creating duch PDF: ' + (err && err.message ? err.message : err));
                 }
