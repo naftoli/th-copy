@@ -38,7 +38,7 @@ app.post('/generate', async (req, res) => {
     const pdf = await page.pdf({
       format: options.format || 'A4',
       printBackground: true,
-      margin: options.margin || { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' }
+      margin: options.margin || { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
     });
 
     res.set('Content-Type', 'application/pdf');
@@ -71,7 +71,7 @@ app.post('/generate-and-merge', async (req, res) => {
       const pdf = await page.pdf({
         format: options.format || 'A4',
         printBackground: true,
-        margin: options.margin || { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' }
+        margin: options.margin || { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
       });
       return pdf;
     }));
