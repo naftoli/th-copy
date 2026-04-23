@@ -1,8 +1,13 @@
 {
   "dependencies": {
+    "express": "^5.2.1",
     "html2canvas": "^1.0.0-rc.1",
+    "ioredis": "^5.10.1",
     "jshint": "^2.13.6",
     "jspdf": "^1.5.3",
+    "nodemailer": "^8.0.5",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^19.11.1",
     "react-jss": "^10.5.0"
   },
   "devDependencies": {
