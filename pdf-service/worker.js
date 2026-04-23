@@ -27,6 +27,7 @@ async function getBrowser() {
   if (!browser || !browser.connected) {
     browser = await puppeteer.launch({
       headless: true,
+      ignoreHTTPSErrors: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
   }
@@ -59,6 +60,20 @@ async function processJob(job) {
       return browser.newPage().then(function(page) {
         openPages.push(page);
         return page.setContent(item.html, { waitUntil: 'networkidle0' })
+          .then(function() {
+            // Ensure all <img> tags have either loaded or errored before rendering PDF.
+            return page.evaluate(function() {
+              var imgs = Array.prototype.slice.call(document.images || []);
+              return Promise.all(imgs.map(function(img) {
+                if (img.complete) return Promise.resolve(true);
+                return new Promise(function(resolve) {
+                  img.addEventListener('load', function() { resolve(true); }, { once: true });
+                  img.addEventListener('error', function() { resolve(false); }, { once: true });
+                  setTimeout(function() { resolve(false); }, 10000);
+                });
+              }));
+            });
+          })
           .then(function() {
             return page.pdf({
               format: options.format || 'A4',
