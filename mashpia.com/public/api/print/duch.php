@@ -130,7 +130,7 @@
             }
             /* Match emailed PDF: slightly smaller type so print matches Puppeteer output */
             #main .userDuch {
-                zoom: 0.87;
+                zoom: 0.95;
             }
         }
         @media screen {
@@ -464,10 +464,10 @@
                 + 'html.duch-pdf body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;'
                 + "font-family:'Exo','Segoe UI',system-ui,-apple-system,sans-serif;}"
                 + 'html.duch-pdf .userDuch{'
-                + 'width:7.25in !important;max-width:7.25in;'
+                + 'width:7.5in !important;max-width:7.5in;'
                 + 'margin:0 auto !important;'
                 + 'page-break-after:auto !important;break-after:auto !important;'
-                + 'zoom:0.87;'
+                + 'zoom:0.9;'
                 + 'transform-origin:top center;'
                 + '}'
                 + 'html.duch-pdf .campaign-name{font-size:17px !important;}'
