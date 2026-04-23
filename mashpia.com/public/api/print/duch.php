@@ -434,6 +434,11 @@
             const clone = studentNode.cloneNode(true);
             clone.style.setProperty('page-break-after', 'always', 'important');
             clone.style.setProperty('break-after', 'page', 'important');
+            clone.querySelectorAll('img').forEach(function(img) {
+                if (!img.closest('.headerImg')) {
+                    img.remove();
+                }
+            });
             await downscaleCloneImages(clone);
 
             const headHtml = document.head ? document.head.innerHTML : '';
@@ -455,7 +460,7 @@
 
                     appendPdfLine('Optimizing images for faster PDF generation...');
                     const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
-                    const recipients = ['naftoli@tzivoshashem.org', 'tziviaweinbaum@gmail.com'];
+                    const recipients = ['naftoli@tzivoshashem.org'];
                     const displayName = 'Ohel';
                     openPdfModal(recipients);
                     appendPdfLine('Preparing duch pages for PDF generation...');
