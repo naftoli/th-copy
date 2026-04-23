@@ -128,6 +128,65 @@
         button {
             padding: 5px 10px;
         }
+        .pdf-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+        .pdf-modal.is-open {
+            display: flex;
+        }
+        .pdf-modal-card {
+            width: min(900px, 92vw);
+            background: #111;
+            color: #d7ffd7;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        }
+        .pdf-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .pdf-modal-close {
+            border: 0;
+            background: #2d2d2d;
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            display: none;
+        }
+        .pdf-modal-close.is-visible {
+            display: inline-block;
+        }
+        .pdf-modal-log {
+            max-height: 55vh;
+            overflow: auto;
+            padding: 14px;
+            line-height: 1.4;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .pdf-line-error {
+            color: #ff9696;
+        }
+        .pdf-line-success {
+            color: #9df7a1;
+        }
     </style>
 </head>
 
@@ -135,6 +194,15 @@
     <div id="spinner"></div>
     <div id="grade-list" class="no-print" style="display: none;"></div>
     <div id="main"></div>
+    <div id="pdf-modal" class="pdf-modal no-print" aria-hidden="true">
+        <div class="pdf-modal-card" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+            <div class="pdf-modal-header">
+                <span id="pdf-modal-title">Sending Duch to Ohel</span>
+                <button type="button" id="pdf-modal-close" class="pdf-modal-close">Close</button>
+            </div>
+            <div id="pdf-modal-log" class="pdf-modal-log"></div>
+        </div>
+    </div>
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
     <script src="/mobile/js/spin.js"></script>
@@ -166,6 +234,42 @@
         };
         var target = document.getElementById('spinner');
         new Spinner(opts).spin(target);
+
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfModalLog = document.getElementById('pdf-modal-log');
+        const pdfModalClose = document.getElementById('pdf-modal-close');
+        let lastProgressSignature = '';
+
+        function ts() {
+            return new Date().toLocaleTimeString();
+        }
+
+        function openPdfModal() {
+            lastProgressSignature = '';
+            pdfModalLog.textContent = '';
+            pdfModal.classList.add('is-open');
+            pdfModal.setAttribute('aria-hidden', 'false');
+            pdfModalClose.classList.remove('is-visible');
+        }
+
+        function appendPdfLine(message, type) {
+            const line = document.createElement('div');
+            line.textContent = '[' + ts() + '] ' + message;
+            if (type === 'error') line.classList.add('pdf-line-error');
+            if (type === 'success') line.classList.add('pdf-line-success');
+            pdfModalLog.appendChild(line);
+            pdfModalLog.scrollTop = pdfModalLog.scrollHeight;
+        }
+
+        function finishPdfModal(message, ok) {
+            appendPdfLine(message, ok ? 'success' : 'error');
+            pdfModalClose.classList.add('is-visible');
+        }
+
+        pdfModalClose.addEventListener('click', function() {
+            pdfModal.classList.remove('is-open');
+            pdfModal.setAttribute('aria-hidden', 'true');
+        });
         
         window.onload = function() {
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
@@ -291,6 +395,9 @@
         function emailToOhel() {
             setTimeout(async function() {
                 try {
+                    openPdfModal();
+                    appendPdfLine('Preparing duch pages for PDF generation...');
+
                     const btns = document.getElementById('buttons');
                     if (btns) btns.remove();
 
@@ -302,20 +409,30 @@
                     const pages = studentNodes.map(buildPdfPageHtml);
                     const emailAddress = 'naftoli@tzivoshashem.org';
                     const displayName = 'Ohel';
+                    appendPdfLine('Queued ' + pages.length + ' page(s) for rendering.');
 
                     PdfHandler.generate(pages, emailAddress, displayName, {
-                        onQueued: function() {
-                            alert('Duch PDF queued. It will be emailed when ready.');
+                        onQueued: function(jobId) {
+                            appendPdfLine('Job queued: ' + jobId);
+                        },
+                        onProgress: function(status) {
+                            const signature = [status.status || '', status.progress || '', status.updatedAt || ''].join('|');
+                            if (signature === lastProgressSignature) return;
+                            lastProgressSignature = signature;
+                            appendPdfLine((status.status || 'processing') + ': ' + (status.progress || 'Working...'));
+                        },
+                        onComplete: function(status) {
+                            finishPdfModal(status.message || 'PDF finished and emailed successfully.', true);
                         },
                         onError: function(err) {
-                            alert('Error creating duch PDF: ' + err);
+                            finishPdfModal('Error creating duch PDF: ' + err, false);
                         }
                     }, {
                         format: 'Letter',
                         margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
                     });
                 } catch (err) {
-                    alert('Error creating duch PDF: ' + (err && err.message ? err.message : err));
+                    finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
                 }
             }, 1500);
         }
