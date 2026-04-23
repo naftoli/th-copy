@@ -393,11 +393,48 @@
                 });
         };
 
-        function buildPdfPageHtml(studentNode) {
+        async function downscaleCloneImages(clone) {
+            const images = Array.from(clone.querySelectorAll('img'));
+            for (const img of images) {
+                const src = img.getAttribute('src');
+                if (!src || src.indexOf('data:') === 0) continue;
+
+                try {
+                    const absoluteUrl = new URL(src, window.location.origin).href;
+                    const response = await fetch(absoluteUrl, { mode: 'cors', credentials: 'include' });
+                    if (!response.ok) continue;
+
+                    const blob = await response.blob();
+                    const bitmap = await createImageBitmap(blob);
+
+                    const maxWidth = 220;
+                    const maxHeight = 220;
+                    const scale = Math.min(1, maxWidth / bitmap.width, maxHeight / bitmap.height);
+                    const targetWidth = Math.max(1, Math.round(bitmap.width * scale));
+                    const targetHeight = Math.max(1, Math.round(bitmap.height * scale));
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) continue;
+
+                    ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.65);
+                    if (!dataUrl) continue;
+                    img.setAttribute('src', dataUrl);
+                    img.removeAttribute('srcset');
+                } catch (e) {
+                    // Keep the original image source if compression fails.
+                }
+            }
+        }
+
+        async function buildPdfPageHtml(studentNode) {
             const clone = studentNode.cloneNode(true);
             clone.style.setProperty('page-break-after', 'always', 'important');
             clone.style.setProperty('break-after', 'page', 'important');
-            // clone.querySelectorAll('img').forEach(function(img) { img.remove(); });
+            await downscaleCloneImages(clone);
 
             const headHtml = document.head ? document.head.innerHTML : '';
             const origin = window.location.origin || 'https://mashpia.com';
@@ -416,7 +453,8 @@
                         throw new Error('No student pages found to export.');
                     }
 
-                    const pages = studentNodes.map(buildPdfPageHtml);
+                    appendPdfLine('Optimizing images for faster PDF generation...');
+                    const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
                     const recipients = ['naftoli@tzivoshashem.org', 'tziviaweinbaum@gmail.com'];
                     const displayName = 'Ohel';
                     openPdfModal(recipients);
