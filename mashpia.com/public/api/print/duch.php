@@ -469,7 +469,7 @@
                     sendBtn.textContent = 'Sending...';
                 }
 
-                const recipients = ['naftoli@tzivoshashem.org', 'naftolir@gmail.com', 'tziviaweinbaum@gmail.com'];
+                const recipients = ['naftolir@gmail.com', 'tziviaweinbaum@gmail.com'];
                 const displayName = 'Ohel';
                 openPdfModal(recipients);
                 appendPdfLine('Preparing duch pages for PDF generation...');
