@@ -57,7 +57,6 @@ $endDate = $startDate + 6;
 $ttl = ttl_until_jd($endDate + 1);
 
 echo "Warming mission/task cache for JD {$startDate}-{$endDate} with TTL {$ttl}s\n";
-exit;
 
 $comboSql = "SELECT DISTINCT school_type_id, subject_id, level, track_id, lang_id
              FROM date_tasks_missions
