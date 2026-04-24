@@ -1134,7 +1134,7 @@ abstract class MissionDisplay {
 							if ($task->grid_id != 13012) {
 								?>
 								<div class='task-container'>
-									<div class='task-stats'><b><?=$accomplished_count?></b> 
+									<div class='task-stats'><b><?=$accomplished_count?></b><br /> 
 									<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
 									<?=$task_type_name?></div>
 									<div class='task'>
