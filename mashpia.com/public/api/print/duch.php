@@ -467,7 +467,7 @@
                 + 'width:7.5in !important;max-width:7.5in;'
                 + 'margin:0 auto !important;'
                 + 'page-break-after:auto !important;break-after:auto !important;'
-                + 'zoom:0.9;'
+                + 'zoom:0.95;'
                 + 'transform-origin:top center;'
                 + '}'
                 + 'html.duch-pdf .campaign-name{font-size:17px !important;}'
