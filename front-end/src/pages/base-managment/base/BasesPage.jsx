@@ -23,7 +23,7 @@ export const BasesPage = () => {
   const login = useSelector(state => state.login.current_login);
   const [modal, setModal] = useState({ show: false, id: false, src: false });
 
-  const basePath = '/bm/bases';
+  const basePath = '/bm/base';
 
   // load the contents
   useEffect(() => {
