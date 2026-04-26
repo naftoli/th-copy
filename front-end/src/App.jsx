@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 // screens
 import { Page404 } from 'pages/errors';
@@ -14,24 +14,30 @@ import BaseManagment from 'pages/base-managment';
 import RegistrationPage from 'pages/base-managment/base/RegisterBasePage';
 // components
 import { Dashboard } from 'components/navigation';
+import { NavigationConfirmationProvider } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
-// import ConfirmationModal from 'components/modals/ConfirmationModal'; // TODO: Implement custom blocker for v6
 // functions
 import { loginStoreChanged } from 'functions/login';
 import { validateLogin } from 'store/login/operations';
 import ReportCards from 'pages/reportCards/ReportCards';
 
+const router = createBrowserRouter(
+  [{ path: '*', element: <AppContent /> }],
+  { basename: import.meta.env.BASE_URL }
+);
+
 export default function App() {
+  return <RouterProvider router={router} />;
+}
+
+function AppContent() {
   console.log('App.jsx: Rendering App component');
   const { current_login: login, current_user, title } = useSelector(state => state.login || {});
   // Helper to safely check login status
   const logged_in = login && Object.keys(login).length > 0 && !!current_user;
 
   const [refreshing, setRefreshing] = useState(true);
-  const [modalState, setModalState] = useState({
-    message: '',
-    isOpen: false,
-  });
+  const previousLogin = useRef({});
 
   // Validate login interval
   useEffect(() => {
@@ -39,17 +45,29 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle login changes
+  // Handle login changes the way the legacy app did: refresh only on account identity changes.
   useEffect(() => {
-    const hadLogin = login && Object.keys(login).length > 0;
-    // Set refreshing to true initially if we have a login, or false if we don't
-    setRefreshing(hadLogin);
+    const oldLogin = previousLogin.current || {};
+    previousLogin.current = login || {};
 
-    // If we have a login, wait 500ms then stop refreshing to show content
-    if (hadLogin) {
-      const timeout = setTimeout(() => setRefreshing(false), 500);
+    if (!loginStoreChanged(oldLogin)) {
+      const timeout = setTimeout(() => setRefreshing(false), 0);
       return () => clearTimeout(timeout);
     }
+
+    const hadLogin = Object.keys(oldLogin).length > 0;
+
+    if (hadLogin) {
+      const startTimeout = setTimeout(() => setRefreshing(true), 0);
+      const timeout = setTimeout(() => setRefreshing(false), 500);
+      return () => {
+        clearTimeout(startTimeout);
+        clearTimeout(timeout);
+      };
+    }
+
+    const timeout = setTimeout(() => setRefreshing(false), 0);
+    return () => clearTimeout(timeout);
   }, [login]);
 
   const dashboardProps = { title, login, current_user };
@@ -81,41 +99,35 @@ export default function App() {
   // Skipping custom confirmation modal for now.
 
   return (
-    <Router basename={import.meta.env.BASE_URL}>
+    <>
       {!logged_in && <Login />}
 
       {logged_in && (
-        <Dashboard {...dashboardProps}>
-          {refreshing ? (
-            <LoadingScreen />
-          ) : (
-            <Routes>
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))}
-            </Routes>
-          )}
+        <NavigationConfirmationProvider>
+          <Dashboard {...dashboardProps}>
+            {refreshing ? (
+              <LoadingScreen />
+            ) : (
+              <Routes>
+                {routes.map((route, index) => (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={route.element}
+                  />
+                ))}
+              </Routes>
+            )}
 
-          <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            closeOnClick={false}
-            draggablePercent={40}
-          />
-
-          {/* 
-          <ConfirmationModal
-            isOpen={modalState.isOpen}
-            message={modalState.message}
-            callback={handleCallback} 
-          /> 
-          */}
-        </Dashboard>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              closeOnClick={false}
+              draggablePercent={40}
+            />
+          </Dashboard>
+        </NavigationConfirmationProvider>
       )}
-    </Router>
+    </>
   );
 }

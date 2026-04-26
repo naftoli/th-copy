@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { TabPane } from 'reactstrap';
-// import { Prompt } from 'react-router';
+import { UnsavedChangesPrompt } from 'components/navigation';
 import { MedalBoard } from '../../components/MedalBoard';
 import { SaveButton } from 'components/buttons/index';
 
@@ -54,9 +54,10 @@ export const MedalsTab = ({
   return (
     <TabPane id='MedalsTab' tabId={tabId}>
 
-      {/* <Prompt
-          when={update_count > 0}
-          message="You have unsaved medals changes. Are you sure you want to leave?" /> */}
+      <UnsavedChangesPrompt
+        when={update_count > 0}
+        message="You have unsaved medals changes. Are you sure you want to leave?"
+      />
 
       <MedalBoard
         board={board}

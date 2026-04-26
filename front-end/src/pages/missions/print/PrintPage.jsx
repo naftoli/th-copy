@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 // components
 import { Callout, FontAwesome } from 'components/ui';
@@ -31,8 +31,11 @@ export const PrintPage = () => {
     school_id, class_ids, user_ids,
     parsha_ids, double_sided, dates
   } = state;
+  const initializedLoginDefaults = useRef(false);
 
   useEffect(() => {
+    if (initializedLoginDefaults.current) return;
+    initializedLoginDefaults.current = true;
     setTitle('Print Missions');
     // set the default school id and class id
     const { school_id, class_id } = login;
@@ -53,6 +56,7 @@ export const PrintPage = () => {
       // Original logic: setDefaultParsha called on mount if parshos.length > 0, and on update if parshos changed.
       // We can just rely on this effect running when parshos changes.
       if (parsha) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setState(prev => ({ ...prev, parsha_ids: [parsha.id] }));
       }
     }
@@ -77,6 +81,13 @@ export const PrintPage = () => {
 
   const toggleDoubleSided = (e) => setState(prev => ({ ...prev, double_sided: JSON.parse(e.target.value) }));
 
+  let legacyUrl = '';
+  if (school_id === 9 && LEGACY_URL === '' && isBC(login.code)) {
+    legacyUrl = 'https://v.mashpia.com/api/print/missions';
+  } else {
+    legacyUrl = `${LEGACY_URL}/api/print/missions`;
+  }
+
   return (
     <div id='PrintPage'>
       <Callout title='Print Missions'>
@@ -88,7 +99,7 @@ export const PrintPage = () => {
         </p>
       </Callout>
 
-      <form target='_blank' method='post' action={`${LEGACY_URL}/api/print/missions`}>
+      <form target='_blank' method='post' action={legacyUrl}>
         <Row>
           <Col sm={6}>
             <label>Base</label>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // components
 import Campaign from './includes/Campaign';
@@ -30,9 +30,12 @@ export const PersonalizePage = () => {
     loading: false, current_options: {},
   });
 
-  const { loading, school_id, class_ids, user_id, parsha_id, mission_type, lang } = state;
+  const { loading } = state;
+  const initializedLoginDefaults = useRef(false);
 
   useEffect(() => {
+    if (initializedLoginDefaults.current) return;
+    initializedLoginDefaults.current = true;
     setTitle('Personalize Missions');
     // set the default school id and class id
     const { school_id, class_id } = login;
@@ -57,7 +60,9 @@ export const PersonalizePage = () => {
 
   const handleGetCampaigns = () => {
     // Destructure state to get current values to submit
-    const { loading, current_options, ...data } = state;
+    const data = { ...state };
+    delete data.loading;
+    delete data.current_options;
 
     setState(prev => ({ ...prev, current_options: data, loading: true }));
 

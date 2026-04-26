@@ -35,10 +35,9 @@
       { "label": "Print Summer Missions", "legacy": true, "path": "/print_missions_summer.php", "user_types": [ "HQ", "BC" ] },
       { "label": "Mark", "path": "/missions/mark" },
       { "label": "Personalize", "path": "/missions/personalize" },
+      { "label": "Duch", "path": "/missions/duch" },
+      { "label": "Streaks", "path": "/missions/streaks" },
       { "label": "Tasks", "path": "/missions/tasks", "user_types": [ "HQ", "INST", "BC" ] },
-      { "label": "Streaks", "path": "/missions/streaks", "user_types": [ "HQ", "INST", "BC" ] },
-      { "label": "Tasks Accomplished", "path": "/missions/tasks-accomplished", "user_types": [ "HQ", "INST", "BC" ] },
-      { "label": "Duch", "path": "/missions/duch", "user_types": [ "HQ", "INST", "BC" ] },
       { "label": "Mission Checklist (old)", "legacy": true, "path": "/mission_sheets_checklist.php", "user_types": [ "HQ", "BC" ] },
       { "label": "Mission Report (old)", "legacy": true, "path": "/missions_report.php", "user_types": [ "HQ", "BC" ] }
     ]
@@ -97,8 +96,9 @@
           { "label": "Report Cards", "path":  "/chidonTests/reportCards" }
         ]
       },
+      { "label": "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/enrollment_report.php" },
 
-      { "label": "Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
+      { "label": "Comprehensive Enrollment Report", "legacy":  true, "path": "/chidonOld/newReports/comprehensive_reg_report.php" },
 
       { "label":  "Enrollment / Prize Confirmation", "legacy": true, "path": "/chidonTests/confirmations.php" },
 
@@ -168,6 +168,7 @@
           { "label":  "Whatsapp Tehillim Reports", "path": "/tehillim_whatsapp.php", "legacy": true, "user_types": [ "HQ" ] },
           { "label": "Mark Shabbos Mevorchim Tehillim", "legacy": true, "path": "/mark_tehillim2.php" },
           { "label": "Shabbos Mevorchim Report", "legacy": true, "path": "/choose_sm_report.php" },
+          { "label": "Shabbos Mevorchim HQ Report", "legacy": true, "path": "/shabbos_mevorchim_by_class_hq.php", "user_types": [ "HQ" ] },
           { "label": "Check Your Tehillim Quotas", "legacy": true, "path": "/tehillim_quotas.php" },
           { "label": "Change Tehillim Ladder/Quota", "legacy": true, "path": "/admin_users_track.php" },
           { "label": "Shabbos Mevorchim Tutorial Video", "legacy": true, "path": "/sm_video.php" },
