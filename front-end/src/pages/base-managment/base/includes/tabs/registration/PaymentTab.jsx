@@ -23,6 +23,7 @@ export const PaymentTab = (props) => {
 
   useEffect(() => {
     if (props.terms) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTerms(prev => ({ ...prev, ...props.terms }));
     }
   }, [props.terms]);
@@ -177,15 +178,7 @@ export const PaymentTab = (props) => {
 
       <NavigationRow back={back}>
         <Button color='primary'
-          onClick={checkTerms} disabled={!props.termsProp && !Object.values(terms).every(t => t !== 0 || t === terms.siddur_gift)}>
-          { /* props.terms check logic might need adjustment but matching intent of original which checked prop passed back to parent */}
-          { /* Original disabled logic was: disabled={ !this.props.terms } where props.terms holds the boolean validity from parent? */}
-          { /* Wait, props.terms in original was initialized in state, but props.onStateUpdate('terms') updates parent. */}
-          { /* If props.terms is boolean in render logic? No, props.terms IS the object in componentDidMount. */}
-          { /* Ah, in render: const { terms } = this.state. But check button disabled={ !this.props.terms }. */}
-          { /* The parent passes 'terms' which might be the boolean valid flag OR the object? */}
-          { /* Looking at ModulesTab logic, it seems parent manages validity. */}
-          { /* Let's assume props.terms (boolean) usage for disabled State. */}
+          onClick={checkTerms} disabled={!props.terms}>
           {total > 0 ? 'Pay and' : ''} Register
         </Button>
       </NavigationRow>

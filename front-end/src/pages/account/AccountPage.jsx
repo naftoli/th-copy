@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // components
 
 import { SaveButton } from 'components/buttons';
+import { UnsavedChangesPrompt } from 'components/navigation';
 import { LoginRow, InformationRow, AccessRow } from './includes/Rows';
 // state
 import { removeAuth } from 'store/base/staff/operations';
@@ -98,7 +99,10 @@ const AccountPage = () => {
 
   return (
     <div id='AccountPage'>
-      {/* Prompt Removed */}
+      <UnsavedChangesPrompt
+        when={updated}
+        message="You have unsaved changes. Are you sure you want to leave?"
+      />
 
       <h1>My Tzivos Hashem Account</h1>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 // components
@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Page404 } from 'pages/errors';
 import { LoadingScreen } from 'components/ui';
 import { SaveButton } from 'components/buttons';
+import { UnsavedChangesPrompt } from 'components/navigation';
 // rows
 import EditStaffRow from './rows/EditStaffRow';
 import PositionRow from './rows/PositionRow';
@@ -43,9 +44,10 @@ const StaffDetailPage = (props) => {
       // if staff changed, clear updates (roughly equivalent to componentDidUpdate check)
       // actually, converting class to func, we just need to ensure updates apply to current staff
       // if ID changes, we probably want to clear updates.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUpdates({});
     }
-  }, [staffId]);
+  }, [currentStaff, staffId]);
 
   const handleUpdates = (newUpdates) => {
     const filtered = filterUpdates(currentStaff, { ...updates, ...newUpdates });
@@ -74,7 +76,10 @@ const StaffDetailPage = (props) => {
 
   return (
     <div id='StaffDetailPage'>
-      {/* Prompt Removed */}
+      <UnsavedChangesPrompt
+        when={isUpdated}
+        message="You have unsaved changes. Are you sure you want to leave?"
+      />
 
       <p className='title'>Account Information</p>
 

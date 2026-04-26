@@ -5,7 +5,7 @@ import { useParams, Navigate } from 'react-router-dom';
 
 import { TabContent, Nav } from 'reactstrap';
 import { LoadingScreen, FontAwesome } from 'components/ui';
-import { NavigationTab } from 'components/navigation';
+import { NavigationTab, UnsavedChangesPrompt } from 'components/navigation';
 import {
   PersonalTab, RankTab, MedalsTab,
   SettingsTab, RegistrationTab, TransactionsTab
@@ -52,6 +52,7 @@ const SoldierPage = (props) => {
 
   // load user on page load
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSoldier();
   }, [fetchSoldier]);
 
@@ -176,7 +177,10 @@ const SoldierPage = (props) => {
 
   return (
     <div id='SoldierPage'>
-      {/* Prompt Removed */}
+      <UnsavedChangesPrompt
+        when={isUpdated}
+        message="You have unsaved changes. Are you sure you want to leave?"
+      />
       <Nav tabs>
 
         <NavigationTab tab={1} icon='user' {...navProps}>

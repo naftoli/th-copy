@@ -4,7 +4,7 @@ import { useParams, Navigate } from 'react-router-dom';
 // components
 
 import { TabContent, Nav } from 'reactstrap';
-import { NavigationTab } from 'components/navigation';
+import { NavigationTab, UnsavedChangesPrompt } from 'components/navigation';
 import { FontAwesome, LoadingScreen } from 'components/ui';
 // tabs
 import { PlatoonTab, TeachersTab, SoldiersTab } from './tabs';
@@ -17,7 +17,7 @@ import { filterUpdates } from 'functions/events';
 
 export const PlatoonPage = (props) => {
   const {
-    login, getPlatoon, updatePlatoon, deletePlatoon,
+    getPlatoon, updatePlatoon, deletePlatoon,
     createAuth: createAuthOp, removeTeacher: removeTeacherOp
   } = props;
   const { id } = useParams();
@@ -44,6 +44,7 @@ export const PlatoonPage = (props) => {
   // load user on page load
   useEffect(() => {
     setTitle('Platoon');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPlatoon();
   }, [fetchPlatoon]);
 
@@ -87,7 +88,10 @@ export const PlatoonPage = (props) => {
 
   return (
     <div id='PlatoonPage'>
-      {/* Prompt Removed */}
+      <UnsavedChangesPrompt
+        when={isUpdated}
+        message="You have unsaved changes. Are you sure you want to leave?"
+      />
       <Nav tabs>
         <NavigationTab active={activeTab === 1} onClick={toggle(1)}>
           Platoon <FontAwesome icon='chalkboard-teacher' />
