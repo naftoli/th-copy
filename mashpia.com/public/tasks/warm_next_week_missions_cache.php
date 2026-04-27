@@ -50,7 +50,8 @@ function fetch_rows($sql)
 }
 
 $today = unixtojd();
-$startDate = next_rollover_jd($today);
+// $startDate = next_rollover_jd($today);
+$startDate = 2461155;
 $endDate = $startDate + 6;
 
 // Keep warm until the end of that week (next Friday at 00:00).
