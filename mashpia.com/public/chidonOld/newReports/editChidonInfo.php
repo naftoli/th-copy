@@ -126,7 +126,7 @@ foreach ($info as $school_name => $users) {
                     echo "<br />";
                 } ?>
                 <br />
-                <form method="POST" action="api/addPrize.php">
+                <form method="POST" action="api/addPrize.php" class="add-prize-form">
                   <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
                   <input type="hidden" name="year" value="<?= $year ?>" />
                   <select name="prize_id">
@@ -140,6 +140,7 @@ foreach ($info as $school_name => $users) {
                   </select><br /><br />
                   <input type="text" name="he_name" style="width: 200px;" placeholder="Hebrew Name" />
                   <button type="submit">Add Prize</button>
+                  <span class="add-prize-message" style="margin-left: 8px;"></span>
                 </form>
             </td>
         </tr>
@@ -222,6 +223,35 @@ foreach ($info as $school_name => $users) {
           alert('Updated.')
         } else {
           alert('Error updating.')
+        }
+      })
+    })
+
+    const addPrizeForms = document.querySelectorAll('.add-prize-form')
+    addPrizeForms.forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const action = form.getAttribute('action')
+        const messageEl = form.querySelector('.add-prize-message')
+        const formData = new FormData(form)
+
+        try {
+          const response = await fetch(action, {
+            method: 'POST',
+            body: formData
+          })
+          const data = await response.json()
+          if (data.success) {
+            messageEl.textContent = 'Added.'
+            messageEl.style.color = 'green'
+            setTimeout(() => location.reload(), 300)
+          } else {
+            messageEl.textContent = data.error || 'Error adding prize.'
+            messageEl.style.color = 'red'
+          }
+        } catch (err) {
+          messageEl.textContent = 'Network error.'
+          messageEl.style.color = 'red'
         }
       })
     })
