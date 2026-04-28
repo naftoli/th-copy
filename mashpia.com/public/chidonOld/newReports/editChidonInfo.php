@@ -3,7 +3,12 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$defaultYear = GlobalSettings::getChidonYear();
+$year = isset($_GET['year']) ? (int) $_GET['year'] : (int) $defaultYear;
+$minYear = 5783;
+$maxYear = max((int) $defaultYear + 1, $minYear);
+$years = range($minYear, $maxYear);
+rsort($years);
 
 if ($admin_user['auth'] != 'super') {
     die('Access denied');
@@ -71,6 +76,15 @@ $stmtPrizes = $MASHPIA_DB->prepare("
 </head>
 <body>
 <h1>Confirmation Report</h1>
+<form method="GET" style="margin-bottom: 20px;">
+    <label for="year">Choose Year:</label>
+    <select name="year" id="year">
+        <?php foreach ($years as $yearOption) { ?>
+            <option value="<?= $yearOption ?>" <?= $yearOption === $year ? 'selected' : '' ?>><?= $yearOption ?></option>
+        <?php } ?>
+    </select>
+    <button type="submit">Go</button>
+</form>
 <?php
 foreach ($info as $school_name => $users) {
     echo "<h2>$school_name</h2>";
@@ -105,6 +119,8 @@ foreach ($info as $school_name => $users) {
 <?php } ?>
 </body>
 <script>
+  const year = <?= json_encode($year) ?>
+
   // Add event listeners to checkboxes on document load
   document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('.confirmed')
@@ -117,7 +133,7 @@ foreach ($info as $school_name => $users) {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({user_id, confirmed})
+          body: JSON.stringify({user_id, confirmed, year})
         });
         const data = await response.json()
         if (data.success) {
@@ -142,7 +158,7 @@ foreach ($info as $school_name => $users) {
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({user_id, prize_id})
+              body: JSON.stringify({user_id, prize_id, year})
             });
             const data = await response.json()
             if (data.success) {
@@ -170,7 +186,7 @@ foreach ($info as $school_name => $users) {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({user_id, prize_id, he_name})
+          body: JSON.stringify({user_id, prize_id, he_name, year})
         });
         const data = await response.json()
         if (data.success) {
