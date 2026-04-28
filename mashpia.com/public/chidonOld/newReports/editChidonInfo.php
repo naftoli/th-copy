@@ -44,7 +44,11 @@ $stmt = $MASHPIA_DB->prepare("
 $info = [];
 foreach ($schools as $school_id => $school_name) {
     $stmt->execute([':year' => $year, ':school' => $school_id]);
-    $info[$school_name] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $info[] = [
+        'school_id' => $school_id,
+        'school_name' => $school_name,
+        'users' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+    ];
 }
 
 $stmtPrizes = $MASHPIA_DB->prepare("
@@ -86,8 +90,25 @@ $stmtPrizes = $MASHPIA_DB->prepare("
     <button type="submit">Go</button>
 </form>
 <?php
-foreach ($info as $school_name => $users) {
+foreach ($info as $schoolInfo) {
+    $school_id = (int) $schoolInfo['school_id'];
+    $school_name = $schoolInfo['school_name'];
+    $users = $schoolInfo['users'];
     echo "<h2>$school_name</h2>";
+    ?>
+    <form class="add-prize-form" style="margin: 10px 0 20px;">
+        <label>
+            Child Serial:
+            <input type="text" name="user_serial" required />
+        </label>
+        <label style="margin-left: 10px;">
+            Prize ID:
+            <input type="number" name="prize_id" min="1" required />
+        </label>
+        <button type="submit" style="margin-left: 10px;">Add</button>
+        <span class="add-prize-message" style="margin-left: 10px;"></span>
+    </form>
+    <?php
     echo "<table>";
     echo "<tr><th>Grade/Class</th><th>Serial</th><th>Name</th><th>Confirmed Info</th><th></th><th>Prizes</th></tr>";
     foreach ($users as $user) {
@@ -193,6 +214,41 @@ foreach ($info as $school_name => $users) {
           alert('Updated.')
         } else {
           alert('Error updating.')
+        }
+      })
+    })
+
+    const addPrizeForms = document.querySelectorAll('.add-prize-form')
+    addPrizeForms.forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const user_serial = form.querySelector('input[name="user_serial"]').value.trim()
+        const prize_id = parseInt(form.querySelector('input[name="prize_id"]').value, 10)
+        const school_id = parseInt(form.querySelector('input[name="school_id"]').value, 10)
+        const messageEl = form.querySelector('.add-prize-message')
+
+        if (!user_serial || Number.isNaN(prize_id) || Number.isNaN(school_id)) {
+          messageEl.textContent = 'Please enter valid serial and prize id.'
+          messageEl.style.color = 'red'
+          return
+        }
+
+        const response = await fetch('api/addPrize.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({user_serial, prize_id, school_id, year})
+        })
+        const data = await response.json()
+        if (data.success) {
+          messageEl.textContent = 'Prize added.'
+          messageEl.style.color = 'green'
+          form.reset()
+          setTimeout(() => location.reload(), 400)
+        } else {
+          messageEl.textContent = data.error || 'Error adding prize.'
+          messageEl.style.color = 'red'
         }
       })
     })
