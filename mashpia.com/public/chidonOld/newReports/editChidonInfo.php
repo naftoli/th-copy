@@ -126,12 +126,7 @@ foreach ($info as $schoolInfo) {
                     <input type="checkbox" class="add-prize-check" id="add-prize-check-<?= $user['user_id'] ?>" />
                     <select class="add-prize-select" data-user-id="<?= $user['user_id'] ?>">
                         <?php foreach ($allPrizes as $prizeOption) { ?>
-                          <?php
-                          $prizeName = $prizeOption['prize_name'];
-                          if ($prizeOption['size']) $prizeName .= ' ' . $prizeOption['size'];
-                          if ($prizeOption['color']) $prizeName .= ' ' . $prizeOption['color'];
-                          ?>
-                            <option value="<?= (int) $prizeOption['prize_id'] ?>"><?= htmlspecialchars($prizeName) ?></option>
+                            <option value="<?= (int) $prizeOption['prize_id'] ?>"><?= htmlspecialchars($prizeOption['prize_name']) ?></option>
                         <?php } ?>
                     </select>
                     <button type="button" class="add-prize-button" data-user-id="<?= $user['user_id'] ?>">Save</button>
