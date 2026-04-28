@@ -127,15 +127,20 @@ foreach ($info as $school_name => $users) {
                 } ?>
                 <br />
                 <form method="POST" action="addPrize.php">
-                <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
-                <input type="hidden" name="year" value="<?= $year ?>" />
-                <select name="prize_id">
-                  <?php foreach ($allPrizes as $prize) {
-                    echo '<option value="' . $prize['prize_id'] . '">' . $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'] . '</option>';
-                  } ?>
-                </select>
-                <button type="submit">Add Prize</button>
-              </form>
+                  <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
+                  <input type="hidden" name="year" value="<?= $year ?>" />
+                  <select name="prize_id">
+                    <?php foreach ($allPrizes as $prize) {
+                      $prize_name = $prize['prize_name'];
+                      if ($prize['size']) $prize_name .= ' ' . $prize['size'];
+                      if ($prize['color']) $prize_name .= ' ' . $prize['color'];
+                      if ($prize['personalization']) $prize_name .= ' (Personalized)';
+                      echo '<option value="' . $prize['prize_id'] . '">' . htmlspecialchars($prize_name) . '</option>';
+                    } ?>
+                  </select><br /><br />
+                  <input type="text" name="he_name" style="width: 200px;" placeholder="Hebrew Name" />
+                  <button type="submit">Add Prize</button>
+                </form>
             </td>
         </tr>
     <?php } ?>

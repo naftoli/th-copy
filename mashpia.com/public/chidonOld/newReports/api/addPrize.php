@@ -15,7 +15,7 @@ if ($admin_user['auth'] !== 'super') {
 $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
 $prize_id = isset($_POST['prize_id']) ? (int) $_POST['prize_id'] : 0;
 $year = isset($_POST['year']) ? (int) $_POST['year'] : 0;
-
+$he_name = isset($_POST['he_name']) ? trim((string) $_POST['he_name']) : '';
 
 if ($user_id <= 0 || $prize_id <= 0 || $year <= 0) {
     echo json_encode(['success' => 0, 'error' => 'Missing required fields']);
@@ -46,13 +46,14 @@ if ($stmtExists->fetchColumn()) {
 }
 
 $stmtInsert = $MASHPIA_DB->prepare("
-    INSERT INTO chidon_user_prizes (user_id, prize_id, year)
-    VALUES (:user_id, :prize_id, :year)
+    INSERT INTO chidon_user_prizes (user_id, prize_id, year, he_name)
+    VALUES (:user_id, :prize_id, :year, :he_name)
 ");
 $res = $stmtInsert->execute([
     ':user_id' => $user_id,
     ':prize_id' => $prize_id,
     ':year' => $year,
+    ':he_name' => $he_name,
 ]);
 
 echo json_encode([
