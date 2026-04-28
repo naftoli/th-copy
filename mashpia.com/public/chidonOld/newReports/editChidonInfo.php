@@ -125,21 +125,18 @@ foreach ($info as $school_name => $users) {
                     }
                     echo "<br />";
                 } ?>
+                <br />
+                <form method="POST" action="addPrize.php">
+                <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
+                <input type="hidden" name="year" value="<?= $year ?>" />
+                <select name="prize_id">
+                  <?php foreach ($allPrizes as $prize) {
+                    echo '<option value="' . $prize['prize_id'] . '">' . $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'] . '</option>';
+                  } ?>
+                </select>
+                <button type="submit">Add Prize</button>
+              </form>
             </td>
-        </tr>
-        <tr>
-          <td colspan="6" style="padding-left: 30px;">
-            <form method="POST" action="addPrize.php">
-              <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
-              <input type="hidden" name="year" value="<?= $year ?>" />
-              <select name="prize_id">
-                <?php foreach ($allPrizes as $prize) {
-                  echo '<option value="' . $prize['prize_id'] . '">' . $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'] . '</option>';
-                } ?>
-              </select>
-              <button type="submit">Add Prize</button>
-            </form>
-          </td>
         </tr>
     <?php } ?>
     </table>
