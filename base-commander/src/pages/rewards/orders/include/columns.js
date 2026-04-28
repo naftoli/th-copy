@@ -26,5 +26,12 @@ export function getColumns( bc ) {
     },
   )
 
+  // show admin id if school is 269 (as last column)
+  if ( bc ) {
+    columns.push(
+      { Header: 'Admin ID', accessor: 'admin_id' },
+    )
+  }
+
   return columns;
 }
