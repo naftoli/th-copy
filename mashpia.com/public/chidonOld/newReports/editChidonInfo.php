@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $defaultYear = GlobalSettings::getChidonYear();
+
 $year = isset($_GET['year']) ? (int) $_GET['year'] : (int) $defaultYear;
 $minYear = 5783;
 $maxYear = max((int) $defaultYear + 1, $minYear);
@@ -57,6 +58,18 @@ $stmtPrizes = $MASHPIA_DB->prepare("
     WHERE
         cp.year = :year AND user_id = :user_id
 ");
+
+$stmtAllPrizes = $MASHPIA_DB->prepare("
+    SELECT 
+        *
+    FROM
+        chidon_prizes 
+    WHERE
+        year = :year
+    ORDER BY prize_name, size, color
+");
+$stmtAllPrizes->execute([':year' => $year]);
+$allPrizes = $stmtAllPrizes->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -112,6 +125,18 @@ foreach ($info as $school_name => $users) {
                     }
                     echo "<br />";
                 } ?>
+            </td>
+            <td id="<?= $user['user_id'] ?>" style="padding-left: 30px;">
+              <form method="POST" action="addPrize.php">
+                <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
+                <input type="hidden" name="year" value="<?= $year ?>" />
+                <select name="prize_id">
+                  <?php foreach ($allPrizes as $prize) {
+                    echo '<option value="' . $prize['prize_id'] . '">' . $prize['prize_name'] . ' ' . $prize['size'] . ' ' . $prize['color'] . '</option>';
+                  } ?>
+                </select>
+                <button type="submit">Add Prize</button>
+              </form>
             </td>
         </tr>
     <?php } ?>
