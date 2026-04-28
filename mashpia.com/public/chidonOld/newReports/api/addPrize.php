@@ -19,34 +19,40 @@ if (!is_array($input)) {
     exit;
 }
 
-$user_serial = isset($input['user_serial']) ? trim((string) $input['user_serial']) : '';
+$user_id = isset($input['user_id']) ? (int) $input['user_id'] : 0;
 $prize_id = isset($input['prize_id']) ? (int) $input['prize_id'] : 0;
 if (isset($input['year'])) {
     $year = (int) $input['year'];
 }
 
-if ($user_serial === '' || $prize_id <= 0 || $school_id <= 0 || $year <= 0) {
+if ($user_id <= 0 || $prize_id <= 0 || $year <= 0) {
     echo json_encode(['success' => 0, 'error' => 'Missing required fields']);
     exit;
 }
 
+$adminSchools = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+$schools = $adminSchools->getSchools();
+
 $stmtUser = $MASHPIA_DB->prepare("
-    SELECT u.user_id
+    SELECT u.user_id, u.school_id
     FROM users u
     JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :year
-    WHERE u.user_serial = :user_serial 
+    WHERE u.user_id = :user_id
     LIMIT 1
 ");
 $stmtUser->execute([
     ':year' => $year,
-    ':user_serial' => $user_serial,
+    ':user_id' => $user_id,
 ]);
 $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
-    echo json_encode(['success' => 0, 'error' => 'Child not found in selected school/year']);
+    echo json_encode(['success' => 0, 'error' => 'Child not found for selected year']);
     exit;
 }
-$user_id = (int) $user['user_id'];
+if (!isset($schools[(int) $user['school_id']])) {
+    echo json_encode(['success' => 0, 'error' => 'Child is not in your schools']);
+    exit;
+}
 
 $stmtPrize = $MASHPIA_DB->prepare("SELECT prize_id FROM chidon_prizes WHERE prize_id = :prize_id LIMIT 1");
 $stmtPrize->execute([':prize_id' => $prize_id]);

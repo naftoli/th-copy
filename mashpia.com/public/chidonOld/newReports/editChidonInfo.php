@@ -61,6 +61,8 @@ $stmtPrizes = $MASHPIA_DB->prepare("
     WHERE
         cp.year = :year AND user_id = :user_id
 ");
+
+$allPrizes = $MASHPIA_DB->query("SELECT prize_id, prize_name FROM chidon_prizes ORDER BY prize_name")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -91,24 +93,9 @@ $stmtPrizes = $MASHPIA_DB->prepare("
 </form>
 <?php
 foreach ($info as $schoolInfo) {
-    $school_id = (int) $schoolInfo['school_id'];
     $school_name = $schoolInfo['school_name'];
     $users = $schoolInfo['users'];
     echo "<h2>$school_name</h2>";
-    ?>
-    <form class="add-prize-form" style="margin: 10px 0 20px;">
-        <label>
-            Child Serial:
-            <input type="text" name="user_serial" required />
-        </label>
-        <label style="margin-left: 10px;">
-            Prize ID:
-            <input type="number" name="prize_id" min="1" required />
-        </label>
-        <button type="submit" style="margin-left: 10px;">Add</button>
-        <span class="add-prize-message" style="margin-left: 10px;"></span>
-    </form>
-    <?php
     echo "<table>";
     echo "<tr><th>Grade/Class</th><th>Serial</th><th>Name</th><th>Confirmed Info</th><th></th><th>Prizes</th></tr>";
     foreach ($users as $user) {
@@ -133,6 +120,16 @@ foreach ($info as $schoolInfo) {
                     }
                     echo "<br />";
                 } ?>
+                <div style="margin-top: 8px;">
+                    <input type="checkbox" class="add-prize-check" id="add-prize-check-<?= $user['user_id'] ?>" />
+                    <select class="add-prize-select" data-user-id="<?= $user['user_id'] ?>">
+                        <?php foreach ($allPrizes as $prizeOption) { ?>
+                            <option value="<?= (int) $prizeOption['prize_id'] ?>"><?= htmlspecialchars($prizeOption['prize_name']) ?></option>
+                        <?php } ?>
+                    </select>
+                    <button type="button" class="add-prize-button" data-user-id="<?= $user['user_id'] ?>">Save</button>
+                    <span class="add-prize-message" data-user-id="<?= $user['user_id'] ?>"></span>
+                </div>
             </td>
         </tr>
     <?php } ?>
@@ -218,17 +215,23 @@ foreach ($info as $schoolInfo) {
       })
     })
 
-    const addPrizeForms = document.querySelectorAll('.add-prize-form')
-    addPrizeForms.forEach(form => {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault()
-        const user_serial = form.querySelector('input[name="user_serial"]').value.trim()
-        const prize_id = parseInt(form.querySelector('input[name="prize_id"]').value, 10)
-        const school_id = parseInt(form.querySelector('input[name="school_id"]').value, 10)
-        const messageEl = form.querySelector('.add-prize-message')
+    const addPrizeButtons = document.querySelectorAll('.add-prize-button')
+    addPrizeButtons.forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const user_id = parseInt(e.target.dataset.userId, 10)
+        const container = e.target.parentElement
+        const enabledCheckbox = container.querySelector('.add-prize-check')
+        const select = container.querySelector('.add-prize-select')
+        const prize_id = parseInt(select.value, 10)
+        const messageEl = container.querySelector('.add-prize-message')
 
-        if (!user_serial || Number.isNaN(prize_id) || Number.isNaN(school_id)) {
-          messageEl.textContent = 'Please enter valid serial and prize id.'
+        if (!enabledCheckbox.checked) {
+          messageEl.textContent = 'Check the box before saving.'
+          messageEl.style.color = 'red'
+          return
+        }
+        if (Number.isNaN(user_id) || Number.isNaN(prize_id)) {
+          messageEl.textContent = 'Invalid user or prize.'
           messageEl.style.color = 'red'
           return
         }
@@ -238,13 +241,13 @@ foreach ($info as $schoolInfo) {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({user_serial, prize_id, school_id, year})
+          body: JSON.stringify({user_id, prize_id, year})
         })
         const data = await response.json()
         if (data.success) {
           messageEl.textContent = 'Prize added.'
           messageEl.style.color = 'green'
-          form.reset()
+          enabledCheckbox.checked = false
           setTimeout(() => location.reload(), 400)
         } else {
           messageEl.textContent = data.error || 'Error adding prize.'
