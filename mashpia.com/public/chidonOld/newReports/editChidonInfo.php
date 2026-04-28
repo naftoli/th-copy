@@ -126,7 +126,7 @@ foreach ($info as $school_name => $users) {
                     echo "<br />";
                 } ?>
                 <br />
-                <form method="POST" action="addPrize.php">
+                <form method="POST" action="api/addPrize.php">
                   <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>" />
                   <input type="hidden" name="year" value="<?= $year ?>" />
                   <select name="prize_id">
