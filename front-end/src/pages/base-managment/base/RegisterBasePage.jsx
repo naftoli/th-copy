@@ -1,6 +1,6 @@
 import './includes/register.scss';
 // main imports
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // sub pages
@@ -79,7 +79,7 @@ const RegistrationPage = (props) => {
     );
   }, [login.id, login.code, getBase, getDefaults, onUpdate, checkDiscount]);
 
-  const register = useCallback(() => {
+  const register = useCallback((siddurGiftValue = siddurGift) => {
     // calculate the total registration cost
     let promise;
     // get the cart and total
@@ -97,15 +97,15 @@ const RegistrationPage = (props) => {
       return toast.error('You must accept the Terms and Conditions.');
     }
 
-    console.log(siddurGift);
+    console.log(siddurGiftValue);
 
     // if the total is greater then 0
     if (total > 0) {
       promise = validateCC(cc)
-        .then(validatedCc => registerBase({ base, cc: validatedCc, cart, total, discount, siddur_gift: siddurGift }));
+        .then(validatedCc => registerBase({ base, cc: validatedCc, cart, total, discount, siddur_gift: siddurGiftValue }));
       // otherwise just register the base
     } else {
-      promise = registerBase({ base, total, siddur_gift: siddurGift });
+      promise = registerBase({ base, total, siddur_gift: siddurGiftValue });
     }
 
     // set the state
@@ -120,44 +120,6 @@ const RegistrationPage = (props) => {
         toast.error(e.message)
       });
   }, [base, cc, terms, valid, discount, siddurGift, registerBase, getCurrentUser, navigate]);
-
-  const updateSiddurGift = (gift, shouldRegister = true) => {
-    setSiddurGift(gift);
-    // Note: in class component this relied on setState callback.
-    // Here we can't easily do that inside this function without useEffect or ref.
-    // However, looking at usage, it seems it triggers registration immediately.
-    // We can just call register() but we need the UPDATED siddurGift.
-    // So we might need to pass it to register or use a useEffect that listens to siddurGift trigger?
-    // A safer way is to call register with the new gift value directly if we refactor register to accept it.
-    // Or, for now, we can try to chain it, but functional updates don't support callbacks.
-    // Let's refactor register to take an override? Or just depend on state.
-
-    // actually, let's just trigger it:
-    if (shouldRegister) {
-      // We can't rely on 'gift' being in state yet.
-      // So we'll pass it to a modified register function or just assume the user won't notice a split second race?
-      // React batching might actually handle this if we call setSiddurGift then define an effect... 
-      // but an effect would trigger on EVERY change.
-      // Better: Pass the gift value to register explicitly? No, register uses other state too.
-
-      // I'll assume for now we can just proceed, but this is a potential race condition.
-      // Correct fix: Use a useEffect that listens to a 'triggerRegister' state, or pass arguments.
-      // I'll try to pass arguments to register if possible, but register reads from state.
-
-      // Workaround: Use a ref for immediate access or just assume sync for now (imperfect).
-      // Actually, I'll update register to accept overrides.
-
-      // Let's modify register to take params? Recursion...
-      // Simpler: Just define a temp variable.
-
-      // Re-implementing register inside updateSiddurGift for safety:
-      // NO, that duplicates logic.
-
-      // I'll simply use a separate useEffect:
-      // useEffect(() => { if (shouldRegisterRef.current) { register(); shouldRegisterRef.current = false; } }, [siddurGift]);
-      // That's cleaner.
-    }
-  };
 
   // * event handlers
   const onChange = onInputChangeFunc(onUpdate);
@@ -212,19 +174,9 @@ const RegistrationPage = (props) => {
     if (content) content.scrollTop = 0;
   };
 
-  // To fix the siddurGift callback issue properly:
-  // We'll use a `triggerRegister` effect.
-  const [triggerRegister, setTriggerRegister] = useState(false);
-  useEffect(() => {
-    if (triggerRegister) {
-      register();
-      setTriggerRegister(false);
-    }
-  }, [triggerRegister, register]);
-
   const handleUpdateSiddurGift = (gift, shouldRegister = true) => {
     setSiddurGift(gift);
-    if (shouldRegister) setTriggerRegister(true);
+    if (shouldRegister) register(gift);
   };
 
 

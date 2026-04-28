@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 // sub pages
 import { Page404 } from 'pages/errors';
+import { NumericRoute } from 'components/navigation';
 import SoldierPage from './SoldierPage/SoldierPage';
 import SoldiersPage from './SoldiersPage/SoldiersPage';
 import RankCardsPage from './RankCardsPage/RankCardsPage';
@@ -21,7 +22,11 @@ export const SoldiersIndexPage = ({ login }) => {
       {onlyBC && <Route path="registration" element={<RegistrationPage />} />}
       {isBC(code) && <Route path="cards" element={<RankCardsPage />} />}
 
-      <Route path=":id" element={<SoldierPage />} />
+      <Route path=":id" element={
+        <NumericRoute fallback={<Page404 />}>
+          <SoldierPage />
+        </NumericRoute>
+      } />
 
       <Route path="*" element={<Page404 />} />
     </Routes>

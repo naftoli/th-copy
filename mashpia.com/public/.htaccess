@@ -38,13 +38,6 @@ RewriteRule ^screens/([0-9]+)/([a-zA-Z0-9\-]+)/?$ screens/display.php?school=$1&
     Require not ip 103.180.236.166
 </RequireAll>
 
-# php -- BEGIN cPanel-generated handler, do not edit
-# Set the programming language.
-<IfModule mime_module>
-  AddHandler application/x-httpd-ea-php72 .php .php7 .phtml
-</IfModule>
-# php -- END cPanel-generated handler, do not edit
-
 
 # BEGIN cPanel-generated php ini directives, do not edit
 # Manual editing of this file may result in unexpected behavior.
@@ -75,3 +68,10 @@ RewriteRule ^screens/([0-9]+)/([a-zA-Z0-9\-]+)/?$ screens/display.php?school=$1&
    php_flag zlib.output_compression Off
 </IfModule>
 # END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php72” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php72 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

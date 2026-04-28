@@ -1,6 +1,9 @@
 <?php
+require_once dirname(__FILE__) . '/../api/header/cache.php';
+
 class user_track 
 {
+	const MISSIONS_CACHE_TTL = 600;
 	public $user_id;
 	public $subject_id;
 	public $track_id;
@@ -146,17 +149,33 @@ class user_track
 				return strcmp( $a['mission_name'], $b['mission_name'] );
 			} );
 		} else {
-			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id
-				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id
-				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date;
-			if ( ! $print_parent_tasks ) $sql .= " AND created_by_parent IS NULL";
-			if ( $this->subject_id == 21 && ! $chidonLimmud ) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
-			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name";
-			// if ($this->subject_id == 41) echo $sql . "<br />";
-			$query = mysql_query( $sql );
-			while ( $row = mysql_fetch_assoc( $query ) ) {
-				$rows[] = $row;
-			}
+			$cacheKey = implode(':', [
+				'missions',
+				'school', (int) $school_type_id,
+				'subject', (int) $this->subject_id,
+				'level', (int) $this->level,
+				'track', (int) $this->track_id,
+				'lang', (int) $lang,
+				'start', (int) $start_date,
+				'end', (int) $end_date,
+				'parent', $print_parent_tasks ? 1 : 0,
+				'chidon', $chidonLimmud ? 1 : 0
+			]);
+
+			$rows = Cache::remember($cacheKey, self::MISSIONS_CACHE_TTL, function () use ($lang, $school_type_id, $start_date, $end_date, $print_parent_tasks, $chidonLimmud) {
+				$list = [];
+				$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id
+					. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id
+					. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date;
+				if ( ! $print_parent_tasks ) $sql .= " AND created_by_parent IS NULL";
+				if ( $this->subject_id == 21 && ! $chidonLimmud ) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
+				$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name";
+				$query = mysql_query($sql);
+				while ($row = mysql_fetch_assoc($query)) {
+					$list[] = $row;
+				}
+				return $list;
+			});
 		}
 
 		foreach ( $rows as $row ) {
@@ -229,23 +248,39 @@ class user_track
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
 		
-		$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id // limit the language and school id
-			. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
-			. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
-		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
-        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
-		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-    //    if ($this->subject_id == 40) echo $sql . "<br />";
-		// if ($this->subject_id == 136) {
-		// 	echo $sql . "<br />"; 
-		// }
-
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
                 
 		$date_tasks_missions = [];
-		$query = mysql_query($sql);
-		while ($row = mysql_fetch_assoc($query)) {
+		$cacheKey = implode(':', [
+			'missions:by_range',
+			'school', (int) $school_type_id,
+			'subject', (int) $this->subject_id,
+			'level', (int) $this->level,
+			'track', (int) $this->track_id,
+			'lang', (int) $lang,
+			'start', (int) $start_date,
+			'end', (int) $end_date,
+			'parent', $print_parent_tasks ? 1 : 0,
+			'chidon', $chidonLimmud ? 1 : 0
+		]);
+
+		$rows = Cache::remember($cacheKey, self::MISSIONS_CACHE_TTL, function () use ($lang, $school_type_id, $start_date, $end_date, $print_parent_tasks, $chidonLimmud) {
+			$list = [];
+			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id
+				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id
+				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date;
+			if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
+	        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
+			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$list[] = $row;
+			}
+			return $list;
+		});
+
+		foreach ($rows as $row) {
 		    
             //find out if mission is new birthday mission and then see if it's for this child
             if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { TabContent, Nav } from 'reactstrap';
-import { NavigationTabs } from 'components/navigation';
+import { NavigationTabs, UnsavedChangesPrompt } from 'components/navigation';
 import { LoadingScreen } from 'components/ui';
 // tabs
 import {
@@ -71,6 +71,7 @@ const BasePage = (props) => {
 
   // update the base on mount and when id changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadBase();
   }, [loadBase]);
 
@@ -122,7 +123,10 @@ const BasePage = (props) => {
 
   return (
     <div id='BasePage'>
-      {/* <Prompt when={ updated } message="You have unsaved changes. Are you sure you want to leave?" /> */}
+      <UnsavedChangesPrompt
+        when={updated}
+        message="You have unsaved changes. Are you sure you want to leave?"
+      />
 
       <Nav tabs>
         <NavigationTabs tabs={tabs} />

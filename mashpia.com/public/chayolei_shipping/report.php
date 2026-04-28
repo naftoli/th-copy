@@ -45,6 +45,8 @@ $for_labels['shipment_number'] = $shipment_number;
 
 $cs = new ChayoleiShipping();
 $cs->setYear($year);
+$GLOBALS['chayolei_max_shipment_num'] = $cs->getMaxHachayolShipmentNum((int) $year);
+$max_hachayol_shipment_option = (int) $GLOBALS['chayolei_max_shipment_num'];
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
@@ -276,7 +278,7 @@ if ($super) {
   }
   if (in_array($_POST['report_type'], ['all', 'details'])) {
     echo "<br />Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
-    for ($i = 1; $i <= 9; $i++) {
+    for ($i = 1; $i <= $max_hachayol_shipment_option; $i++) {
       echo "<option value='" . $i . "'>" . $i . "</option>";
     }
     echo "</select><br />";

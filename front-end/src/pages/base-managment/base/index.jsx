@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import BasePage from './BasePage';
 import BasesPage from './BasesPage';
 import { Page404 } from 'pages/errors';
+import { NumericRoute } from 'components/navigation';
 // styles for all base pages
 import './includes/base.scss';
 
@@ -12,7 +13,11 @@ const BaseIndexPage = () => {
       {/* Index routes */}
       <Route index element={<BasesPage />} />
       {/* Detail Page Routes */}
-      <Route path=":id" element={<BasePage />} />
+      <Route path=":id" element={
+        <NumericRoute fallback={<Page404 />}>
+          <BasePage />
+        </NumericRoute>
+      } />
       {/* All other routes */}
       <Route path="*" element={<Page404 />} />
     </Routes>

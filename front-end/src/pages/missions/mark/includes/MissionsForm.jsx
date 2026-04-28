@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 // components
 import { Row, Col, Button, Input, FormFeedback } from 'reactstrap';
@@ -30,10 +30,13 @@ const MissionsForm = (props) => {
     parsha_id: false
   });
   const { class_id, parsha_id } = state;
+  const initializedSchool = useRef(false);
 
   const [touched, setTouched] = useState({});
 
   useEffect(() => {
+    if (initializedSchool.current) return;
+    initializedSchool.current = true;
     // Set default school id
     setState(prev => ({ ...prev, school_id: school_id }));
   }, [school_id]);
@@ -46,6 +49,7 @@ const MissionsForm = (props) => {
     let parsha = parshos.filter(p => p.end < today).pop();
     if (!parsha) parsha = parshos[0];
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(prev => ({ ...prev, parsha_id: parsha.id }));
   }, [parshos]);
 
@@ -60,6 +64,13 @@ const MissionsForm = (props) => {
 
   const handleSoldierChange = option => {
     if (option && option.value) onSoldierChange(option.value);
+  };
+
+  const loadMissionsData = (selectedUserId = user_id) => {
+    if (!loading) {
+      dispatch(getMissions(selectedUserId, parsha_id))
+        .catch(e => toast.error(e.message));
+    }
   };
 
   const selectSerial = ({ target }) => {
@@ -85,13 +96,7 @@ const MissionsForm = (props) => {
       class_id: soldier.class_id,
       school_id: soldier.school_id
     }));
-  };
-
-  const loadMissionsData = () => {
-    if (!loading) {
-      dispatch(getMissions(user_id, parsha_id))
-        .catch(e => toast.error(e.message));
-    }
+    loadMissionsData(soldier.user_id);
   };
 
   const today = julianToday();
@@ -161,7 +166,7 @@ const MissionsForm = (props) => {
 
         <Row className='buttons'>
           <Col sm={6}>
-            <Button color='primary' onClick={loadMissionsData}
+            <Button color='primary' onClick={() => loadMissionsData()}
               disabled={!user_id || !parsha_id || loading} >
               <InlineSync loading={loading} /> Load Missions
             </Button>

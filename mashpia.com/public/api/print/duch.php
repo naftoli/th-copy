@@ -16,12 +16,15 @@
             margin: 20px auto;
             page-break-after: always;
         }
+        .userDuch:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
         .container {
             column-count: 3;
             column-gap: 20px;
             height: auto !important;
-            /* min-height: auto !important; */
-            /* page-break-after: avoid !important; */
+            page-break-after: avoid !important;
         }
         .track {
             margin-bottom: 15px;
@@ -113,6 +116,7 @@
         .pageFooter {
             padding-top: 5px;
             padding-bottom: 2px;
+            page-break-before: always;
         }
         h3 {
             font-weight: bold;
@@ -120,6 +124,13 @@
         @media print {
             .no-print {
                 display: none !important;
+            }
+            .pdf-modal {
+                display: none !important;
+            }
+            /* Match emailed PDF: slightly smaller type so print matches Puppeteer output */
+            #main .userDuch {
+                zoom: 0.95;
             }
         }
         @media screen {
@@ -130,46 +141,156 @@
         button {
             padding: 5px 10px;
         }
+        .pdf-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+        .pdf-modal.is-open {
+            display: flex;
+        }
+        .pdf-modal-card {
+            width: min(900px, 92vw);
+            background: #111;
+            color: #d7ffd7;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        }
+        .pdf-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .pdf-modal-close {
+            border: 0;
+            background: #2d2d2d;
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            display: none;
+        }
+        .pdf-modal-close.is-visible {
+            display: inline-block;
+        }
+        .pdf-modal-log {
+            max-height: 55vh;
+            overflow: auto;
+            padding: 14px;
+            line-height: 1.4;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .pdf-line-error {
+            color: #ff9696;
+        }
+        .pdf-line-success {
+            color: #9df7a1;
+        }
     </style>
-
-    <script src="https://docraptor.com/docraptor-1.0.0.js"></script>
 </head>
 
 <body>
     <div id="spinner"></div>
     <div id="grade-list" class="no-print" style="display: none;"></div>
     <div id="main"></div>
+    <div id="pdf-modal" class="pdf-modal" aria-hidden="true">
+        <div class="pdf-modal-card" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+            <div class="pdf-modal-header">
+                <span id="pdf-modal-title">Sending Duch to Ohel</span>
+                <button type="button" id="pdf-modal-close" class="pdf-modal-close">Close</button>
+            </div>
+            <div id="pdf-modal-log" class="pdf-modal-log"></div>
+        </div>
+    </div>
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
-    <script src="/scripts/js.cookie.js"></script>
     <script src="/mobile/js/spin.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script> -->
+    <script src="/pdf-maker/pdf-handler.js"></script>
     <script>
-        // options for the loading spinner....
         var opts = {
-            lines: 8, // The number of lines to draw
-            length: 26, // The length of each line
-            width: 12, // The line thickness
-            radius: 26, // The radius of the inner circle
-            scale: 0.75, // Scales overall size of the spinner
-            corners: 1, // Corner roundness (0..1)
-            color: '#888', // #rgb or #rrggbb or array of colors
-            opacity: 0.25, // Opacity of the lines
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise-1: counterclockwise
-            speed: 1.1, // Rounds per second
-            trail: 60, // Afterglow percentage
-            fps: 20, // Frames per second when using setTimeout() as a fallback for CSS
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            className: 'spinner', // The CSS class to assign to the spinner
-            top: '50%', // Top position relative to parent
-            left: '50%', // Left position relative to parent
-            shadow: false, // Whether to render a shadow
-            hwaccel: true, // Whether to use hardware acceleration
-            position: 'absolute' // Element positioning
+            lines: 8,
+            length: 26,
+            width: 12,
+            radius: 26,
+            scale: 0.75,
+            corners: 1,
+            color: '#888',
+            opacity: 0.25,
+            rotate: 0,
+            direction: 1,
+            speed: 1.1,
+            trail: 60,
+            fps: 20,
+            zIndex: 2e9,
+            className: 'spinner',
+            top: '50%',
+            left: '50%',
+            shadow: false,
+            hwaccel: true,
+            position: 'absolute'
         };
         var target = document.getElementById('spinner');
         new Spinner(opts).spin(target);
+
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfModalTitle = document.getElementById('pdf-modal-title');
+        const pdfModalLog = document.getElementById('pdf-modal-log');
+        const pdfModalClose = document.getElementById('pdf-modal-close');
+        let lastProgressSignature = '';
+
+        function ts() {
+            return new Date().toLocaleTimeString();
+        }
+
+        function openPdfModal(recipients) {
+            lastProgressSignature = '';
+            pdfModalLog.textContent = '';
+            const list = Array.isArray(recipients) ? recipients.filter(Boolean) : [];
+            if (list.length) {
+                pdfModalTitle.textContent = 'Sending Duch to Ohel (' + list.join(', ') + ')';
+            } else {
+                pdfModalTitle.textContent = 'Sending Duch to Ohel';
+            }
+            pdfModal.classList.add('is-open');
+            pdfModal.setAttribute('aria-hidden', 'false');
+            pdfModalClose.classList.remove('is-visible');
+        }
+
+        function appendPdfLine(message, type) {
+            const line = document.createElement('div');
+            line.textContent = '[' + ts() + '] ' + message;
+            if (type === 'error') line.classList.add('pdf-line-error');
+            if (type === 'success') line.classList.add('pdf-line-success');
+            pdfModalLog.appendChild(line);
+            pdfModalLog.scrollTop = pdfModalLog.scrollHeight;
+        }
+
+        function finishPdfModal(message, ok) {
+            appendPdfLine(message, ok ? 'success' : 'error');
+            appendPdfLine(ok ? 'Process complete. You can close this window.' : 'Process stopped due to an error.', ok ? 'success' : 'error');
+            pdfModalClose.classList.add('is-visible');
+        }
+
+        pdfModalClose.addEventListener('click', function() {
+            pdfModal.classList.remove('is-open');
+            pdfModal.setAttribute('aria-hidden', 'true');
+        });
         
         window.onload = function() {
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
@@ -192,33 +313,6 @@
                     if (fromBC) {
                         $("#email-button").show();
                     }
-                    // Wait for fonts, images, and layout before auto-printing
-                    // waitForRenderReady(document.getElementById('main')).then(function() {
-                        // const children = document.querySelectorAll('.userDuch');
-                        // children.forEach(function(child) {
-                        //     const totalPages = checkPageCount(child);
-                        //     if (totalPages % 2 !== 0) {
-                        //         // add a blank page
-                        //         child.insertAdjacentHTML('beforeend',
-                        //             '<div style="page-break-after: always;"></div>'
-                        //         );
-                        //     }
-                        // });
-                        // window.print();
-                        // this key works in test mode!
-                        // DocRaptor.createAndDownloadDoc("CIrbbDsV2QqOc-ULQnQv", {
-                        //     name: "html-and-javascript",
-                        //     test: true, // test documents are free but watermarked
-                        //     document_type: "pdf",
-                        //     document_content: document.getElementById('main').innerHTML,
-                        //     // document_url: "https://mashpia.com/pdf/duch.php",
-                        //     javascript: true
-                        //     // prince_options: {
-                        //     //   media: "print", // @media 'screen' or 'print' CSS
-                        //     //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
-                        //     // }
-                        // });
-                    // });
                 }
             }
 
@@ -270,141 +364,176 @@
                 return;
             }
 
-            // Print Duch All: check if we need to auto-open tab pages (more than 10 classes)
-                var checkData = Object.assign({}, postData, { check_tabs: 1 });
-                fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
-                    .then(function(r) { return r.text(); })
-                    .then(function(text) {
-                        var json = null;
-                        try { json = JSON.parse(text); } catch (e) {}
-                        if (json && json.useTabs && json.tabs && json.tabs.length > 0) {
-                            $("#spinner").empty();
-                            var listEl = document.getElementById('grade-list');
-                            listEl.style.display = 'block';
-                            listEl.innerHTML = '<p>Opening ' + json.tabs.length + ' tab pages…</p>';
-                            json.tabs.forEach(function(t, i) {
-                                openTabInNewPage(t, i * 1000);
-                            });
-                            var lastOpenMs = (json.tabs.length - 1) * 1000;
-                            setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.tabs.length + ' tab pages. Closing…</p>';
-                                window.close();
-                            }, lastOpenMs + 1000);
-                            return;
-                        }
-                        var fullData = Object.assign({}, postData);
-                        delete fullData.check_tabs;
-                        fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
-                            .then(function(r) { return r.text(); })
-                            .then(showContent)
-                            .catch(function(err) {
-                                $("#spinner").empty();
-                                alert('Error: ' + err);
-                            });
-                    })
-                    .catch(function(err) {
+            // Print Duch All: optionally split into multiple tab pages (see printDuchAll check_tabs)
+            var checkData = Object.assign({}, postData, { check_tabs: 1 });
+            fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
+                .then(function(r) { return r.text(); })
+                .then(function(text) {
+                    var json = null;
+                    try { json = JSON.parse(text); } catch (e) {}
+                    if (json && json.useTabs && json.tabs && json.tabs.length > 0) {
                         $("#spinner").empty();
-                        alert('Error: ' + err);
-                    });
-
-            // fetch(url, { method: 'POST', body: JSON.stringify(postData) })
-            //     .then(function(r) { return r.text(); })
-            //     .then(showContent)
-            //     .catch(function(err) {
-            //         $("#spinner").empty();
-            //         alert('Error: ' + err);
-            //     });
+                        var listEl = document.getElementById('grade-list');
+                        listEl.style.display = 'block';
+                        listEl.innerHTML = '<p>Opening ' + json.tabs.length + ' tab pages…</p>';
+                        json.tabs.forEach(function(t, i) {
+                            openTabInNewPage(t, i * 1000);
+                        });
+                        var lastOpenMs = (json.tabs.length - 1) * 1000;
+                        setTimeout(function() {
+                            listEl.innerHTML = '<p>Opened ' + json.tabs.length + ' tab pages. Closing…</p>';
+                            window.close();
+                        }, lastOpenMs + 1000);
+                        return;
+                    }
+                    var fullData = Object.assign({}, postData);
+                    delete fullData.check_tabs;
+                    fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
+                        .then(function(r) { return r.text(); })
+                        .then(showContent)
+                        .catch(function(err) {
+                            $("#spinner").empty();
+                            alert('Error: ' + err);
+                        });
+                })
+                .catch(function(err) {
+                    $("#spinner").empty();
+                    alert('Error: ' + err);
+                });
         };
 
-        function emailToOhel() {
-            console.log('emailing to ohel');
-            setTimeout(async function() {
-                document.getElementById('buttons').remove();
-                /*
-                var mainEl = document.getElementById('main');
-                // Root-relative only (/path), not // protocol-relative or bare relative URLs
-                var htmlForPdf = mainEl.innerHTML;
-                htmlForPdf = htmlForPdf.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
-                htmlForPdf = htmlForPdf.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
+        async function downscaleCloneImages(clone) {
+            const images = Array.from(clone.querySelectorAll('img'));
+            for (const img of images) {
+                const src = img.getAttribute('src');
+                if (!src || src.indexOf('data:') === 0) continue;
 
-                const formData = new FormData();
-                const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
-                const opt = {
-                    margin:       0.5,
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                const pdfBlob = await html2pdf().set(opt).from(htmlForPdf).toPdf().output('blob');
-                formData.append('file', pdfBlob, filename);
-                */
-               const html = document.documentElement.outerHTML;
-               const formData = new FormData();
-               formData.append('html', html);
-                fetch('sendToOhel.php', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(result => {
-                    $("#spinner").empty();
-                    if (result.success) {
-                        alert('Email sent successfully');
-                    } else {
-                        alert('Error: ' + (result.error || JSON.stringify(result)));
+                try {
+                    const absoluteUrl = new URL(src, window.location.origin).href;
+                    img.setAttribute('src', absoluteUrl);
+                    const response = await fetch(absoluteUrl, { mode: 'cors', credentials: 'include' });
+                    if (!response.ok) continue;
+
+                    const blob = await response.blob();
+                    const mime = (blob.type || '').toLowerCase();
+                    const isRaster = mime.indexOf('jpeg') !== -1 || mime.indexOf('jpg') !== -1 || mime.indexOf('png') !== -1 || mime.indexOf('webp') !== -1;
+                    if (!isRaster) {
+                        // Keep absolute src for svg/gif/other assets.
+                        continue;
                     }
-                })
-                .catch(result => {
-                    $("#spinner").empty();
-                    alert('Error: ' + (result.error || JSON.stringify(result)));
-                });
-            }, 1500);
-        }
+                    const bitmap = await createImageBitmap(blob);
 
-        async function waitForRenderReady(rootEl) {
-            // Wait for webfonts (if supported)
-            try {
-                if (document.fonts && document.fonts.ready) {
-                    await document.fonts.ready;
+                    const maxWidth = 220;
+                    const maxHeight = 220;
+                    const scale = Math.min(1, maxWidth / bitmap.width, maxHeight / bitmap.height);
+                    const targetWidth = Math.max(1, Math.round(bitmap.width * scale));
+                    const targetHeight = Math.max(1, Math.round(bitmap.height * scale));
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) continue;
+
+                    ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    if (!dataUrl) continue;
+                    img.setAttribute('src', dataUrl);
+                    img.removeAttribute('srcset');
+                } catch (e) {
+                    // Keep the original image source if compression fails.
                 }
-            } catch (e) {}
-
-            // Wait for images inside root to load/decode so heights don't change after measuring
-            try {
-                const imgs = (rootEl || document).querySelectorAll ? (rootEl || document).querySelectorAll('img') : [];
-                const waits = [];
-                imgs.forEach(function(img) {
-                    if (!img) return;
-                    if (img.complete && img.naturalWidth) return;
-                    if (img.decode) {
-                        waits.push(img.decode().catch(function(){}));
-                    } else {
-                        waits.push(new Promise(function(resolve){ img.onload = resolve; img.onerror = resolve; }));
-                    }
-                });
-                await Promise.all(waits);
-            } catch (e) {}
-
-            // Let the browser flush layout at least once
-            await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+            }
         }
 
-        async function checkPageCount(element) {
-            // Configure PDF settings to match standard paper
-            const opt = {
-                    margin:       0.5,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
+        async function buildPdfPageHtml(studentNode) {
+            const clone = studentNode.cloneNode(true);
+            clone.style.setProperty('page-break-after', 'auto', 'important');
+            clone.style.setProperty('break-after', 'auto', 'important');
+            // clone.querySelectorAll('img').forEach(function(img) {
+            //     if (img.closest('.userImg') || img.closest('.schoolLogo')) {
+            //         img.remove();
+            //     }
+            // });
+            await downscaleCloneImages(clone);
 
-            // Generate the PDF internally but don't save it yet
-            const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf');
-            // The pdf object is an instance of jsPDF
-            const totalPages = pdf.internal.getNumberOfPages();
-            console.log('Total pages: ' + totalPages);
-            return totalPages;
+            const headHtml = document.head ? document.head.innerHTML : '';
+            const origin = window.location.origin || 'https://mashpia.com';
+            const pageStyle = '<style id="duch-pdf-fonts">@page{size:letter;margin:0.5in;}'
+                + 'html.duch-pdf,html.duch-pdf body{margin:0;padding:0;}'
+                + 'html.duch-pdf body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;'
+                + "font-family:'Exo','Segoe UI',system-ui,-apple-system,sans-serif;}"
+                + 'html.duch-pdf .userDuch{'
+                + 'width:7.5in !important;max-width:7.5in;'
+                + 'margin:0 auto !important;'
+                + 'page-break-after:auto !important;break-after:auto !important;'
+                + 'zoom:0.95;'
+                + 'transform-origin:top center;'
+                + '}'
+                + 'html.duch-pdf .campaign-name{font-size:17px !important;}'
+                + 'html.duch-pdf .task-short-name{font-size:12px !important;}'
+                + 'html.duch-pdf .streak-text{font-size:12px !important;}'
+                + 'html.duch-pdf .medal-name,html.duch-pdf .promotion-name,html.duch-pdf .campaign-medals{font-size:11px !important;}'
+                + 'html.duch-pdf footer{font-size:16px !important;}'
+                + '</style>';
+            return '<!DOCTYPE html><html class="duch-pdf"><head><base href="' + origin + '/">' + headHtml + pageStyle + '</head><body>' + clone.outerHTML + '</body></html>';
+        }
+
+        function emailToOhel() {
+            try {
+                const sendBtn = document.getElementById('email-button');
+                if (sendBtn) {
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.6';
+                    sendBtn.style.cursor = 'not-allowed';
+                    sendBtn.textContent = 'Sending...';
+                }
+
+                const recipients = ['naftolir@gmail.com', 'tziviaweinbaum@gmail.com'];
+                const displayName = 'Ohel';
+                openPdfModal(recipients);
+                appendPdfLine('Preparing duch pages for PDF generation...');
+                appendPdfLine('Recipients: ' + recipients.join(', '));
+
+                setTimeout(async function() {
+                    try {
+                        const studentNodes = Array.from(document.querySelectorAll('.userDuch'));
+                        if (!studentNodes.length) {
+                            throw new Error('No student pages found to export.');
+                        }
+
+                        appendPdfLine('Optimizing images for faster PDF generation...');
+                        const pages = await Promise.all(studentNodes.map(buildPdfPageHtml));
+                        appendPdfLine('Queued ' + pages.length + ' page(s) for rendering.');
+
+                        PdfHandler.generate(pages, recipients, displayName, {
+                            onQueued: function(jobId) {
+                                appendPdfLine('Job queued: ' + jobId + '. Waiting for worker...');
+                            },
+                            onProgress: function(status) {
+                                const signature = [status.status || '', status.progress || '', status.updatedAt || ''].join('|');
+                                if (signature === lastProgressSignature) return;
+                                lastProgressSignature = signature;
+                                const state = (status.status || 'processing').toUpperCase();
+                                appendPdfLine(state + ': ' + (status.progress || 'Working...'));
+                            },
+                            onComplete: function(status) {
+                                finishPdfModal(status.message || 'PDF finished and emailed successfully.', true);
+                            },
+                            onError: function(err) {
+                                finishPdfModal('Error creating duch PDF: ' + err, false);
+                            }
+                        }, {
+                            format: 'letter',
+                            margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
+                        });
+                    } catch (err) {
+                        finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
+                    }
+                }, 0);
+            } catch (err) {
+                finishPdfModal('Error creating duch PDF: ' + (err && err.message ? err.message : err), false);
+            }
         }
     </script>
 </body>
