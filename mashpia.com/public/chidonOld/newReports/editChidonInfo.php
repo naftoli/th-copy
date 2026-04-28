@@ -62,7 +62,9 @@ $stmtPrizes = $MASHPIA_DB->prepare("
         cp.year = :year AND user_id = :user_id
 ");
 
-$allPrizes = $MASHPIA_DB->query("SELECT prize_id, prize_name FROM chidon_prizes ORDER BY prize_name")->fetchAll(PDO::FETCH_ASSOC);
+$stmtPrizes = $MASHPIA_DB->prepare("SELECT * FROM chidon_prizes WHERE year = :year ORDER BY prize_name");
+$stmtPrizes->execute([':year' => $year]);
+$allPrizes = $stmtPrizes->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -124,7 +126,12 @@ foreach ($info as $schoolInfo) {
                     <input type="checkbox" class="add-prize-check" id="add-prize-check-<?= $user['user_id'] ?>" />
                     <select class="add-prize-select" data-user-id="<?= $user['user_id'] ?>">
                         <?php foreach ($allPrizes as $prizeOption) { ?>
-                            <option value="<?= (int) $prizeOption['prize_id'] ?>"><?= htmlspecialchars($prizeOption['prize_name']) ?></option>
+                          <?php
+                          $prizeName = $prizeOption['prize_name'];
+                          if ($prizeOption['size']) $prizeName .= ' ' . $prizeOption['size'];
+                          if ($prizeOption['color']) $prizeName .= ' ' . $prizeOption['color'];
+                          ?>
+                            <option value="<?= (int) $prizeOption['prize_id'] ?>"><?= htmlspecialchars($prizeName) ?></option>
                         <?php } ?>
                     </select>
                     <button type="button" class="add-prize-button" data-user-id="<?= $user['user_id'] ?>">Save</button>
