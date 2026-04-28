@@ -21,17 +21,17 @@ class OrdersRouter {
         } else return json_error('Access Denied');
 
         $query = $POINTS_DB->prepare(
-             " SELECT user_prize_id, user_serial, admin_id, first, last, prize_name, p.points, points.points as total, "
+             " SELECT user_prize_id, user_serial, first, last, prize_name, p.points, points.points as total, "
             ." quantity, status, class_grade, class_sub, orders.created "
             ." FROM pointsDB.user_prizes orders "
             ." JOIN pointsDB.prizes p USING ( prize_id ) "
             ." JOIN mashpiadb.users u USING( user_id ) "
             ." JOIN mashpiadb.classes c USING( class_id ) "
             ." JOIN pointsDB.user_points points USING ( user_prize_id ) "
-            ." JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' ) "
             ." WHERE is_reversed = 0 AND $filter AND status = ? "
             ." ORDER BY orders.created DESC, class_grade ASC, class_sub ASC, first ASC, last ASC, prize_name ASC;"
         );
+
         $query->execute([ $login->id, $status ]);
         $orders = [];
         while( $order = $query->fetch() ) {

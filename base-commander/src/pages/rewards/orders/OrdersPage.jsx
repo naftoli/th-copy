@@ -74,12 +74,12 @@ class OrdersPage extends Component {
   toCSV = () => {
     const headers = [
       'Date', 'First Name', 'Last Name', 'Serial Number', 'Prize',
-      'Miles', 'Qty', 'Total', 'Grade', 'Sub', 'Admin ID'
+      'Miles', 'Qty', 'Total', 'Grade', 'Sub'
     ];
     const rows = this.props.orders.map( order => [
       order.created, order.first, order.last, order.user_serial,
       order.prize_name, order.points, order.quantity, order.total * -1,
-      order.class_grade, order.class_sub, order.admin_id
+      order.class_grade, order.class_sub
     ]);
     //arrayToCSV( headers, rows, 'store_orders' );
     return dataToCSV( headers, rows );
@@ -92,6 +92,8 @@ class OrdersPage extends Component {
 
     const { modal, selection, redeemed } = this.state;
     const { orders, loading, login } = this.props;
+    console.log(orders)
+
     let columns = getColumns( isBC( login.code, true ) );
 
     return (
