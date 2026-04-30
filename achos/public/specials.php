@@ -1,1 +1,0 @@
-Yemei Chabad | Ha'maaseh Hu Ha'ikar | Sicha Yomis
