@@ -1,0 +1,201 @@
+-- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
+--
+-- Host: 50.28.66.228    Database: mashpiadb
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.3.39-MariaDB-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `th_chidon`
+--
+
+DROP TABLE IF EXISTS `th_chidon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `th_chidon` (
+  `th_chidon_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `year` int(10) unsigned NOT NULL,
+  `school_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `history` varchar(255) DEFAULT NULL,
+  `size` varchar(35) DEFAULT NULL,
+  `reg_date` timestamp NULL DEFAULT current_timestamp(),
+  `test1a` decimal(5,2) unsigned DEFAULT NULL,
+  `test1b` decimal(5,2) unsigned DEFAULT NULL,
+  `test2a` decimal(5,2) unsigned DEFAULT NULL,
+  `test2b` decimal(5,2) unsigned DEFAULT NULL,
+  `test3a` decimal(5,2) unsigned DEFAULT NULL,
+  `test3b` decimal(5,2) unsigned DEFAULT NULL,
+  `contestant` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `school_rep_old` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `paid` decimal(6,2) DEFAULT NULL,
+  `date_paid` datetime DEFAULT NULL,
+  `paid_by` int(10) unsigned DEFAULT NULL,
+  `grade` enum('4','5','6','7','8') DEFAULT NULL,
+  `book` enum('1','2','3','4','5') DEFAULT NULL,
+  `host` varchar(105) DEFAULT NULL,
+  `host_address1` varchar(45) DEFAULT NULL,
+  `host_address2` varchar(105) DEFAULT NULL,
+  `between_streets1` varchar(155) DEFAULT NULL,
+  `between_streets2` varchar(65) DEFAULT NULL,
+  `host_number` varchar(20) DEFAULT NULL,
+  `allergies` varchar(255) DEFAULT NULL,
+  `height` varchar(45) DEFAULT NULL,
+  `weight` varchar(45) DEFAULT NULL,
+  `ski` enum('ski','snowboard') DEFAULT NULL,
+  `skill` varchar(45) DEFAULT NULL,
+  `outerwear` varchar(45) DEFAULT NULL,
+  `walk_day` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `walk_night` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `walking_zone` varchar(5) DEFAULT NULL,
+  `approval` varchar(255) DEFAULT NULL,
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `team_id` int(10) unsigned DEFAULT NULL,
+  `bunk_id_old` int(10) unsigned DEFAULT NULL,
+  `test_table_old` int(10) unsigned DEFAULT NULL,
+  `bowling_lane` varchar(10) DEFAULT NULL,
+  `coach_bus` varchar(45) DEFAULT NULL,
+  `dropoff_bus` int(10) unsigned DEFAULT NULL,
+  `dropoff_seat` int(10) unsigned DEFAULT NULL,
+  `school_bus` varchar(45) DEFAULT NULL,
+  `open_air_bus` varchar(45) DEFAULT NULL,
+  `seat_type` enum('medal','plaque','round one','round two') DEFAULT NULL,
+  `seat_number` int(10) unsigned DEFAULT NULL,
+  `cert_number` varchar(10) DEFAULT NULL,
+  `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `test_lang` enum('en','yi') NOT NULL DEFAULT 'en',
+  `can_enroll` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `confirmed` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `allow_edit` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `workshop_number` varchar(10) DEFAULT '0',
+  `lane` int(10) DEFAULT 0,
+  `mm_test1` int(10) unsigned DEFAULT 0,
+  `mm_test2` int(10) unsigned DEFAULT 0,
+  `mm_test3` int(10) unsigned DEFAULT 0,
+  `rohr_subsidy` tinyint(1) unsigned DEFAULT 0,
+  `walking` tinyint(1) unsigned DEFAULT 0,
+  `notes` varchar(255) DEFAULT NULL,
+  `answers` varchar(255) DEFAULT NULL,
+  `host_street` varchar(65) DEFAULT NULL,
+  `host_street_num` int(10) unsigned DEFAULT NULL,
+  `host_street_num_suffix` varchar(45) DEFAULT NULL,
+  `host_street_apt` varchar(45) DEFAULT NULL,
+  `yarmulka` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `walking_group` varchar(45) DEFAULT NULL,
+  `test_table` varchar(45) DEFAULT NULL,
+  `bunk_number` varchar(10) DEFAULT NULL,
+  `kol_hatorah` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `round_number` tinyint(1) unsigned DEFAULT NULL,
+  `sunday_pm_bus` varchar(45) DEFAULT NULL,
+  `dropoff_number` int(10) unsigned DEFAULT NULL,
+  `not_printed` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `recruited_by` int(10) unsigned DEFAULT NULL,
+  `poll` varchar(255) DEFAULT NULL,
+  `trophy_5779` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `fundraising_goal` int(10) unsigned DEFAULT NULL,
+  `show_pic` tinyint(3) unsigned DEFAULT 1,
+  `trophy_contestant` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `tie_breaker` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `khk` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `in_zone` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `transportation` tinyint(3) unsigned DEFAULT NULL,
+  `airport` varchar(45) DEFAULT NULL,
+  `flight` varchar(45) DEFAULT NULL,
+  `snack_way_back` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `school_name` varchar(85) DEFAULT NULL,
+  `affiliation` varchar(45) DEFAULT NULL,
+  `friend_name` varchar(65) DEFAULT NULL,
+  `home_address` varchar(65) DEFAULT NULL,
+  `home_city` varchar(45) DEFAULT NULL,
+  `home_state` varchar(45) DEFAULT NULL,
+  `home_zip` varchar(45) DEFAULT NULL,
+  `medications` varchar(255) DEFAULT NULL,
+  `bunk_request` varchar(65) DEFAULT NULL,
+  `anash_airport` varchar(45) DEFAULT NULL,
+  `anash_arrival` varchar(45) DEFAULT NULL,
+  `known_family` tinyint(3) unsigned DEFAULT NULL,
+  `morning_pickup` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `trophy` varchar(45) NOT NULL,
+  `test_type` enum('maven','pro','expert','trophy','genius') DEFAULT 'expert',
+  `khk_test_1` decimal(5,2) unsigned DEFAULT NULL,
+  `khk_test_2` decimal(5,2) unsigned DEFAULT NULL,
+  `khk_test_3` decimal(5,2) unsigned DEFAULT NULL,
+  `khk_test_4` decimal(5,2) unsigned DEFAULT NULL,
+  `shabbaton_maven` tinyint(3) unsigned DEFAULT 0,
+  `shabbaton_pro` tinyint(3) unsigned DEFAULT 0,
+  `shabbaton_expert` tinyint(3) unsigned DEFAULT 0,
+  `shabbaton_trophy` tinyint(3) unsigned DEFAULT 0,
+  `regional_rep` tinyint(3) unsigned DEFAULT 0,
+  `intl_rep` tinyint(3) unsigned DEFAULT 0,
+  `trip_option` tinyint(3) unsigned DEFAULT NULL,
+  `chidon_final_mark` int(10) unsigned DEFAULT NULL,
+  `trophy_final_mark` int(10) unsigned DEFAULT NULL,
+  `khk_final_mark` int(10) unsigned DEFAULT NULL,
+  `edit_prizes` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `khk_plaque` tinyint(4) NOT NULL DEFAULT 0,
+  `khk_reg` tinyint(4) NOT NULL DEFAULT 0,
+  `name_pref` varchar(12) DEFAULT NULL,
+  `comments` varchar(255) DEFAULT NULL,
+  `fundraising_minutes` int(10) unsigned DEFAULT NULL,
+  `fundraising_type` varchar(20) DEFAULT NULL,
+  `payment_request` int(10) unsigned DEFAULT NULL,
+  `khk_trip` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `to_fundraise_5782` int(10) unsigned DEFAULT NULL,
+  `sweater_shipped` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sweater_replaced` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `rep_type` enum('grade','khk') DEFAULT NULL,
+  `trophy_type` enum('bronze','gold','silver') DEFAULT NULL,
+  `invite_used` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `surprise_gift` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `cert_reviewed` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `trip` varchar(45) DEFAULT NULL,
+  `ultimate_trip` tinyint(3) unsigned DEFAULT 0,
+  `school_rep` tinyint(3) unsigned DEFAULT 0,
+  `khk_rep` tinyint(3) unsigned DEFAULT 0,
+  `school_team` varchar(45) DEFAULT NULL,
+  `regional_team` varchar(45) DEFAULT NULL,
+  `intl_team` varchar(45) DEFAULT NULL,
+  `early_registration` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `reward_type` enum('maven','pro','expert','trophy','genius','highest track passed','khk trip') DEFAULT NULL,
+  `award_type` enum('maven','pro','expert','trophy','genius','highest final passed') DEFAULT NULL,
+  `dropped_out` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `reason` varchar(45) DEFAULT NULL,
+  `khk_experience` enum('khk experience','regional trip') DEFAULT NULL,
+  `prepaid_credit_old` decimal(6,2) unsigned DEFAULT 0.00,
+  `prepaid_credit` decimal(6,2) unsigned NOT NULL DEFAULT 0.00,
+  `chidon_photo` varchar(255) DEFAULT NULL,
+  `khk_photo` varchar(255) DEFAULT NULL,
+  `thurs_walking` tinyint(3) unsigned DEFAULT NULL,
+  `ms_walking` tinyint(3) unsigned DEFAULT NULL,
+  `confirmed_info` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `sandwich` enum('tuna','egg','cc','plain','cheese') DEFAULT NULL,
+  `shoe_size` varchar(30) DEFAULT NULL,
+  `contacted_parent` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `parent_notes` text DEFAULT NULL,
+  `khk_override` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `final_type` enum('maven','pro','expert','trophy','genius','highest track passed','khk trip') DEFAULT NULL,
+  PRIMARY KEY (`th_chidon_id`),
+  KEY `idx_th_chidon_user_id_year` (`user_id`,`year`)
+) ENGINE=InnoDB AUTO_INCREMENT=44032 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-04-30 16:32:13

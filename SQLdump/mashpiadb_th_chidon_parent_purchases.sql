@@ -1,0 +1,63 @@
+-- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
+--
+-- Host: 50.28.66.228    Database: mashpiadb
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.3.39-MariaDB-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `th_chidon_parent_purchases`
+--
+
+DROP TABLE IF EXISTS `th_chidon_parent_purchases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `th_chidon_parent_purchases` (
+  `th_chidon_parent_purchase_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_id` int(10) unsigned NOT NULL,
+  `authorize_id` varchar(45) DEFAULT NULL,
+  `authorize_trans_type` enum('charge','hold') DEFAULT NULL,
+  `authorize_desc` varchar(255) DEFAULT NULL,
+  `purchase_date` timestamp NULL DEFAULT current_timestamp(),
+  `amount` decimal(6,2) unsigned DEFAULT 0.00,
+  `celeb_box` int(10) unsigned DEFAULT 0,
+  `celeb_box_add` int(10) unsigned DEFAULT 0,
+  `celeb_box_add_ship` int(10) unsigned DEFAULT 0,
+  `celeb_box_add_addr` varchar(45) DEFAULT NULL,
+  `sweater_mother` varchar(45) DEFAULT NULL,
+  `sweater_mother_ship` int(10) unsigned DEFAULT 0,
+  `sweater_mother_ship_addr` varchar(45) DEFAULT NULL,
+  `sweater_father` varchar(45) DEFAULT NULL,
+  `sweater_father_ship` int(10) unsigned DEFAULT 0,
+  `sweater_father_ship_addr` varchar(45) DEFAULT NULL,
+  `sweater_bubby` varchar(45) DEFAULT NULL,
+  `sweater_bubby_ship` int(10) unsigned DEFAULT NULL,
+  `sweater_bubby_ship_addr` varchar(45) DEFAULT NULL,
+  `sweater_zaidy` varchar(45) DEFAULT NULL,
+  `sweater_zaidy_ship` int(10) unsigned DEFAULT 0,
+  `sweater_zaidy_ship_addr` varchar(45) DEFAULT NULL,
+  `unknown_size` tinyint(3) unsigned DEFAULT 0,
+  PRIMARY KEY (`th_chidon_parent_purchase_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3046 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-04-30 16:32:35
